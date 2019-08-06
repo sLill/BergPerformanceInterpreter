@@ -11,23 +11,6 @@ C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceIn
 C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\obj\Debug\BergPerformanceInterpreter.csproj.CopyComplete
 C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\obj\Debug\BergPerformanceInterpreter.exe
 C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\obj\Debug\BergPerformanceInterpreter.pdb
-C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\Infragistics4.Shared.v15.2.dll
-C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\Infragistics4.Win.Misc.v15.2.dll
-C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\Infragistics4.Win.UltraWinEditors.v15.2.dll
-C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\Infragistics4.Win.UltraWinSchedule.v15.2.dll
-C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\Infragistics4.Win.UltraWinTabControl.v15.2.dll
-C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\Infragistics4.Win.UltraWinToolbars.v15.2.dll
-C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\Infragistics4.Win.v15.2.dll
-C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\Infragistics4.Win.UltraWinStatusBar.v15.2.dll
-C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\Infragistics4.Shared.v15.2.xml
-C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\Infragistics4.Win.Misc.v15.2.xml
-C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\Infragistics4.Win.UltraWinEditors.v15.2.xml
-C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\Infragistics4.Win.UltraWinSchedule.v15.2.xml
-C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\Infragistics4.Win.UltraWinTabControl.v15.2.xml
-C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\Infragistics4.Win.UltraWinToolbars.v15.2.xml
-C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\Infragistics4.Win.v15.2.xml
-C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\Infragistics4.Win.UltraWinStatusBar.v15.2.xml
-C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\obj\Debug\BergPerformanceInterpreter.exe.licenses
 C:\Code\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\BergPerformanceInterpreter.exe.config
 C:\Code\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\BergPerformanceInterpreter.exe
 C:\Code\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\BergPerformanceInterpreter.pdb

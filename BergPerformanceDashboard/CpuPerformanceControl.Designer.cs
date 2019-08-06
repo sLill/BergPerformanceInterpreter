@@ -59,7 +59,7 @@
             this.groupBoxCPU.Controls.Add(this.tableLayoutPanelCpuDetails);
             this.groupBoxCPU.Location = new System.Drawing.Point(2, 3);
             this.groupBoxCPU.Name = "groupBoxCPU";
-            this.groupBoxCPU.Size = new System.Drawing.Size(912, 461);
+            this.groupBoxCPU.Size = new System.Drawing.Size(700, 388);
             this.groupBoxCPU.TabIndex = 9;
             this.groupBoxCPU.TabStop = false;
             this.groupBoxCPU.Text = "CPU";
@@ -83,7 +83,7 @@
             chartArea1.AxisY2.MajorTickMark.Enabled = false;
             chartArea1.Name = "OverallCpu";
             this.chartCpu.ChartAreas.Add(chartArea1);
-            this.chartCpu.Location = new System.Drawing.Point(27, 57);
+            this.chartCpu.Location = new System.Drawing.Point(-14, 52);
             this.chartCpu.Margin = new System.Windows.Forms.Padding(0);
             this.chartCpu.Name = "chartCpu";
             this.chartCpu.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None;
@@ -96,7 +96,7 @@
             series1.IsVisibleInLegend = false;
             series1.Name = "Series1";
             this.chartCpu.Series.Add(series1);
-            this.chartCpu.Size = new System.Drawing.Size(543, 196);
+            this.chartCpu.Size = new System.Drawing.Size(715, 276);
             this.chartCpu.TabIndex = 15;
             this.chartCpu.Text = "chart1";
             // 
@@ -108,7 +108,7 @@
             this.cbFilterUser.Items.AddRange(new object[] {
             "Total",
             "Current User"});
-            this.cbFilterUser.Location = new System.Drawing.Point(131, 33);
+            this.cbFilterUser.Location = new System.Drawing.Point(419, 28);
             this.cbFilterUser.Margin = new System.Windows.Forms.Padding(3, 3, 17, 3);
             this.cbFilterUser.Name = "cbFilterUser";
             this.cbFilterUser.Size = new System.Drawing.Size(121, 21);
@@ -122,7 +122,7 @@
             this.cbStyle.Items.AddRange(new object[] {
             "Overall",
             "Virtual Cores"});
-            this.cbStyle.Location = new System.Drawing.Point(252, 33);
+            this.cbStyle.Location = new System.Drawing.Point(556, 28);
             this.cbStyle.Margin = new System.Windows.Forms.Padding(3, 3, 17, 3);
             this.cbStyle.Name = "cbStyle";
             this.cbStyle.Size = new System.Drawing.Size(121, 21);
@@ -149,7 +149,7 @@
             this.tableLayoutPanelCpuDetails.Controls.Add(this.toolTipLabel7, 2, 1);
             this.tableLayoutPanelCpuDetails.Controls.Add(this.toolTipLabel8, 4, 0);
             this.tableLayoutPanelCpuDetails.Controls.Add(this.lblTotalCpuUser, 3, 1);
-            this.tableLayoutPanelCpuDetails.Location = new System.Drawing.Point(27, 269);
+            this.tableLayoutPanelCpuDetails.Location = new System.Drawing.Point(61, 331);
             this.tableLayoutPanelCpuDetails.Name = "tableLayoutPanelCpuDetails";
             this.tableLayoutPanelCpuDetails.RowCount = 3;
             this.tableLayoutPanelCpuDetails.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
@@ -300,7 +300,7 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Controls.Add(this.groupBoxCPU);
             this.Name = "CpuPerformanceControl";
-            this.Size = new System.Drawing.Size(917, 467);
+            this.Size = new System.Drawing.Size(705, 394);
             this.groupBoxCPU.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.chartCpu)).EndInit();
             this.tableLayoutPanelCpuDetails.ResumeLayout(false);

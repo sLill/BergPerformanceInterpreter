@@ -67,10 +67,10 @@
             this.cpuPerformanceControl.AutoSize = true;
             this.cpuPerformanceControl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.cpuPerformanceControl.Cores = "-";
-            this.cpuPerformanceControl.Location = new System.Drawing.Point(24, 50);
+            this.cpuPerformanceControl.Location = new System.Drawing.Point(6, 19);
             this.cpuPerformanceControl.LogicalProcessors = "-";
             this.cpuPerformanceControl.Name = "cpuPerformanceControl";
-            this.cpuPerformanceControl.Size = new System.Drawing.Size(1069, 467);
+            this.cpuPerformanceControl.Size = new System.Drawing.Size(822, 394);
             this.cpuPerformanceControl.TabIndex = 0;
             this.cpuPerformanceControl.Threads = "-";
             this.cpuPerformanceControl.TotalCpu = "-";

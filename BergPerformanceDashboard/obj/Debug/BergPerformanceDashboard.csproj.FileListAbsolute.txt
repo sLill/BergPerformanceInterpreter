@@ -17,3 +17,5 @@ C:\Code\BergPerformanceInterpreter\BergPerformanceDashboard\obj\Debug\BergPerfor
 C:\Code\BergPerformanceInterpreter\BergPerformanceDashboard\obj\Debug\BergPerformanceDashboard.csproj.CoreCompileInputs.cache
 C:\Code\BergPerformanceInterpreter\BergPerformanceDashboard\obj\Debug\BergPerformanceDashboard.dll
 C:\Code\BergPerformanceInterpreter\BergPerformanceDashboard\obj\Debug\BergPerformanceDashboard.pdb
+C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceDashboard\obj\Debug\BergPerformanceDashboard.csprojAssemblyReference.cache
+C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceDashboard\obj\Debug\BergPerformanceDashboard.CpuPerformanceControl.resources

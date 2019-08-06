@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.tableLayoutPanelBackground = new System.Windows.Forms.TableLayoutPanel();
-            this.BergPerformanceDashboard = new BergPerformanceDashboard.BergPerformanceDashboardControl();
+            this.bergPerformanceDashboardControl1 = new BergPerformanceDashboard.BergPerformanceDashboardControl();
             this.tableLayoutPanelBackground.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -39,28 +39,28 @@
             this.tableLayoutPanelBackground.ColumnCount = 2;
             this.tableLayoutPanelBackground.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanelBackground.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelBackground.Controls.Add(this.BergPerformanceDashboard, 0, 0);
+            this.tableLayoutPanelBackground.Controls.Add(this.bergPerformanceDashboardControl1, 0, 0);
             this.tableLayoutPanelBackground.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelBackground.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanelBackground.Name = "tableLayoutPanelBackground";
             this.tableLayoutPanelBackground.RowCount = 1;
             this.tableLayoutPanelBackground.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelBackground.Size = new System.Drawing.Size(902, 488);
+            this.tableLayoutPanelBackground.Size = new System.Drawing.Size(1102, 678);
             this.tableLayoutPanelBackground.TabIndex = 0;
             // 
-            // BergPerformanceDashboard
+            // bergPerformanceDashboardControl1
             // 
-            this.BergPerformanceDashboard.Location = new System.Drawing.Point(3, 3);
-            this.BergPerformanceDashboard.Name = "BergPerformanceDashboard";
-            this.BergPerformanceDashboard.Size = new System.Drawing.Size(716, 340);
-            this.BergPerformanceDashboard.TabIndex = 0;
+            this.bergPerformanceDashboardControl1.Location = new System.Drawing.Point(3, 3);
+            this.bergPerformanceDashboardControl1.Name = "bergPerformanceDashboardControl1";
+            this.bergPerformanceDashboardControl1.Size = new System.Drawing.Size(1099, 672);
+            this.bergPerformanceDashboardControl1.TabIndex = 0;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(902, 488);
+            this.ClientSize = new System.Drawing.Size(1102, 678);
             this.Controls.Add(this.tableLayoutPanelBackground);
             this.DoubleBuffered = true;
             this.Name = "MainForm";
@@ -73,7 +73,7 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelBackground;
-        private BergPerformanceDashboard.BergPerformanceDashboardControl BergPerformanceDashboard;
+        private BergPerformanceDashboard.BergPerformanceDashboardControl bergPerformanceDashboardControl1;
     }
 }
 
