@@ -28,3 +28,16 @@ C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceIn
 C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\Infragistics4.Win.v15.2.xml
 C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\Infragistics4.Win.UltraWinStatusBar.v15.2.xml
 C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\obj\Debug\BergPerformanceInterpreter.exe.licenses
+C:\Code\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\BergPerformanceInterpreter.exe.config
+C:\Code\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\BergPerformanceInterpreter.exe
+C:\Code\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\BergPerformanceInterpreter.pdb
+C:\Code\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\BergPerformanceDashboard.dll
+C:\Code\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\BergPerformanceDashboard.pdb
+C:\Code\BergPerformanceInterpreter\BergPerformanceInterpreter\obj\Debug\BergPerformanceInterpreter.csprojAssemblyReference.cache
+C:\Code\BergPerformanceInterpreter\BergPerformanceInterpreter\obj\Debug\BergPerformanceInterpreter.MainForm.resources
+C:\Code\BergPerformanceInterpreter\BergPerformanceInterpreter\obj\Debug\BergPerformanceInterpreter.Properties.Resources.resources
+C:\Code\BergPerformanceInterpreter\BergPerformanceInterpreter\obj\Debug\BergPerformanceInterpreter.csproj.GenerateResource.cache
+C:\Code\BergPerformanceInterpreter\BergPerformanceInterpreter\obj\Debug\BergPerformanceInterpreter.csproj.CoreCompileInputs.cache
+C:\Code\BergPerformanceInterpreter\BergPerformanceInterpreter\obj\Debug\BergPerformanceInterpreter.csproj.CopyComplete
+C:\Code\BergPerformanceInterpreter\BergPerformanceInterpreter\obj\Debug\BergPerformanceInterpreter.exe
+C:\Code\BergPerformanceInterpreter\BergPerformanceInterpreter\obj\Debug\BergPerformanceInterpreter.pdb

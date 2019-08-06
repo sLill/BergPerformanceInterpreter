@@ -54,16 +54,7 @@ namespace BergPerformanceDashboard
         #region InitializeControls
         private void InitializeControls()
         {
-            // chartLogicalProcessingUnits
-            chartLogicalProcessingUnits.Series[0].Name = "Processor Time";
 
-            chartLogicalProcessingUnits.ChartAreas[0].AxisY.MinorGrid.Enabled = false;
-            chartLogicalProcessingUnits.ChartAreas[0].AxisY.MajorGrid.Enabled = false;
-            chartLogicalProcessingUnits.ChartAreas[0].AxisX.MinorGrid.Enabled = false;
-            chartLogicalProcessingUnits.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
-
-            chartLogicalProcessingUnits.ChartAreas[0].AxisY.Minimum = 0;
-            chartLogicalProcessingUnits.ChartAreas[0].AxisY.Maximum = 100;
         }
         #endregion InitializeControls 
 
@@ -84,15 +75,17 @@ namespace BergPerformanceDashboard
         {
             Invoke(new OnPerformanceDataUpdated(() =>
             {
-                lblCores.Text = CpuData.CoreCount;
-                lblLogicalProcessors.Text = CpuData.LogicalProcessorsCount;
-                lblTotalCPU.Text = CpuData.TotalCPU;
-                lblTotalCpuUser.Text = CpuData.TotalUserCPU;
+                cpuPerformanceControl.Cores = CpuData.CoreCount;
+                cpuPerformanceControl.LogicalProcessors = CpuData.LogicalProcessorsCount;
+                cpuPerformanceControl.TotalCpu = CpuData.TotalCPU;
+                cpuPerformanceControl.TotalCpuUser = CpuData.TotalUserCPU;
 
-                chartLogicalProcessingUnits.Series[0].Points.Clear();
-                for (int i = 0; i < CpuData.LogicalCores.Count; i++)
+                cpuPerformanceControl.Series[0].Points.Add(Convert.ToDouble(CpuData.TotalCPU));
+
+                foreach (var logicalCore in CpuData.LogicalCores)
                 {
-                    chartLogicalProcessingUnits.Series[0].Points.AddXY(i, (Convert.ToDouble(CpuData.LogicalCores[i].PercentUserTime)));
+                    string SeriesName = $"LogicalProcessorSeries_{logicalCore.CoreId}";
+                    cpuPerformanceControl.Series[SeriesName].Points.Add(Convert.ToDouble(logicalCore.PercentProcessorTime));
                 }
             }), null);
         }    

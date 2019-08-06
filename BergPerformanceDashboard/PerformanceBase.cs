@@ -48,6 +48,22 @@ namespace BergPerformanceDashboard
             PerformanceDataUpdated?.Invoke(this, EventArgs.Empty);
         }
         #endregion GetPerformanceUpdate
+
+        #region GetPropertyValue
+        protected string GetPropertyValue(ManagementBaseObject systemItem, string fieldName)
+        {
+            string Result = string.Empty;
+
+            try
+            {
+                Result = systemItem.GetPropertyValue(fieldName).ToString();
+                //Result = systemItem[fieldName].ToString();
+            }
+            catch { }
+
+            return Result;
+        }
+        #endregion GetPropertyValue
         #endregion Methods..
     }
 }

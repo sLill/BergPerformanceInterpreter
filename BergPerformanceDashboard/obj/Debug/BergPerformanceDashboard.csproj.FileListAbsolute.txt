@@ -7,3 +7,13 @@ C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceDa
 C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceDashboard\obj\Debug\BergPerformanceDashboard.csproj.CoreCompileInputs.cache
 C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceDashboard\obj\Debug\BergPerformanceDashboard.dll
 C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceDashboard\obj\Debug\BergPerformanceDashboard.pdb
+C:\Code\BergPerformanceInterpreter\BergPerformanceDashboard\bin\Debug\BergPerformanceDashboard.dll
+C:\Code\BergPerformanceInterpreter\BergPerformanceDashboard\bin\Debug\BergPerformanceDashboard.pdb
+C:\Code\BergPerformanceInterpreter\BergPerformanceDashboard\obj\Debug\BergPerformanceDashboard.CpuPerformanceControl.resources
+C:\Code\BergPerformanceInterpreter\BergPerformanceDashboard\obj\Debug\BergPerformanceDashboard.BergPerformanceDashboardControl.resources
+C:\Code\BergPerformanceInterpreter\BergPerformanceDashboard\obj\Debug\BergPerformanceDashboard.Properties.Resources.resources
+C:\Code\BergPerformanceInterpreter\BergPerformanceDashboard\obj\Debug\BergPerformanceDashboard.ToolTipLabel.resources
+C:\Code\BergPerformanceInterpreter\BergPerformanceDashboard\obj\Debug\BergPerformanceDashboard.csproj.GenerateResource.cache
+C:\Code\BergPerformanceInterpreter\BergPerformanceDashboard\obj\Debug\BergPerformanceDashboard.csproj.CoreCompileInputs.cache
+C:\Code\BergPerformanceInterpreter\BergPerformanceDashboard\obj\Debug\BergPerformanceDashboard.dll
+C:\Code\BergPerformanceInterpreter\BergPerformanceDashboard\obj\Debug\BergPerformanceDashboard.pdb

@@ -75,12 +75,20 @@ namespace BergPerformanceDashboard
                 L3CacheSize = systemItem["L3CacheSize"].ToString();
                 CurrentClockSpeed = systemItem["CurrentClockSpeed"].ToString();
                 MaxClockSpeed = systemItem["MaxClockSpeed"].ToString();
-                ThreadCount = systemItem["ThreadCount"].ToString();
+                ThreadCount = GetPropertyValue(systemItem, "ThreadCount");
                 CoreCount = systemItem["NumberOfCores"].ToString();
                 LoadPercentage = systemItem["LoadPercentage"].ToString();
                 LogicalProcessorsCount = systemItem["NumberOfLogicalProcessors"].ToString();
                 Name = systemItem["Name"].ToString();
                 Status = systemItem["Status"].ToString();
+            }
+
+            foreach (var systemItem in ManagementObjectSearcher.Get())
+            {
+                foreach (var property in systemItem.Properties)
+                {
+                    Console.WriteLine($"{property.Name} - {property.Value}");
+                }
             }
         }
         #endregion Initialize
