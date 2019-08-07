@@ -82,14 +82,6 @@ namespace BergPerformanceDashboard
                 Name = systemItem["Name"].ToString();
                 Status = systemItem["Status"].ToString();
             }
-
-            foreach (var systemItem in ManagementObjectSearcher.Get())
-            {
-                foreach (var property in systemItem.Properties)
-                {
-                    Console.WriteLine($"{property.Name} - {property.Value}");
-                }
-            }
         }
         #endregion Initialize
 
@@ -111,6 +103,12 @@ namespace BergPerformanceDashboard
                     {
                         TotalCPU = systemItem["PercentProcessorTime"].ToString();
                         TotalUserCPU = systemItem["PercentUserTime"].ToString();
+
+
+                        foreach (var property in systemItem.Properties)
+                        {
+                            Console.WriteLine($"{property.Name} - {property.Value}");
+                        }
                     }
                     else
                     {

@@ -28,18 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.groupBoxCPU = new System.Windows.Forms.GroupBox();
             this.chartCpu = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.cbFilterUser = new System.Windows.Forms.ComboBox();
-            this.cbStyle = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanelCpuDetails = new System.Windows.Forms.TableLayoutPanel();
             this.lblTotalCpu = new System.Windows.Forms.Label();
             this.lblLogicalProcessors = new System.Windows.Forms.Label();
             this.lblCores = new System.Windows.Forms.Label();
             this.lblThreads = new System.Windows.Forms.Label();
             this.lblTotalCpuUser = new System.Windows.Forms.Label();
+            this.ctxChartCpu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tsCpuViewMode = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsOverallUtilization = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsLogicalProcessors = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTipLabel4 = new BergPerformanceDashboard.ToolTipLabel();
             this.toolTipLabel5 = new BergPerformanceDashboard.ToolTipLabel();
             this.toolTipLabel6 = new BergPerformanceDashboard.ToolTipLabel();
@@ -48,6 +52,7 @@
             this.groupBoxCPU.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartCpu)).BeginInit();
             this.tableLayoutPanelCpuDetails.SuspendLayout();
+            this.ctxChartCpu.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxCPU
@@ -55,7 +60,6 @@
             this.groupBoxCPU.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.groupBoxCPU.Controls.Add(this.chartCpu);
             this.groupBoxCPU.Controls.Add(this.cbFilterUser);
-            this.groupBoxCPU.Controls.Add(this.cbStyle);
             this.groupBoxCPU.Controls.Add(this.tableLayoutPanelCpuDetails);
             this.groupBoxCPU.Location = new System.Drawing.Point(2, 3);
             this.groupBoxCPU.Name = "groupBoxCPU";
@@ -83,6 +87,7 @@
             chartArea1.AxisY2.MajorTickMark.Enabled = false;
             chartArea1.Name = "OverallCpu";
             this.chartCpu.ChartAreas.Add(chartArea1);
+            this.chartCpu.ContextMenuStrip = this.ctxChartCpu;
             this.chartCpu.Location = new System.Drawing.Point(-14, 52);
             this.chartCpu.Margin = new System.Windows.Forms.Padding(0);
             this.chartCpu.Name = "chartCpu";
@@ -113,21 +118,6 @@
             this.cbFilterUser.Name = "cbFilterUser";
             this.cbFilterUser.Size = new System.Drawing.Size(121, 21);
             this.cbFilterUser.TabIndex = 17;
-            // 
-            // cbStyle
-            // 
-            this.cbStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbStyle.FormattingEnabled = true;
-            this.cbStyle.Items.AddRange(new object[] {
-            "Overall",
-            "Virtual Cores"});
-            this.cbStyle.Location = new System.Drawing.Point(556, 28);
-            this.cbStyle.Margin = new System.Windows.Forms.Padding(3, 3, 17, 3);
-            this.cbStyle.Name = "cbStyle";
-            this.cbStyle.Size = new System.Drawing.Size(121, 21);
-            this.cbStyle.TabIndex = 16;
-            this.cbStyle.SelectedIndexChanged += new System.EventHandler(this.CbStyle_SelectedIndexChanged);
             // 
             // tableLayoutPanelCpuDetails
             // 
@@ -220,6 +210,37 @@
             this.lblTotalCpuUser.Text = "-";
             this.lblTotalCpuUser.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // ctxChartCpu
+            // 
+            this.ctxChartCpu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsCpuViewMode});
+            this.ctxChartCpu.Name = "ctxChartCpu";
+            this.ctxChartCpu.Size = new System.Drawing.Size(160, 26);
+            // 
+            // tsCpuViewMode
+            // 
+            this.tsCpuViewMode.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsOverallUtilization,
+            this.tsLogicalProcessors});
+            this.tsCpuViewMode.Name = "tsCpuViewMode";
+            this.tsCpuViewMode.Size = new System.Drawing.Size(159, 22);
+            this.tsCpuViewMode.Text = "CPU View Mode";
+            this.tsCpuViewMode.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsCpuViewMode_DropDownItemClicked);
+            // 
+            // tsOverallUtilization
+            // 
+            this.tsOverallUtilization.Checked = true;
+            this.tsOverallUtilization.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tsOverallUtilization.Name = "tsOverallUtilization";
+            this.tsOverallUtilization.Size = new System.Drawing.Size(180, 22);
+            this.tsOverallUtilization.Text = "Overall Utilization";
+            // 
+            // tsLogicalProcessors
+            // 
+            this.tsLogicalProcessors.Name = "tsLogicalProcessors";
+            this.tsLogicalProcessors.Size = new System.Drawing.Size(180, 22);
+            this.tsLogicalProcessors.Text = "Logical Processors";
+            // 
             // toolTipLabel4
             // 
             this.toolTipLabel4.AutoSize = true;
@@ -232,7 +253,8 @@
             this.toolTipLabel4.TabIndex = 9;
             this.toolTipLabel4.Text = "Logical Processors:";
             this.toolTipLabel4.ToolTipEnabled = true;
-            this.toolTipLabel4.ToolTipText = "Equal to 2x the number of physical cpu cores when hyperthreading is enabled";
+            this.toolTipLabel4.ToolTipText = "Typically equal to twice the number of physical cpu cores when hyperthreading is " +
+    "enabled";
             // 
             // toolTipLabel5
             // 
@@ -259,8 +281,8 @@
             this.toolTipLabel6.Size = new System.Drawing.Size(126, 14);
             this.toolTipLabel6.TabIndex = 10;
             this.toolTipLabel6.Text = "Total CPU Usage";
-            this.toolTipLabel6.ToolTipEnabled = true;
-            this.toolTipLabel6.ToolTipText = "The number";
+            this.toolTipLabel6.ToolTipEnabled = false;
+            this.toolTipLabel6.ToolTipText = "";
             // 
             // toolTipLabel7
             // 
@@ -275,7 +297,7 @@
             this.toolTipLabel7.TabIndex = 11;
             this.toolTipLabel7.Text = "Total CPU Usage (User):";
             this.toolTipLabel7.ToolTipEnabled = true;
-            this.toolTipLabel7.ToolTipText = "The number";
+            this.toolTipLabel7.ToolTipText = "Time spent working on user applications and user environment specific processes";
             // 
             // toolTipLabel8
             // 
@@ -305,6 +327,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.chartCpu)).EndInit();
             this.tableLayoutPanelCpuDetails.ResumeLayout(false);
             this.tableLayoutPanelCpuDetails.PerformLayout();
+            this.ctxChartCpu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -313,7 +336,6 @@
         private System.Windows.Forms.GroupBox groupBoxCPU;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartCpu;
         private System.Windows.Forms.ComboBox cbFilterUser;
-        private System.Windows.Forms.ComboBox cbStyle;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelCpuDetails;
         private ToolTipLabel toolTipLabel4;
         private System.Windows.Forms.Label lblTotalCpu;
@@ -325,5 +347,9 @@
         private ToolTipLabel toolTipLabel7;
         private ToolTipLabel toolTipLabel8;
         private System.Windows.Forms.Label lblTotalCpuUser;
+        private System.Windows.Forms.ContextMenuStrip ctxChartCpu;
+        private System.Windows.Forms.ToolStripMenuItem tsCpuViewMode;
+        private System.Windows.Forms.ToolStripMenuItem tsOverallUtilization;
+        private System.Windows.Forms.ToolStripMenuItem tsLogicalProcessors;
     }
 }

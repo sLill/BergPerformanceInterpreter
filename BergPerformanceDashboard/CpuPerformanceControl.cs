@@ -13,7 +13,16 @@ namespace BergPerformanceDashboard
 {
     public partial class CpuPerformanceControl : UserControl
     {
+        #region Enums..
+        private enum CpuViewMode
+        {
+            OverallUtilization,
+            LogicalProcessors
+        }
+        #endregion Enums..
+
         #region Member Variables..
+        private CpuViewMode _CpuViewMode = CpuViewMode.OverallUtilization;
         #endregion Member Variables..
 
         #region Properties..
@@ -83,32 +92,29 @@ namespace BergPerformanceDashboard
 
         #region Methods..
         #region Events..
-        #region CbStyle_SelectedIndexChanged
-        private void CbStyle_SelectedIndexChanged(object sender, EventArgs e)
+        #region tsCpuViewMode_DropDownItemClicked
+        private void tsCpuViewMode_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            bool ShowLogicalProcessors = cbStyle.SelectedIndex == 1;
+            foreach (ToolStripMenuItem item in tsCpuViewMode.DropDownItems)
+            {
+                item.Checked = item.Name == e.ClickedItem.Name;
+            }
+
             foreach (var chartArea in chartCpu.ChartAreas)
             {
-                bool IsLogicalProcessorChart = chartArea.Name.Contains("LogicalProcessorChartArea");
-                if (ShowLogicalProcessors)
-                {
-                    chartArea.Visible = IsLogicalProcessorChart;
-                }
-                else
-                {
-                    chartArea.Visible = !IsLogicalProcessorChart;
-                }
+                chartArea.Visible = (CpuViewMode)e.ClickedItem.Tag == (CpuViewMode)chartArea.Tag;
             }
         }
-        #endregion CbStyle_SelectedIndexChanged
+        #endregion tsCpuViewMode_DropDownItemClicked
         #endregion Events..
 
-        #region GetNewChartArea
-        private ChartArea GetNewChartArea(string name)
+        #region AddLogicalProcessorChartArea
+        private ChartArea AddLogicalProcessorChartArea(string name)
         {
             ChartArea ChartArea = new ChartArea(name);
+            ChartArea.Tag = CpuViewMode.LogicalProcessors;
 
-            bool ShowLogicalProcessors = cbStyle.SelectedIndex == 1;
+            bool ShowLogicalProcessors = _CpuViewMode == CpuViewMode.LogicalProcessors;
             ChartArea.Visible = ShowLogicalProcessors;
 
             ChartArea.AxisX2.Enabled = AxisEnabled.True;
@@ -136,22 +142,21 @@ namespace BergPerformanceDashboard
 
             return ChartArea;
         }
-        #endregion GetNewChartArea
+        #endregion AddLogicalProcessorChartArea
 
-        #region GetNewSeries
-        private Series GetNewSeries(string name)
+        #region AddLogicalProcessorSeries
+        private Series AddLogicalProcessorSeries(string name)
         {
             Series Series = new Series(name);
             Series.ChartType = SeriesChartType.Line;
 
             return Series;
         }
-        #endregion GetNewSeries
+        #endregion AddLogicalProcessorSeries
 
         #region InitializeControls
         private void InitializeControls()
         {
-            cbStyle.SelectedIndex = 0;
             cbFilterUser.SelectedIndex = 0;
 
             InitializeGridLayout();
@@ -161,22 +166,29 @@ namespace BergPerformanceDashboard
         #region InitializeGridLayout
         private void InitializeGridLayout()
         {
+            chartCpu.ChartAreas["OverallCpu"].Tag = CpuViewMode.OverallUtilization;
+
+            ToolStripMenuItem CpuViewModeMenuItem = chartCpu.ContextMenuStrip.Items["tsCpuViewMode"] as ToolStripMenuItem;
+            CpuViewModeMenuItem.DropDownItems ["tsOverallUtilization"].Tag = CpuViewMode.OverallUtilization;
+            CpuViewModeMenuItem.DropDownItems["tsLogicalProcessors"].Tag = CpuViewMode.LogicalProcessors;
+
             for (int i = 0; i < Environment.ProcessorCount; i++)
             {
                 // ChartArea
                 string ChartAreaName = $"LogicalProcessorChartArea_{i}";
-                ChartArea LogicalProcessorChartArea = GetNewChartArea(ChartAreaName);
+                ChartArea LogicalProcessorChartArea = AddLogicalProcessorChartArea(ChartAreaName);
                 LogicalProcessorChartArea.Name = $"LogicalProcessorChartArea_{i}";
                 chartCpu.ChartAreas.Add(LogicalProcessorChartArea);
 
                 // Series
                 string SeriesName = $"LogicalProcessorSeries_{i}";
-                Series LogicalProcessorSeries = GetNewSeries(SeriesName);
+                Series LogicalProcessorSeries = AddLogicalProcessorSeries(SeriesName);
                 LogicalProcessorSeries.ChartArea = LogicalProcessorChartArea.Name;
                 chartCpu.Series.Add(LogicalProcessorSeries);
             }
         }
         #endregion InitializeGridLayout
+
         #endregion Methods..
     }
 }

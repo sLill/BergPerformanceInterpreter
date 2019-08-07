@@ -38,6 +38,10 @@
             // toolTip
             // 
             this.toolTip.AutomaticDelay = 100;
+            this.toolTip.AutoPopDelay = 32767;
+            this.toolTip.InitialDelay = 100;
+            this.toolTip.IsBalloon = true;
+            this.toolTip.ReshowDelay = 20;
             this.toolTip.UseAnimation = false;
             this.toolTip.UseFading = false;
             // 
