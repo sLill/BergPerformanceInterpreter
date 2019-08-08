@@ -4,3 +4,9 @@
 
 /.vs/BergPerformanceInterpreter/v15
 /.vs
+*.suo
+*.user
+_ReSharper.*
+bin
+obj
+packages
