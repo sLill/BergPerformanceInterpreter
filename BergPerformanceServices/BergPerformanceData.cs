@@ -20,7 +20,7 @@ namespace BergPerformanceServices
         #endregion Properties..
 
         #region Delegates/Events
-        public event EventHandler PerformanceDataUpdated;
+        public event EventHandler DataUpdated;
         #endregion Delegates/Events
 
         #region Constructors..
@@ -45,7 +45,7 @@ namespace BergPerformanceServices
         #region GetPerformanceUpdate
         protected virtual void GetPerformanceUpdate(object state)
         {
-            PerformanceDataUpdated?.Invoke(this, EventArgs.Empty);
+            DataUpdated?.Invoke(this, EventArgs.Empty);
         }
         #endregion GetPerformanceUpdate
 

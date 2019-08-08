@@ -12,7 +12,7 @@ using BergPerformanceServices;
 
 namespace BergUI
 {
-    public partial class CpuPerformanceControl : BergPerformanceControl
+    public partial class CpuPerformanceControl : UserControl, IBergPerformanceControl
     {
         #region Member Variables..
         #region Enums..
@@ -27,7 +27,6 @@ namespace BergUI
         #endregion Member Variables..
 
         #region Properties..
-
         #region ChartAreas
         public ChartAreaCollection ChartAreas
         {
@@ -50,6 +49,10 @@ namespace BergUI
             set { lblLogicalProcessors.Text = value; }
         }
         #endregion LogicalProcessors
+
+        #region BergPerformanceData
+        public BergPerformanceData PerformanceData { get; set; }
+        #endregion BergPerformanceData
 
         #region Series
         public SeriesCollection Series
@@ -83,10 +86,24 @@ namespace BergUI
         #endregion Threads
         #endregion Properties..
 
+        #region Delegates/Events
+        public delegate void OnDataUpdated();
+        #endregion Delegates/Events
+
         #region Constructors..
         #region CpuPerformanceControl
         public CpuPerformanceControl()
-             : base() { }
+             : base()
+        {
+            InitializeComponent();
+            InitializeControls();
+
+            // Prevent the control from running in VS Designer
+            if (LicenseManager.UsageMode == LicenseUsageMode.Runtime)
+            {
+                InitializeData();
+            }
+        }
         #endregion CpuPerformanceControl
         #endregion Constructors..
 
@@ -155,21 +172,20 @@ namespace BergUI
         #endregion AddLogicalProcessorSeries
 
         #region InitializeControls
-        protected override void InitializeControls()
+        public void InitializeControls()
         {
-            base.InitializeControls();
-
             cbFilterUser.SelectedIndex = 0;
             InitializeGridLayout();
         }
         #endregion InitializeControls
 
-        protected override void InitializeData()
+        #region InitializeData
+        public void InitializeData()
         {
-            base.InitializeData();
-
             PerformanceData = new CpuPerformanceData(1000);
+            PerformanceData.DataUpdated += OnPerformanceDataUpdated;
         }
+        #endregion InitializeData
 
         #region InitializeGridLayout
         private void InitializeGridLayout()
@@ -177,7 +193,7 @@ namespace BergUI
             chartCpu.ChartAreas["OverallCpu"].Tag = CpuViewMode.OverallUtilization;
 
             ToolStripMenuItem CpuViewModeMenuItem = chartCpu.ContextMenuStrip.Items["tsCpuViewMode"] as ToolStripMenuItem;
-            CpuViewModeMenuItem.DropDownItems ["tsOverallUtilization"].Tag = CpuViewMode.OverallUtilization;
+            CpuViewModeMenuItem.DropDownItems["tsOverallUtilization"].Tag = CpuViewMode.OverallUtilization;
             CpuViewModeMenuItem.DropDownItems["tsLogicalProcessors"].Tag = CpuViewMode.LogicalProcessors;
 
             for (int i = 0; i < Environment.ProcessorCount; i++)
@@ -197,13 +213,11 @@ namespace BergUI
         }
         #endregion InitializeGridLayout
 
-        #region OnDataUpdated
-        public override void OnDataUpdated(object sender, EventArgs e)
+        #region OnPerformanceDataUpdated
+        public void OnPerformanceDataUpdated(object sender, EventArgs e)
         {
-            base.OnDataUpdated(sender, e);
-
             CpuPerformanceData CpuPerformanceData = PerformanceData as CpuPerformanceData;
-            Invoke(new OnPerformanceDataUpdated(() =>
+            Invoke(new OnDataUpdated(() =>
             {
                 Cores = CpuPerformanceData.CoreCount;
                 LogicalProcessors = CpuPerformanceData.LogicalProcessorsCount;
@@ -219,7 +233,7 @@ namespace BergUI
                 }
             }), null);
         }
-        #endregion OnDataUpdated
+        #endregion OnPerformanceDataUpdated
         #endregion Methods..
     }
 }

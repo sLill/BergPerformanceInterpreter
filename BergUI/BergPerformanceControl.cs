@@ -18,12 +18,12 @@ namespace BergUI
 
         #region Properties..
         #region BergPerformanceData
-        public BergPerformanceData PerformanceData { get; set; }
+        protected BergPerformanceData PerformanceData { get; set; }
         #endregion BergPerformanceData
         #endregion Properties..
 
         #region Delegates/Events
-        public delegate void OnPerformanceDataUpdated();
+        public delegate void OnDataUpdated();
         #endregion Delegates/Events
 
         #region Constructors..
@@ -53,16 +53,16 @@ namespace BergUI
         #region InitializeData
         protected virtual void InitializeData()
         {
-            PerformanceData.PerformanceDataUpdated += OnDataUpdated;
+            PerformanceData.DataUpdated += OnPerformanceDataUpdated;
         }
         #endregion InitializeData
 
-        #region OnDataUpdated
-        public virtual void OnDataUpdated(object sender, EventArgs e)
+        #region OnPerformanceDataUpdated
+        public virtual void OnPerformanceDataUpdated(object sender, EventArgs e)
         {
 
         }
-        #endregion OnDataUpdated
+        #endregion OnPerformanceDataUpdated
         #endregion Methods..
     }
 }

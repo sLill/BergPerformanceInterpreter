@@ -94,7 +94,7 @@ namespace BergPerformanceServices
 
                 // CPU Performance
                 string CpuPerformanceQuery = "SELECT * FROM Win32_PerfFormattedData_PerfOS_Processor";
-                ManagementObjectSearcher ManagementObjectSearcher = new ManagementObjectSearcher(CpuPerformanceQuery);
+                ManagementObjectSearcher ManagementObjectSearcher = new ManagementObjectSearcher("root\\CIMV2", CpuPerformanceQuery);
 
                 foreach (var systemItem in ManagementObjectSearcher.Get())
                 {
@@ -103,15 +103,14 @@ namespace BergPerformanceServices
                     {
                         TotalCPU = systemItem["PercentProcessorTime"].ToString();
                         TotalUserCPU = systemItem["PercentUserTime"].ToString();
-
-
+                    }
+                    else
+                    {
                         foreach (var property in systemItem.Properties)
                         {
                             Console.WriteLine($"{property.Name} - {property.Value}");
                         }
-                    }
-                    else
-                    {
+
                         LogicalCores.Add(new LogicalCore()
                         {
                             CoreId = ItemName,

@@ -18,7 +18,7 @@ namespace BergPerformanceInterpreter
         {
             InitializeComponent();
 
-            _BergNamedPipeServer = new BergNamedPipeServer();
+            //_BergNamedPipeServer = new BergNamedPipeServer();
         }
         #endregion MainForm
         #endregion Constructors.. 
