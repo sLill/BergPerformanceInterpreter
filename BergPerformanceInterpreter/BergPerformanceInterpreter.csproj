@@ -82,9 +82,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BergPerformanceDashboard\BergPerformanceDashboard.csproj">
+    <ProjectReference Include="..\BergDataServices\BergDataServices.csproj">
+      <Project>{900de9ec-80b7-4cb9-a62b-06dca21169d5}</Project>
+      <Name>BergDataServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BergUI\BergUI.csproj">
       <Project>{bd277512-2395-4955-9ead-06dfe34a0e67}</Project>
-      <Name>BergPerformanceDashboard</Name>
+      <Name>BergUI</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

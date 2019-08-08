@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{900DE9EC-80B7-4CB9-A62B-06DCA21169D5}</ProjectGuid>
+    <ProjectGuid>{4DA2393B-2C1B-40F1-9A7D-883EB8C1DB2F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BergDataServices</RootNamespace>
-    <AssemblyName>BergDataServices</AssemblyName>
+    <RootNamespace>BergPerformanceServices</RootNamespace>
+    <AssemblyName>BergPerformanceServices</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -33,6 +33,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,10 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BergNamedPipeClient.cs" />
-    <Compile Include="BergNamedPipeServer.cs" />
-    <Compile Include="PerformanceDataStreamString.cs" />
+    <Compile Include="CpuPerformanceData.cs" />
+    <Compile Include="DiskPerformanceData.cs" />
+    <Compile Include="MemoryPerformanceData.cs" />
+    <Compile Include="BergPerformanceData.cs" />
+    <Compile Include="ProcessPerformanceData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SystemPerformanceData.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

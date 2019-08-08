@@ -1,13 +1,22 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29009.5
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.705
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BergPerformanceInterpreter", "BergPerformanceInterpreter\BergPerformanceInterpreter.csproj", "{BCF901AA-1BF9-4C4B-8CBE-6C168A28987B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BergPerformanceDashboard", "BergPerformanceDashboard\BergPerformanceDashboard.csproj", "{BD277512-2395-4955-9EAD-06DFE34A0E67}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BD277512-2395-4955-9EAD-06DFE34A0E67} = {BD277512-2395-4955-9EAD-06DFE34A0E67}
+		{900DE9EC-80B7-4CB9-A62B-06DCA21169D5} = {900DE9EC-80B7-4CB9-A62B-06DCA21169D5}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BergDataServices", "BergDataServices\BergDataServices.csproj", "{900DE9EC-80B7-4CB9-A62B-06DCA21169D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BergPerformanceServices", "BergPerformanceServices\BergPerformanceServices.csproj", "{4DA2393B-2C1B-40F1-9A7D-883EB8C1DB2F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{900DE9EC-80B7-4CB9-A62B-06DCA21169D5} = {900DE9EC-80B7-4CB9-A62B-06DCA21169D5}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BergUI", "BergUI\BergUI.csproj", "{BD277512-2395-4955-9EAD-06DFE34A0E67}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +28,18 @@ Global
 		{BCF901AA-1BF9-4C4B-8CBE-6C168A28987B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCF901AA-1BF9-4C4B-8CBE-6C168A28987B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCF901AA-1BF9-4C4B-8CBE-6C168A28987B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BD277512-2395-4955-9EAD-06DFE34A0E67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BD277512-2395-4955-9EAD-06DFE34A0E67}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BD277512-2395-4955-9EAD-06DFE34A0E67}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BD277512-2395-4955-9EAD-06DFE34A0E67}.Release|Any CPU.Build.0 = Release|Any CPU
 		{900DE9EC-80B7-4CB9-A62B-06DCA21169D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{900DE9EC-80B7-4CB9-A62B-06DCA21169D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{900DE9EC-80B7-4CB9-A62B-06DCA21169D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{900DE9EC-80B7-4CB9-A62B-06DCA21169D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DA2393B-2C1B-40F1-9A7D-883EB8C1DB2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DA2393B-2C1B-40F1-9A7D-883EB8C1DB2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DA2393B-2C1B-40F1-9A7D-883EB8C1DB2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DA2393B-2C1B-40F1-9A7D-883EB8C1DB2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD277512-2395-4955-9EAD-06DFE34A0E67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD277512-2395-4955-9EAD-06DFE34A0E67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD277512-2395-4955-9EAD-06DFE34A0E67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD277512-2395-4955-9EAD-06DFE34A0E67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
