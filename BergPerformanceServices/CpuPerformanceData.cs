@@ -93,7 +93,8 @@ namespace BergPerformanceServices
                 LogicalCores = new List<LogicalCore>();
 
                 // CPU Performance
-                string CpuPerformanceQuery = "SELECT * FROM Win32_PerfFormattedData_PerfOS_Processor";
+                //string CpuPerformanceQuery = "SELECT * FROM Win32_PerfFormattedData_PerfOS_Processor";
+                string CpuPerformanceQuery = "SELECT * FROM Win32_PerfRawData_PerfOS_Processor";
                 ManagementObjectSearcher ManagementObjectSearcher = new ManagementObjectSearcher("root\\CIMV2", CpuPerformanceQuery);
 
                 foreach (var systemItem in ManagementObjectSearcher.Get())
@@ -106,10 +107,10 @@ namespace BergPerformanceServices
                     }
                     else
                     {
-                        foreach (var property in systemItem.Properties)
-                        {
-                            Console.WriteLine($"{property.Name} - {property.Value}");
-                        }
+                        //foreach (var property in systemItem.Properties)
+                        //{
+                        //    Console.WriteLine($"{property.Name} - {property.Value}");
+                        //}
 
                         LogicalCores.Add(new LogicalCore()
                         {
