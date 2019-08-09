@@ -69,6 +69,14 @@ namespace BergUI
         }
         #endregion TotalCpu
 
+        #region TotalCpuFromRaw
+        public string TotalCpuFromRaw
+        {
+            get { return lblTotalCpuFromRaw.Text; }
+            set { lblTotalCpuFromRaw.Text = value; }
+        }
+        #endregion TotalCpuFromRaw
+
         #region TotalCpuUser
         public string TotalCpuUser
         {
@@ -223,6 +231,7 @@ namespace BergUI
                 LogicalProcessors = CpuPerformanceData.LogicalProcessorsCount;
                 TotalCpu = CpuPerformanceData.TotalCPU;
                 TotalCpuUser = CpuPerformanceData.TotalUserCPU;
+                TotalCpuFromRaw = CpuPerformanceData.TotalCPUFromRaw;
 
                 this.Series[0].Points.Add(Convert.ToDouble(CpuPerformanceData.TotalCPU));
 

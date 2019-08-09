@@ -44,12 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BergPerformanceControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="BergPerformanceControl.Designer.cs">
-      <DependentUpon>BergPerformanceControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="CpuPerformanceControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
