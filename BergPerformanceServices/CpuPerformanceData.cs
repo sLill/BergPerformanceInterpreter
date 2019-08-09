@@ -93,9 +93,24 @@ namespace BergPerformanceServices
                 LogicalCores = new List<LogicalCore>();
 
                 // CPU Performance
-                //string CpuPerformanceQuery = "SELECT * FROM Win32_PerfFormattedData_PerfOS_Processor";
-                string CpuPerformanceQuery = "SELECT * FROM Win32_PerfRawData_PerfOS_Processor";
+                string CpuPerformanceQuery = "SELECT * FROM Win32_PerfFormattedData_PerfOS_Processor";
+                string CpuPerformanceQueryRaw = "SELECT * FROM Win32_PerfRawData_PerfOS_Processor";
+
                 ManagementObjectSearcher ManagementObjectSearcher = new ManagementObjectSearcher("root\\CIMV2", CpuPerformanceQuery);
+                ManagementObjectSearcher ManagementObjectSearcherRaw = new ManagementObjectSearcher("root\\CIMV2", CpuPerformanceQueryRaw);
+
+                string RawCpu = string.Empty;
+                string RawUser = string.Empty;
+
+                foreach (var systemItem in ManagementObjectSearcherRaw.Get())
+                {
+                    string ItemName = systemItem["Name"].ToString();
+                    if (ItemName == "_Total")
+                    {
+                        RawCpu = systemItem["PercentProcessorTime"].ToString().GetPerfValueFromRaw();
+                        RawUser = systemItem["PercentUserTime"].ToString();
+                    }
+                }
 
                 foreach (var systemItem in ManagementObjectSearcher.Get())
                 {
