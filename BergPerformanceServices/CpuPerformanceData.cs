@@ -9,6 +9,9 @@ namespace BergPerformanceServices
     public class CpuPerformanceData : BergPerformanceData
     {
         #region Member Variables..
+        private long _RawCpuPrev = 0;
+        private long _RawUserCpuPrev = 0;
+        private UInt64 _RawTimeStampPrev = 0;
         #endregion Member Variables..
 
         #region Properties..
@@ -37,8 +40,6 @@ namespace BergPerformanceServices
 
         public string TotalCPU { get; private set; }
 
-        public string TotalCPUFromRaw { get; private set; }
-
         public string TotalUserCPU { get; private set; }
         #endregion Properties..
 
@@ -65,7 +66,6 @@ namespace BergPerformanceServices
         protected override void Initialize()
         {
             base.Initialize();
-
             ManagementObjectSearcher ManagementObjectSearcher = new ManagementObjectSearcher();
 
             // CPU Information
@@ -96,24 +96,40 @@ namespace BergPerformanceServices
                 LogicalCores = new List<LogicalCore>();
 
                 // CPU Performance
-                string CpuPerformanceQuery = "SELECT * FROM Win32_PerfFormattedData_PerfOS_Processor";
-                ManagementObjectSearcher ManagementObjectSearcher = new ManagementObjectSearcher("root\\CIMV2", CpuPerformanceQuery);
-
                 // Raw Calculation : ~200-250 ms faster than formatted 
                 //string CpuPerformanceQueryRaw = "SELECT * FROM Win32_PerfRawData_PerfOS_Processor";
                 //ManagementObjectSearcher ManagementObjectSearcherRaw = new ManagementObjectSearcher("root\\CIMV2", CpuPerformanceQueryRaw);
                 //foreach (var systemItem in ManagementObjectSearcherRaw.Get())
                 //{
                 //    string ItemName = systemItem["Name"].ToString();
+                //    UInt64 RawTimeStampCurrent = Convert.ToUInt64(systemItem["Timestamp_Sys100NS"]);
+
                 //    if (ItemName == "_Total")
                 //    {
-                //        TotalCPUFromRaw = GetPerfValueFromRaw(RawCpu, Convert.ToInt64(systemItem["PercentProcessorTime"]), RawtimeStamp, Convert.ToUInt64(systemItem["Timestamp_Sys100NS"]));
+                //        if (_RawTimeStampPrev > 0 && _RawCpuPrev > 0)
+                //        {
+                //            TotalCPU = GetPerfValueFromRaw(CookingType.PERF_100NSEC_TIMER_INV, _RawCpuPrev, Convert.ToInt64(systemItem["PercentProcessorTime"]), _RawTimeStampPrev, RawTimeStampCurrent);
+                //            TotalUserCPU = GetPerfValueFromRaw(CookingType.PERF_100NSEC_TIMER, _RawUserCpuPrev, Convert.ToInt64(systemItem["PercentUserTime"]), _RawTimeStampPrev, RawTimeStampCurrent);
+                //        }
 
-                //        RawtimeStamp = Convert.ToUInt64(systemItem["Timestamp_Sys100NS"]);
-                //        RawCpu = Convert.ToInt64(systemItem["PercentProcessorTime"]);
+                //        _RawCpuPrev = Convert.ToInt64(systemItem["PercentProcessorTime"]);
+                //        _RawUserCpuPrev = Convert.ToInt64(systemItem["PercentUserTime"]);
+                //        _RawTimeStampPrev = Convert.ToUInt64(systemItem["Timestamp_Sys100NS"]);
+                //    }
+                //    else
+                //    {
+                //        LogicalCores.Add(new LogicalCore()
+                //        {
+                //            CoreId = ItemName,
+                //            PercentProcessorTime = systemItem["PercentProcessorTime"].ToString(),
+                //            PercentUserTime = systemItem["PercentUserTime"].ToString()
+                //        });
                 //    }
                 //}
 
+                // Formatted Calculation
+                string CpuPerformanceQuery = "SELECT * FROM Win32_PerfFormattedData_PerfOS_Processor";
+                ManagementObjectSearcher ManagementObjectSearcher = new ManagementObjectSearcher("root\\CIMV2", CpuPerformanceQuery);
                 foreach (var systemItem in ManagementObjectSearcher.Get())
                 {
                     string ItemName = systemItem["Name"].ToString();

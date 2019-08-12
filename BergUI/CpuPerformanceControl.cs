@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using BergPerformanceServices;
+using System.Threading;
 
 namespace BergUI
 {
@@ -68,14 +69,6 @@ namespace BergUI
             set { lblTotalCpu.Text = value; }
         }
         #endregion TotalCpu
-
-        #region TotalCpuFromRaw
-        public string TotalCpuFromRaw
-        {
-            get { return lblTotalCpuFromRaw.Text; }
-            set { lblTotalCpuFromRaw.Text = value; }
-        }
-        #endregion TotalCpuFromRaw
 
         #region TotalCpuUser
         public string TotalCpuUser
@@ -182,7 +175,6 @@ namespace BergUI
         #region InitializeControls
         public void InitializeControls()
         {
-            cbFilterUser.SelectedIndex = 0;
             InitializeGridLayout();
         }
         #endregion InitializeControls
@@ -231,7 +223,6 @@ namespace BergUI
                 LogicalProcessors = CpuPerformanceData.LogicalProcessorsCount;
                 TotalCpu = CpuPerformanceData.TotalCPU;
                 TotalCpuUser = CpuPerformanceData.TotalUserCPU;
-                TotalCpuFromRaw = CpuPerformanceData.TotalCPUFromRaw;
 
                 this.Series[0].Points.Add(Convert.ToDouble(CpuPerformanceData.TotalCPU));
 

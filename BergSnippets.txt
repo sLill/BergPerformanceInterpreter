@@ -1,0 +1,36 @@
+            Console.WriteLine($"CPUPerformanceDataUpdate - {DateTime.Now.ToString("HH:mm:ss")}");
+			
+                //Console.WriteLine($"LPU 0 - {CpuData.LogicalCores[0].PercentProcessorTime}{Environment.NewLine}" +
+                //                  $"LPU 1 - {CpuData.LogicalCores[1].PercentProcessorTime}\n" +
+                //                  $"LPU 2 - {CpuData.LogicalCores[2].PercentProcessorTime}\n" +
+                //                  $"LPU 3 - {CpuData.LogicalCores[3].PercentProcessorTime}\n" +
+                //                  $"LPU 4 - {CpuData.LogicalCores[4].PercentProcessorTime}\n" +
+                //                  $"LPU 5 - {CpuData.LogicalCores[5].PercentProcessorTime}\n" +
+                //                  $"LPU 6 - {CpuData.LogicalCores[6].PercentProcessorTime}\n" +
+                //                  $"LPU 7 - {CpuData.LogicalCores[7].PercentProcessorTime}\n");
+				
+				foreach (var property in systemItem.Properties)
+                {
+                    Console.WriteLine($"{property.Name} - {property.Value}");
+                }
+				
+				
+				
+            foreach (var systemItem in ManagementObjectSearcher.Get())
+            {
+                foreach (var property in systemItem.Properties)
+                {
+                    Console.WriteLine($"{property.Name} - {property.Value}");
+                }
+            }
+
+
+                loadingControl.Visible = true;
+                loadingControl.Active = true;
+                loadingControl.BringToFront();
+                await Task.Run(() => Thread.Sleep(5000));
+                loadingControl.Active = false;
+                loadingControl.SendToBack();
+                loadingControl.Visible = false;			
+				
+

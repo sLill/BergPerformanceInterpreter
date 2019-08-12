@@ -23,6 +23,14 @@ namespace BergPerformanceServices
         public event EventHandler DataUpdated;
         #endregion Delegates/Events
 
+        #region Enums..
+        public enum CookingType
+        {
+            PERF_100NSEC_TIMER_INV,
+            PERF_100NSEC_TIMER
+        }
+        #endregion Enums..
+
         #region Constructors..
         #region BergPerformanceData
         public BergPerformanceData(int updateInterval)
@@ -62,17 +70,26 @@ namespace BergPerformanceServices
         /// <param name="dataPointTimeStampNew"></param>
         /// <param name="dataPointTimeStampOld"></param>
         /// <returns></returns>
-        public static string GetPerfValueFromRaw(long dataPointOld, long dataPointNew, UInt64 dataPointTimeStampOld, UInt64 dataPointTimeStampNew)
+        public static string GetPerfValueFromRaw(CookingType cookingType, long dataPointOld, long dataPointNew, UInt64 dataPointTimeStampOld, UInt64 dataPointTimeStampNew)
         {
             string Result = string.Empty;
 
+            double DataDifference = (dataPointNew - dataPointOld);
+            double TimeDifference = (dataPointTimeStampNew - dataPointTimeStampOld);
             try
             {
-                double DataDifference = (dataPointNew - dataPointOld);
-                double TimeDifference = (dataPointTimeStampNew - dataPointTimeStampOld);
-                double UsageRaw = (1 - (DataDifference / TimeDifference)) * 100;
+                switch (cookingType)
+                {
+                    case CookingType.PERF_100NSEC_TIMER_INV:
+                        double UsageRawInv = (1 - (DataDifference / TimeDifference)) * 100;
+                        Result = (UsageRawInv >= 0.5) ? Convert.ToInt32(Math.Ceiling(UsageRawInv)).ToString() : "0";
+                        break;
+                    case CookingType.PERF_100NSEC_TIMER:
+                        double UsageRaw = (DataDifference / TimeDifference) * 100;
+                        Result = (UsageRaw >= 0.5) ? Convert.ToInt32(Math.Ceiling(UsageRaw)).ToString() : "0";
+                        break;
+                }
 
-                Result = (UsageRaw >= 0.5) ? Convert.ToInt32(Math.Ceiling(UsageRaw)).ToString() : "0";
             }
             catch { }
 
