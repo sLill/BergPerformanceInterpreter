@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using BergPerformanceServices;
 using System.Threading;
+using BergDataServices;
 
 namespace BergUI
 {
@@ -102,7 +103,19 @@ namespace BergUI
             // Prevent the control from running in VS Designer
             if (LicenseManager.UsageMode == LicenseUsageMode.Runtime)
             {
-                InitializeData();
+                bool isLocalDataSource = false;
+                if (isLocalDataSource)
+                {
+                    InitializeData();
+                }
+                else
+                {
+                    using (BergNamedPipeServer bergNamedPipeServer = new BergNamedPipeServer())
+                    {
+                        // Dedicates a new thread to listening explicitly for writes to the Berg named pipe
+                        bergNamedPipeServer.ListenContinuously();
+                    }
+                }
             }
         }
         #endregion CpuPerformanceControl

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BergDataServices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management;
@@ -17,6 +18,9 @@ namespace BergPerformanceServices
         #endregion Member Variables..
 
         #region Properties..
+        #region BergNamedPipeClient
+        public BergNamedPipeClient BergNamedPipeClient { get; set; }
+        #endregion BergNamedPipeClient
         #endregion Properties..
 
         #region Delegates/Events
@@ -33,10 +37,9 @@ namespace BergPerformanceServices
 
         #region Constructors..
         #region BergPerformanceData
-        public BergPerformanceData(int updateInterval)
+        protected BergPerformanceData(int updateInterval)
         {
             _UpdateInterval = updateInterval;
-
             Initialize();
         }
         #endregion BergPerformanceData
@@ -46,17 +49,14 @@ namespace BergPerformanceServices
         #region Initialize
         protected virtual void Initialize()
         {
-            _UpdateTimer = new Timer(GetPerformanceUpdate, new AutoResetEvent(true), 0 , _UpdateInterval);
+            BergNamedPipeClient = new BergNamedPipeClient();
+            _UpdateTimer = new Timer(GetPerformanceUpdate, new AutoResetEvent(true), 0, _UpdateInterval);
         }
         #endregion Initialize
 
         #region GetPerformanceUpdate
         protected virtual void GetPerformanceUpdate(object state)
         {
-            //foreach (var property in systemItem.Properties)
-            //{
-            //    Console.WriteLine($"{property.Name} - {property.Value}");
-            //}
             DataUpdated?.Invoke(this, EventArgs.Empty);
         }
         #endregion GetPerformanceUpdate
@@ -70,7 +70,7 @@ namespace BergPerformanceServices
         /// <param name="dataPointTimeStampNew"></param>
         /// <param name="dataPointTimeStampOld"></param>
         /// <returns></returns>
-        public static string GetPerfValueFromRaw(CookingType cookingType, long dataPointOld, long dataPointNew, UInt64 dataPointTimeStampOld, UInt64 dataPointTimeStampNew)
+        protected static string GetPerfValueFromRaw(CookingType cookingType, long dataPointOld, long dataPointNew, UInt64 dataPointTimeStampOld, UInt64 dataPointTimeStampNew)
         {
             string Result = string.Empty;
 
@@ -112,6 +112,13 @@ namespace BergPerformanceServices
             return Result;
         }
         #endregion GetPropertyValue
+
+        #region BroadcastPerformanceData
+        protected virtual void BroadcastPerformanceData()
+        {
+
+        }
+        #endregion BroadcastPerformanceData
         #endregion Methods..
     }
 }

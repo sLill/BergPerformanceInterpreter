@@ -30,15 +30,23 @@ namespace BergPerformanceInterpreter
         /// </summary>
         private void InitializeComponent()
         {
-            this.cpuPerformanceControl1 = new BergUI.CpuPerformanceControl();
+            this.cpuPerformanceControl = new BergUI.CpuPerformanceControl();
             this.SuspendLayout();
             // 
-            // cpuPerformanceControl1
+            // cpuPerformanceControl
             // 
-            this.cpuPerformanceControl1.Location = new System.Drawing.Point(61, 33);
-            this.cpuPerformanceControl1.Name = "cpuPerformanceControl1";
-            this.cpuPerformanceControl1.Size = new System.Drawing.Size(512, 292);
-            this.cpuPerformanceControl1.TabIndex = 0;
+            this.cpuPerformanceControl.AutoSize = true;
+            this.cpuPerformanceControl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.cpuPerformanceControl.Cores = "-";
+            this.cpuPerformanceControl.Location = new System.Drawing.Point(51, 38);
+            this.cpuPerformanceControl.LogicalProcessors = "-";
+            this.cpuPerformanceControl.Name = "cpuPerformanceControl";
+            this.cpuPerformanceControl.PerformanceData = null;
+            this.cpuPerformanceControl.Size = new System.Drawing.Size(754, 369);
+            this.cpuPerformanceControl.TabIndex = 0;
+            this.cpuPerformanceControl.Threads = "-";
+            this.cpuPerformanceControl.TotalCpu = "-";
+            this.cpuPerformanceControl.TotalCpuUser = "-";
             // 
             // MainForm
             // 
@@ -46,17 +54,18 @@ namespace BergPerformanceInterpreter
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(907, 528);
-            this.Controls.Add(this.cpuPerformanceControl1);
+            this.Controls.Add(this.cpuPerformanceControl);
             this.DoubleBuffered = true;
             this.Name = "MainForm";
             this.Text = "Berg Performance Interpreter";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private CpuPerformanceControl cpuPerformanceControl1;
+        private CpuPerformanceControl cpuPerformanceControl;
     }
 }
 

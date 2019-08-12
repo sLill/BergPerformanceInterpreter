@@ -84,6 +84,10 @@
     <None Include="Resources\tooltip_info.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BergDataServices\BergDataServices.csproj">
+      <Project>{900DE9EC-80B7-4CB9-A62B-06DCA21169D5}</Project>
+      <Name>BergDataServices</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BergPerformanceServices\BergPerformanceServices.csproj">
       <Project>{4DA2393B-2C1B-40F1-9A7D-883EB8C1DB2F}</Project>
       <Name>BergPerformanceServices</Name>

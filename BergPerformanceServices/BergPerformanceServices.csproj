@@ -51,5 +51,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SystemPerformanceData.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BergDataServices\BergDataServices.csproj">
+      <Project>{900DE9EC-80B7-4CB9-A62B-06DCA21169D5}</Project>
+      <Name>BergDataServices</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

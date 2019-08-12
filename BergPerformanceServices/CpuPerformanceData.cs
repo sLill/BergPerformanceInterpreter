@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Management;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace BergPerformanceServices
 {
@@ -88,6 +89,14 @@ namespace BergPerformanceServices
         }
         #endregion Initialize
 
+        #region BroadcastPerformanceData
+        protected override void BroadcastPerformanceData()
+        {
+            base.BroadcastPerformanceData();
+            BergNamedPipeClient.WriteByteAsync(8);
+        }
+        #endregion BroadcastPerformanceData
+
         #region GetPerformanceUpdate
         protected override void GetPerformanceUpdate(object state)
         {
@@ -95,6 +104,7 @@ namespace BergPerformanceServices
             {
                 LogicalCores = new List<LogicalCore>();
 
+                #region RawCalculation
                 // CPU Performance
                 // Raw Calculation : ~200-250 ms faster than formatted 
                 //string CpuPerformanceQueryRaw = "SELECT * FROM Win32_PerfRawData_PerfOS_Processor";
@@ -125,9 +135,10 @@ namespace BergPerformanceServices
                 //            PercentUserTime = systemItem["PercentUserTime"].ToString()
                 //        });
                 //    }
-                //}
+                //} 
+                #endregion RawCalculation
 
-                // Formatted Calculation
+                #region Formatted Calculation
                 string CpuPerformanceQuery = "SELECT * FROM Win32_PerfFormattedData_PerfOS_Processor";
                 ManagementObjectSearcher ManagementObjectSearcher = new ManagementObjectSearcher("root\\CIMV2", CpuPerformanceQuery);
                 foreach (var systemItem in ManagementObjectSearcher.Get())
@@ -148,6 +159,9 @@ namespace BergPerformanceServices
                         });
                     }
                 }
+                #endregion Formatted Calculation
+
+                BroadcastPerformanceData();
 
                 base.GetPerformanceUpdate(state);
                 Monitor.Exit(_UpdateLock);

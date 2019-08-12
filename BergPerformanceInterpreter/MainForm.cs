@@ -6,7 +6,6 @@ namespace BergPerformanceInterpreter
     public partial class MainForm : Form
     {
         #region Member Variables..
-        private BergNamedPipeServer _BergNamedPipeServer;
         #endregion Member Variables..
 
         #region Properties..
@@ -17,10 +16,11 @@ namespace BergPerformanceInterpreter
         public MainForm()
         {
             InitializeComponent();
-
-            //_BergNamedPipeServer = new BergNamedPipeServer();
         }
         #endregion MainForm
         #endregion Constructors.. 
+
+        #region Methods..
+        #endregion Methods..
     }
 }
