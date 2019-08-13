@@ -52,9 +52,9 @@ namespace BergUI
         }
         #endregion LogicalProcessors
 
-        #region BergPerformanceData
+        #region PerformanceData
         public BergPerformanceData PerformanceData { get; set; }
-        #endregion BergPerformanceData
+        #endregion PerformanceData
 
         #region Series
         public SeriesCollection Series
@@ -86,6 +86,13 @@ namespace BergUI
             set { lblThreads.Text = value; }
         }
         #endregion Threads
+
+        #region UseLocalDataSource
+        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always), Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [Description(@"""True"" uses the current system this control is running on as the datasource. ""False"" uses a remote application or executable running the BergDataServices dll as the datasource"), Category("DataSource")]
+        public bool UseLocalDataSource { get; set; }
+        #endregion UseLocalDataSource
         #endregion Properties..
 
         #region Delegates/Events
@@ -103,18 +110,13 @@ namespace BergUI
             // Prevent the control from running in VS Designer
             if (LicenseManager.UsageMode == LicenseUsageMode.Runtime)
             {
-                bool isLocalDataSource = false;
-                if (isLocalDataSource)
+                if (UseLocalDataSource)
                 {
                     InitializeData();
                 }
                 else
                 {
-                    using (BergNamedPipeServer bergNamedPipeServer = new BergNamedPipeServer())
-                    {
-                        // Dedicates a new thread to listening explicitly for writes to the Berg named pipe
-                        bergNamedPipeServer.ListenContinuously();
-                    }
+                    InitializeDataFromStream();
                 }
             }
         }
@@ -199,6 +201,24 @@ namespace BergUI
             PerformanceData.DataUpdated += OnPerformanceDataUpdated;
         }
         #endregion InitializeData
+
+        #region InitializeDataFromStream
+        public void InitializeDataFromStream()
+        {
+            using (BergNamedPipeServer bergNamedPipeServer = new BergNamedPipeServer())
+            {
+                // Dedicates a new thread to listening explicitly for writes to the Berg named pipe
+                Task.Run(() =>
+                {
+                    while (true)
+                    {
+                        int bite = bergNamedPipeServer.ListenContinuously();
+                        Console.WriteLine(bite);
+                    }
+                });
+            }
+        }
+        #endregion InitializeDataFromStream
 
         #region InitializeGridLayout
         private void InitializeGridLayout()

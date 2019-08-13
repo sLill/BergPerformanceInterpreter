@@ -38,7 +38,7 @@ namespace BergPerformanceInterpreter
             this.cpuPerformanceControl.AutoSize = true;
             this.cpuPerformanceControl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.cpuPerformanceControl.Cores = "-";
-            this.cpuPerformanceControl.Location = new System.Drawing.Point(51, 38);
+            this.cpuPerformanceControl.Location = new System.Drawing.Point(37, 35);
             this.cpuPerformanceControl.LogicalProcessors = "-";
             this.cpuPerformanceControl.Name = "cpuPerformanceControl";
             this.cpuPerformanceControl.PerformanceData = null;
@@ -47,13 +47,14 @@ namespace BergPerformanceInterpreter
             this.cpuPerformanceControl.Threads = "-";
             this.cpuPerformanceControl.TotalCpu = "-";
             this.cpuPerformanceControl.TotalCpuUser = "-";
+            this.cpuPerformanceControl.UseLocalDataSource = false;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(907, 528);
+            this.ClientSize = new System.Drawing.Size(820, 433);
             this.Controls.Add(this.cpuPerformanceControl);
             this.DoubleBuffered = true;
             this.Name = "MainForm";

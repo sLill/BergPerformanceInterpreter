@@ -31,19 +31,13 @@ namespace BergDataServices
         #endregion Dispose
 
         #region ListenContinuously
-        public void ListenContinuously()
+        public int ListenContinuously()
         {
-            Task.Run(async () =>
+            using (NamedPipeServerStream namedPipeServer = new NamedPipeServerStream("BergNamedPipe5", PipeDirection.InOut, 4))
             {
-                while (true)
-                {
-                    using (NamedPipeServerStream namedPipeServer = new NamedPipeServerStream("BergNamedPipe5", PipeDirection.InOut, 4))
-                    {
-                        await namedPipeServer.WaitForConnectionAsync();
-                        await Task.Run(() => Console.WriteLine(namedPipeServer.ReadByte()));
-                    }
-                }
-            });
+                namedPipeServer.WaitForConnectionAsync().Wait();
+                return namedPipeServer.ReadByte();
+            }
         }
         #endregion ListenContinuously
         #endregion Methods..

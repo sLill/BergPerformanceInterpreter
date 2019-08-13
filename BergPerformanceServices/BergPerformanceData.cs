@@ -18,9 +18,7 @@ namespace BergPerformanceServices
         #endregion Member Variables..
 
         #region Properties..
-        #region BergNamedPipeClient
         public BergNamedPipeClient BergNamedPipeClient { get; set; }
-        #endregion BergNamedPipeClient
         #endregion Properties..
 
         #region Delegates/Events
