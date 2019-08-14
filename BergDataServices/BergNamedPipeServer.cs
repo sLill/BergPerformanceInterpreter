@@ -14,6 +14,7 @@ namespace BergDataServices
     public class BergNamedPipeServer : IDisposable
     {
         #region Member Variables..
+        private string _PipeName = "BergNamedPipe5";
         #endregion Member Variables..
 
         #region Properties..
@@ -29,17 +30,31 @@ namespace BergDataServices
 
         }
         #endregion Dispose
-
-        #region ListenContinuously
-        public int ListenContinuously()
+        #region Read
+        public byte[] Read()
         {
-            using (NamedPipeServerStream namedPipeServer = new NamedPipeServerStream("BergNamedPipe5", PipeDirection.InOut, 4))
+            byte[] Result = null;
+
+            using (NamedPipeServerStream namedPipeServer = new NamedPipeServerStream(_PipeName, PipeDirection.InOut, 1))
             {
-                namedPipeServer.WaitForConnectionAsync().Wait();
-                return namedPipeServer.ReadByte();
+                try
+                {
+                    namedPipeServer.WaitForConnection();
+
+                    using (StreamReader reader = new StreamReader(namedPipeServer))
+                    {
+                        Result = Encoding.ASCII.GetBytes(reader.ReadToEnd());
+                    }
+                }
+                catch
+                {
+                    Console.WriteLine($"Thread {Environment.CurrentManagedThreadId} Timed Out");
+                }
             }
+
+            return Result;
         }
-        #endregion ListenContinuously
+        #endregion Read
         #endregion Methods..
     }
 }

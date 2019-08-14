@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Management;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,13 +11,13 @@ namespace BergPerformanceServices
     public class CpuPerformanceData : BergPerformanceData
     {
         #region Member Variables..
+        private static int _UpdateInterval = -1;
         private long _RawCpuPrev = 0;
         private long _RawUserCpuPrev = 0;
         private UInt64 _RawTimeStampPrev = 0;
         #endregion Member Variables..
 
         #region Properties..
-
         public string CoreCount { get; private set; }
         
         public string CurrentClockSpeed { get; private set; }
@@ -37,7 +38,7 @@ namespace BergPerformanceServices
 
         public string Status { get; private set; }
 
-        public string ThreadCount { get; set; }
+        public string ThreadCount { get; private set; }
 
         public string TotalCPU { get; private set; }
 
@@ -45,24 +46,63 @@ namespace BergPerformanceServices
         #endregion Properties..
 
         #region Structs
-        #region CpuCore
+        #region LogicalCore
         public struct LogicalCore
         {
             public string CoreId;
             public string PercentProcessorTime;
             public string PercentUserTime;
         }
-        #endregion CpuCore
+        #endregion LogicalCore
         #endregion Structs
 
         #region Constructors..
         #region CpuPerformanceData
         public CpuPerformanceData(int updateInterval)
-            : base(updateInterval) { }
+            : base(updateInterval)
+        {
+            _UpdateInterval = updateInterval;
+        }
+        #endregion CpuPerformanceData
+
+        #region CpuPerformanceData
+        public CpuPerformanceData()
+            : base() { }
         #endregion CpuPerformanceData
         #endregion Constructors..
 
         #region Methods..
+        #region Deserialize
+        public static CpuPerformanceData Deserialize(byte[] data)
+        {
+            CpuPerformanceData result = new CpuPerformanceData();
+
+            if (data.Length > 0)
+            {
+                using (MemoryStream memoryStream = new MemoryStream(data))
+                {
+                    using (BinaryReader reader = new BinaryReader(memoryStream))
+                    {
+                        result.CoreCount = reader.ReadString();
+                        result.CurrentClockSpeed = reader.ReadString();
+                        result.L2CacheSize = reader.ReadString();
+                        result.L3CacheSize = reader.ReadString();
+                        result.LoadPercentage = reader.ReadString();
+                        result.LogicalProcessorsCount = reader.ReadString();
+                        result.MaxClockSpeed = reader.ReadString();
+                        result.Name = reader.ReadString();
+                        result.Status = reader.ReadString();
+                        result.ThreadCount = reader.ReadString();
+                        result.TotalCPU = reader.ReadString();
+                        result.TotalUserCPU = reader.ReadString();
+                    }
+                }
+            }
+
+            return result;
+        }
+        #endregion Deserialize
+
         #region Initialize
         protected override void Initialize()
         {
@@ -93,7 +133,9 @@ namespace BergPerformanceServices
         protected override void BroadcastPerformanceData()
         {
             base.BroadcastPerformanceData();
-            BergNamedPipeClient.WriteByteAsync(8);
+
+            byte[] performanceDataByteArray = Serialize();
+            BergNamedPipeClient.WriteAsync(performanceDataByteArray);
         }
         #endregion BroadcastPerformanceData
 
@@ -168,6 +210,33 @@ namespace BergPerformanceServices
             }
         }
         #endregion GetPerformanceUpdate
+
+        #region Serialize
+        protected byte[] Serialize()
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                using (BinaryWriter writer = new BinaryWriter(memoryStream))
+                {
+                    writer.Write(CoreCount ?? string.Empty);
+                    writer.Write(CurrentClockSpeed ?? string.Empty);
+                    writer.Write(L2CacheSize ?? string.Empty);
+                    writer.Write(L3CacheSize ?? string.Empty);
+                    writer.Write(LoadPercentage ?? string.Empty);
+                    writer.Write(LogicalProcessorsCount ?? string.Empty);
+                    writer.Write(MaxClockSpeed ?? string.Empty);
+                    writer.Write(Name ?? string.Empty);
+                    writer.Write(Status ?? string.Empty);
+                    writer.Write(ThreadCount ?? string.Empty);
+                    writer.Write(TotalCPU ?? string.Empty);
+                    writer.Write(TotalUserCPU ?? string.Empty);
+                    //public List<LogicalCore> LogicalCores );
+                }
+
+                return memoryStream.ToArray();
+            }
+        }
+        #endregion Serialize
         #endregion Methods..
     }
 }

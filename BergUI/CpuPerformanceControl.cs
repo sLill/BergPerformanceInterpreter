@@ -93,6 +93,14 @@ namespace BergUI
         [Description(@"""True"" uses the current system this control is running on as the datasource. ""False"" uses a remote application or executable running the BergDataServices dll as the datasource"), Category("DataSource")]
         public bool UseLocalDataSource { get; set; }
         #endregion UseLocalDataSource
+
+        #region UpdateInterval
+        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always), Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [DefaultValue(1000)]
+        [Description(@"Frequency at which performance data is refreshed. Default - 1000ms"), Category("DataSource")]
+        public int UpdateInterval { get; set; }
+        #endregion UpdateInterval
         #endregion Properties..
 
         #region Delegates/Events
@@ -197,7 +205,7 @@ namespace BergUI
         #region InitializeData
         public void InitializeData()
         {
-            PerformanceData = new CpuPerformanceData(1000);
+            PerformanceData = new CpuPerformanceData(UpdateInterval);
             PerformanceData.DataUpdated += OnPerformanceDataUpdated;
         }
         #endregion InitializeData
@@ -212,8 +220,9 @@ namespace BergUI
                 {
                     while (true)
                     {
-                        int bite = bergNamedPipeServer.ListenContinuously();
-                        Console.WriteLine(bite);
+                        byte[] performanceDataByteArray = bergNamedPipeServer.Read();
+                        CpuPerformanceData CpuPerformanceData = CpuPerformanceData.Deserialize(performanceDataByteArray);
+                        OnPerformanceDataUpdated(CpuPerformanceData, null);
                     }
                 });
             }
@@ -249,7 +258,8 @@ namespace BergUI
         #region OnPerformanceDataUpdated
         public void OnPerformanceDataUpdated(object sender, EventArgs e)
         {
-            CpuPerformanceData CpuPerformanceData = PerformanceData as CpuPerformanceData;
+            //CpuPerformanceData CpuPerformanceData = PerformanceData as CpuPerformanceData;
+            CpuPerformanceData CpuPerformanceData = sender as CpuPerformanceData;
             Invoke(new OnDataUpdated(() =>
             {
                 Cores = CpuPerformanceData.CoreCount;
@@ -259,11 +269,11 @@ namespace BergUI
 
                 this.Series[0].Points.Add(Convert.ToDouble(CpuPerformanceData.TotalCPU));
 
-                foreach (var logicalCore in CpuPerformanceData.LogicalCores)
-                {
-                    string SeriesName = $"LogicalProcessorSeries_{logicalCore.CoreId}";
-                    this.Series[SeriesName].Points.Add(Convert.ToDouble(logicalCore.PercentProcessorTime));
-                }
+                //foreach (var logicalCore in CpuPerformanceData.LogicalCores)
+                //{
+                //    string SeriesName = $"LogicalProcessorSeries_{logicalCore.CoreId}";
+                //    this.Series[SeriesName].Points.Add(Convert.ToDouble(logicalCore.PercentProcessorTime));
+                //}
             }), null);
         }
         #endregion OnPerformanceDataUpdated
