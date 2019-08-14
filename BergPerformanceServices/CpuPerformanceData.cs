@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Management;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,9 +12,9 @@ namespace BergPerformanceServices
     {
         #region Member Variables..
         private static int _UpdateInterval = -1;
-        private long _RawCpuPrev = 0;
-        private long _RawUserCpuPrev = 0;
-        private UInt64 _RawTimeStampPrev = 0;
+        //private long _RawCpuPrev = 0;
+        //private long _RawUserCpuPrev = 0;
+        //private UInt64 _RawTimeStampPrev = 0;
         #endregion Member Variables..
 
         #region Properties..
@@ -43,6 +43,8 @@ namespace BergPerformanceServices
         public string TotalCPU { get; private set; }
 
         public string TotalUserCPU { get; private set; }
+
+        public Dictionary<string, PerformanceWatch> PerformanceWatchList = new Dictionary<string, PerformanceWatch>();
         #endregion Properties..
 
         #region Structs
@@ -72,6 +74,20 @@ namespace BergPerformanceServices
         #endregion Constructors..
 
         #region Methods..
+        #region BeginWatch
+        public void BeginWatch(string name)
+        {
+            PerformanceWatchList[name] = new PerformanceWatch(name);
+        }
+        #endregion BeginWatch
+
+        #region EndWatch
+        public void EndWatch(string name)
+        {
+            PerformanceWatchList.Remove(name);
+        }
+        #endregion EndWatch
+
         #region Deserialize
         public static CpuPerformanceData Deserialize(byte[] data)
         {
@@ -95,6 +111,10 @@ namespace BergPerformanceServices
                         result.ThreadCount = reader.ReadString();
                         result.TotalCPU = reader.ReadString();
                         result.TotalUserCPU = reader.ReadString();
+
+                        // Performance Watches
+                        var binaryFormatter = new BinaryFormatter();
+                        result.PerformanceWatchList = (Dictionary<string, PerformanceWatch>)binaryFormatter.Deserialize(memoryStream);
                     }
                 }
             }
@@ -135,7 +155,7 @@ namespace BergPerformanceServices
             base.BroadcastPerformanceData();
 
             byte[] performanceDataByteArray = Serialize();
-            BergNamedPipeClient.WriteAsync(performanceDataByteArray);
+            BergNamedPipeClient.Write(performanceDataByteArray);
         }
         #endregion BroadcastPerformanceData
 
@@ -231,6 +251,12 @@ namespace BergPerformanceServices
                     writer.Write(TotalCPU ?? string.Empty);
                     writer.Write(TotalUserCPU ?? string.Empty);
                     //public List<LogicalCore> LogicalCores );
+
+                    // Performance Watches
+                    foreach (var watch in PerformanceWatchList)
+                    {
+                        writer.Write(watch.Value.Serialize());
+                    }
                 }
 
                 return memoryStream.ToArray();

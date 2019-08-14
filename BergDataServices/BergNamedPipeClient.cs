@@ -12,7 +12,6 @@ namespace BergDataServices
     {
         #region Member Variables..
         private string _PipeName = "BergNamedPipe5";
-        private object _WriteLock = new object();
         #endregion Member Variables..
 
         #region Properties..
@@ -22,8 +21,8 @@ namespace BergDataServices
         #endregion Constructors..
 
         #region Methods..
-        #region WriteAsync
-        public void WriteAsync(byte[] buffer)
+        #region Write
+        public void Write(byte[] buffer)
         {
             using (NamedPipeClientStream namedPipeClientStream = new NamedPipeClientStream(_PipeName))
             {
@@ -40,7 +39,7 @@ namespace BergDataServices
                 }
             }
         }
-        #endregion WriteAsync
+        #endregion Write
 
         #region WriteByteAsync
         public async void WriteByteAsync(byte value)
