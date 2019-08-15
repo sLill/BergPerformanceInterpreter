@@ -91,7 +91,7 @@ namespace BergPerformanceServices
         #region Deserialize
         public static CpuPerformanceData Deserialize(byte[] data)
         {
-            CpuPerformanceData result = new CpuPerformanceData();
+            CpuPerformanceData Result = new CpuPerformanceData();
 
             if (data.Length > 0)
             {
@@ -99,27 +99,27 @@ namespace BergPerformanceServices
                 {
                     using (BinaryReader reader = new BinaryReader(memoryStream))
                     {
-                        result.CoreCount = reader.ReadString();
-                        result.CurrentClockSpeed = reader.ReadString();
-                        result.L2CacheSize = reader.ReadString();
-                        result.L3CacheSize = reader.ReadString();
-                        result.LoadPercentage = reader.ReadString();
-                        result.LogicalProcessorsCount = reader.ReadString();
-                        result.MaxClockSpeed = reader.ReadString();
-                        result.Name = reader.ReadString();
-                        result.Status = reader.ReadString();
-                        result.ThreadCount = reader.ReadString();
-                        result.TotalCPU = reader.ReadString();
-                        result.TotalUserCPU = reader.ReadString();
+                        Result.CoreCount = reader.ReadString();
+                        Result.CurrentClockSpeed = reader.ReadString();
+                        Result.L2CacheSize = reader.ReadString();
+                        Result.L3CacheSize = reader.ReadString();
+                        Result.LoadPercentage = reader.ReadString();
+                        Result.LogicalProcessorsCount = reader.ReadString();
+                        Result.MaxClockSpeed = reader.ReadString();
+                        Result.Name = reader.ReadString();
+                        Result.Status = reader.ReadString();
+                        Result.ThreadCount = reader.ReadString();
+                        Result.TotalCPU = reader.ReadString();
+                        Result.TotalUserCPU = reader.ReadString();
 
                         // Performance Watches
-                        var binaryFormatter = new BinaryFormatter();
-                        result.PerformanceWatchList = (Dictionary<string, PerformanceWatch>)binaryFormatter.Deserialize(memoryStream);
+                        //var BinaryFormatter = new BinaryFormatter();
+                        //Result.PerformanceWatchList = (Dictionary<string, PerformanceWatch>)BinaryFormatter.Deserialize(memoryStream);
                     }
                 }
             }
 
-            return result;
+            return Result;
         }
         #endregion Deserialize
 

@@ -18,6 +18,12 @@ namespace BergPerformanceServices
 
         #region Constructors..
         #region PerformanceWatch
+        private PerformanceWatch()
+        {
+        }
+        #endregion PerformanceWatch
+
+        #region PerformanceWatch
         public PerformanceWatch(string name)
         {
             Name = name;
@@ -26,6 +32,23 @@ namespace BergPerformanceServices
         #endregion Constructors..
 
         #region Methods..
+        #region Deserialize
+        public static PerformanceWatch Deserialize(byte[] data)
+        {
+            PerformanceWatch Result = new PerformanceWatch();
+
+            using (MemoryStream memoryStream = new MemoryStream(data))
+            {
+                using (BinaryReader reader = new BinaryReader(memoryStream))
+                {
+                    Result.Name = reader.ReadString();
+                }
+            }
+
+            return Result;
+        }
+        #endregion Deserialize
+
         #region Serialize
         public byte[] Serialize()
         {
