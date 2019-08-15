@@ -17,21 +17,10 @@ namespace BergPerformanceServices
     public class BergPerformanceData
     {
         #region Member Variables..
-        [NonSerialized]
-        protected object _UpdateLock = new object();
-
-        [NonSerialized]
-        private int _UpdateInterval = -1;
-
-        [NonSerialized]
-        private Timer _UpdateTimer;
         #endregion Member Variables..
 
         #region Properties..
-        #region BergNamedPipeClient
-        [NonSerialized]
-        public BergNamedPipeClient BergNamedPipeClient;
-        #endregion BergNamedPipeClient
+        public Dictionary<string, PerformanceWatch> PerformanceWatchCollection { get; set; }
         #endregion Properties..
 
         #region Delegates/Events
@@ -46,45 +35,38 @@ namespace BergPerformanceServices
         }
         #endregion Enums..
 
+        #region Structs..
+        #region PerformanceWatch
+        [Serializable]
+        public struct PerformanceWatch
+        {
+            public string Name;
+        }
+        #endregion PerformanceWatch 
+        #endregion Structs..
+
         #region Constructors..
         #region BergPerformanceData
         protected BergPerformanceData()
         {
-
-        }
-        #endregion BergPerformanceData
-
-        #region BergPerformanceData
-        protected BergPerformanceData(int updateInterval)
-        {
-            _UpdateInterval = updateInterval;
-            Initialize();
+            PerformanceWatchCollection = new Dictionary<string, PerformanceWatch>();
         }
         #endregion BergPerformanceData
         #endregion Constructors..
 
         #region Methods..
-        #region BroadcastPerformanceData
-        protected virtual void BroadcastPerformanceData()
-        {
-
-        }
-        #endregion BroadcastPerformanceData
-
         #region Initialize
-        protected virtual void Initialize()
+        public virtual void Initialize()
         {
-            BergNamedPipeClient = new BergNamedPipeClient();
-            _UpdateTimer = new Timer(GetPerformanceUpdate, new AutoResetEvent(true), 0, _UpdateInterval);
         }
         #endregion Initialize
 
-        #region GetPerformanceUpdate
-        protected virtual void GetPerformanceUpdate(object state)
+        #region RefreshPerformanceData
+        internal virtual void RefreshPerformanceData(object state)
         {
             DataUpdated?.Invoke(this, EventArgs.Empty);
         }
-        #endregion GetPerformanceUpdate
+        #endregion RefreshPerformanceData
 
         #region GetPerfValueFromRaw
         /// <summary>

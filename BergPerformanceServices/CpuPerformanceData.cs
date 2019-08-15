@@ -12,8 +12,6 @@ namespace BergPerformanceServices
     public class CpuPerformanceData : BergPerformanceData
     {
         #region Member Variables..
-        [NonSerialized]
-        private static int _UpdateInterval = -1;
         //private long _RawCpuPrev = 0;
         //private long _RawUserCpuPrev = 0;
         //private UInt64 _RawTimeStampPrev = 0;
@@ -45,8 +43,6 @@ namespace BergPerformanceServices
         public string TotalCPU { get; private set; }
 
         public string TotalUserCPU { get; private set; }
-
-        public Dictionary<string, PerformanceWatch> PerformanceWatchCollection { get; set; }
         #endregion Properties..
 
         #region Structs
@@ -59,56 +55,21 @@ namespace BergPerformanceServices
             public string PercentUserTime;
         }
         #endregion LogicalCore
-
-        #region PerformanceWatch
-        public struct PerformanceWatch
-        {
-            public string Name;
-        }
-        #endregion PerformanceWatch
         #endregion Structs
 
         #region Constructors..
         #region CpuPerformanceData
-        public CpuPerformanceData(int updateInterval)
-            : base(updateInterval)
-        {
-            PerformanceWatchCollection = new Dictionary<string, PerformanceWatch>();
-            _UpdateInterval = updateInterval;
-        }
-        #endregion CpuPerformanceData
-
-        #region CpuPerformanceData
         public CpuPerformanceData()
-            : base()
-        {
-            PerformanceWatchCollection = new Dictionary<string, PerformanceWatch>();
-        }
+            : base() { }
         #endregion CpuPerformanceData
         #endregion Constructors..
 
         #region Methods..
-        #region BeginWatch
-        public void BeginWatch(string name)
-        {
-            PerformanceWatchCollection[name] = new PerformanceWatch()
-            {
-                Name = name
-            };
-        }
-        #endregion BeginWatch
-
-        #region EndWatch
-        public void EndWatch(string name)
-        {
-            PerformanceWatchCollection.Remove(name);
-        }
-        #endregion EndWatch
-
         #region Initialize
-        protected override void Initialize()
+        public override void Initialize()
         {
             base.Initialize();
+
             ManagementObjectSearcher ManagementObjectSearcher = new ManagementObjectSearcher();
 
             // CPU Information
@@ -131,87 +92,71 @@ namespace BergPerformanceServices
         }
         #endregion Initialize
 
-        #region BroadcastPerformanceData
-        protected override void BroadcastPerformanceData()
+        #region RefreshPerformanceData
+        internal override void RefreshPerformanceData(object state)
         {
-            base.BroadcastPerformanceData();
+            LogicalCores = new List<LogicalCore>();
 
-            byte[] performanceDataByteArray = this.Serialize();
-            BergNamedPipeClient.Write(performanceDataByteArray);
-        }
-        #endregion BroadcastPerformanceData
+            #region RawCalculation
+            // CPU Performance
+            // Raw Calculation : ~200-250 ms faster than formatted 
+            //string CpuPerformanceQueryRaw = "SELECT * FROM Win32_PerfRawData_PerfOS_Processor";
+            //ManagementObjectSearcher ManagementObjectSearcherRaw = new ManagementObjectSearcher("root\\CIMV2", CpuPerformanceQueryRaw);
+            //foreach (var systemItem in ManagementObjectSearcherRaw.Get())
+            //{
+            //    string ItemName = systemItem["Name"].ToString();
+            //    UInt64 RawTimeStampCurrent = Convert.ToUInt64(systemItem["Timestamp_Sys100NS"]);
 
-        #region GetPerformanceUpdate
-        protected override void GetPerformanceUpdate(object state)
-        {
-            if (Monitor.TryEnter(_UpdateLock))
+            //    if (ItemName == "_Total")
+            //    {
+            //        if (_RawTimeStampPrev > 0 && _RawCpuPrev > 0)
+            //        {
+            //            TotalCPU = GetPerfValueFromRaw(CookingType.PERF_100NSEC_TIMER_INV, _RawCpuPrev, Convert.ToInt64(systemItem["PercentProcessorTime"]), _RawTimeStampPrev, RawTimeStampCurrent);
+            //            TotalUserCPU = GetPerfValueFromRaw(CookingType.PERF_100NSEC_TIMER, _RawUserCpuPrev, Convert.ToInt64(systemItem["PercentUserTime"]), _RawTimeStampPrev, RawTimeStampCurrent);
+            //        }
+
+            //        _RawCpuPrev = Convert.ToInt64(systemItem["PercentProcessorTime"]);
+            //        _RawUserCpuPrev = Convert.ToInt64(systemItem["PercentUserTime"]);
+            //        _RawTimeStampPrev = Convert.ToUInt64(systemItem["Timestamp_Sys100NS"]);
+            //    }
+            //    else
+            //    {
+            //        LogicalCores.Add(new LogicalCore()
+            //        {
+            //            CoreId = ItemName,
+            //            PercentProcessorTime = systemItem["PercentProcessorTime"].ToString(),
+            //            PercentUserTime = systemItem["PercentUserTime"].ToString()
+            //        });
+            //    }
+            //} 
+            #endregion RawCalculation
+
+            #region Formatted Calculation
+            string CpuPerformanceQuery = "SELECT * FROM Win32_PerfFormattedData_PerfOS_Processor";
+            ManagementObjectSearcher ManagementObjectSearcher = new ManagementObjectSearcher("root\\CIMV2", CpuPerformanceQuery);
+            foreach (var systemItem in ManagementObjectSearcher.Get())
             {
-                LogicalCores = new List<LogicalCore>();
-
-                #region RawCalculation
-                // CPU Performance
-                // Raw Calculation : ~200-250 ms faster than formatted 
-                //string CpuPerformanceQueryRaw = "SELECT * FROM Win32_PerfRawData_PerfOS_Processor";
-                //ManagementObjectSearcher ManagementObjectSearcherRaw = new ManagementObjectSearcher("root\\CIMV2", CpuPerformanceQueryRaw);
-                //foreach (var systemItem in ManagementObjectSearcherRaw.Get())
-                //{
-                //    string ItemName = systemItem["Name"].ToString();
-                //    UInt64 RawTimeStampCurrent = Convert.ToUInt64(systemItem["Timestamp_Sys100NS"]);
-
-                //    if (ItemName == "_Total")
-                //    {
-                //        if (_RawTimeStampPrev > 0 && _RawCpuPrev > 0)
-                //        {
-                //            TotalCPU = GetPerfValueFromRaw(CookingType.PERF_100NSEC_TIMER_INV, _RawCpuPrev, Convert.ToInt64(systemItem["PercentProcessorTime"]), _RawTimeStampPrev, RawTimeStampCurrent);
-                //            TotalUserCPU = GetPerfValueFromRaw(CookingType.PERF_100NSEC_TIMER, _RawUserCpuPrev, Convert.ToInt64(systemItem["PercentUserTime"]), _RawTimeStampPrev, RawTimeStampCurrent);
-                //        }
-
-                //        _RawCpuPrev = Convert.ToInt64(systemItem["PercentProcessorTime"]);
-                //        _RawUserCpuPrev = Convert.ToInt64(systemItem["PercentUserTime"]);
-                //        _RawTimeStampPrev = Convert.ToUInt64(systemItem["Timestamp_Sys100NS"]);
-                //    }
-                //    else
-                //    {
-                //        LogicalCores.Add(new LogicalCore()
-                //        {
-                //            CoreId = ItemName,
-                //            PercentProcessorTime = systemItem["PercentProcessorTime"].ToString(),
-                //            PercentUserTime = systemItem["PercentUserTime"].ToString()
-                //        });
-                //    }
-                //} 
-                #endregion RawCalculation
-
-                #region Formatted Calculation
-                string CpuPerformanceQuery = "SELECT * FROM Win32_PerfFormattedData_PerfOS_Processor";
-                ManagementObjectSearcher ManagementObjectSearcher = new ManagementObjectSearcher("root\\CIMV2", CpuPerformanceQuery);
-                foreach (var systemItem in ManagementObjectSearcher.Get())
+                string ItemName = systemItem["Name"].ToString();
+                if (ItemName == "_Total")
                 {
-                    string ItemName = systemItem["Name"].ToString();
-                    if (ItemName == "_Total")
-                    {
-                        TotalCPU = systemItem["PercentProcessorTime"].ToString();
-                        TotalUserCPU = systemItem["PercentUserTime"].ToString();
-                    }
-                    else
-                    {
-                        LogicalCores.Add(new LogicalCore()
-                        {
-                            CoreId = ItemName,
-                            PercentProcessorTime = systemItem["PercentProcessorTime"].ToString(),
-                            PercentUserTime = systemItem["PercentUserTime"].ToString()
-                        });
-                    }
+                    TotalCPU = systemItem["PercentProcessorTime"].ToString();
+                    TotalUserCPU = systemItem["PercentUserTime"].ToString();
                 }
-                #endregion Formatted Calculation
-
-                BroadcastPerformanceData();
-
-                base.GetPerformanceUpdate(state);
-                Monitor.Exit(_UpdateLock);
+                else
+                {
+                    LogicalCores.Add(new LogicalCore()
+                    {
+                        CoreId = ItemName,
+                        PercentProcessorTime = systemItem["PercentProcessorTime"].ToString(),
+                        PercentUserTime = systemItem["PercentUserTime"].ToString()
+                    });
+                }
             }
+            #endregion Formatted Calculation
+
+            base.RefreshPerformanceData(state);
         }
-        #endregion GetPerformanceUpdate
+        #endregion RefreshPerformanceData
         #endregion Methods..
     }
 }

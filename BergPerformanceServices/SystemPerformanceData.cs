@@ -18,13 +18,13 @@ namespace BergPerformanceServices
         #region Constructors..
         #region SystemPerformanceData
         public SystemPerformanceData(int updateInterval)
-            : base(updateInterval) { }
+            : base() { }
         #endregion SystemPerformanceData
         #endregion Constructors..
 
         #region Methods..
         #region Initialize
-        protected override void Initialize()
+        public override void Initialize()
         {
             base.Initialize();
 
@@ -37,9 +37,9 @@ namespace BergPerformanceServices
         #endregion Initialize
 
         #region GetPerformanceUpdate
-        protected override void GetPerformanceUpdate(object state)
+        internal override void RefreshPerformanceData(object state)
         {
-            base.GetPerformanceUpdate(state);
+            base.RefreshPerformanceData(state);
         }
         #endregion GetPerformanceUpdate
         #endregion Methods..

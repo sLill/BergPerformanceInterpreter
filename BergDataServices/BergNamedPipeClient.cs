@@ -11,7 +11,7 @@ namespace BergDataServices
     public class BergNamedPipeClient
     {
         #region Member Variables..
-        private string _PipeName = "BergNamedPipe5";
+        private string _PipeName = "BergNamedPipe7";
         #endregion Member Variables..
 
         #region Properties..

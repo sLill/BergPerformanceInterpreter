@@ -17,6 +17,7 @@ namespace BergUI
     public partial class CpuPerformanceControl : UserControl, IBergPerformanceControl
     {
         #region Member Variables..
+        BergCpuMonitor _BergCpuMonitor { get; set; }
         private CpuViewMode _CpuViewMode = CpuViewMode.OverallUtilization;
         #endregion Member Variables..
 
@@ -29,6 +30,7 @@ namespace BergUI
         #endregion ChartAreas
 
         #region Cores
+        [Browsable(false)]
         public string Cores
         {
             get { return lblCores.Text; }
@@ -37,16 +39,13 @@ namespace BergUI
         #endregion Cores
 
         #region LogicalProcessors
+        [Browsable(false)]
         public string LogicalProcessors
         {
             get { return lblLogicalProcessors.Text; }
             set { lblLogicalProcessors.Text = value; }
         }
         #endregion LogicalProcessors
-
-        #region PerformanceData
-        public BergPerformanceData PerformanceData { get; set; }
-        #endregion PerformanceData
 
         #region Series
         public SeriesCollection Series
@@ -56,6 +55,7 @@ namespace BergUI
         #endregion Series
 
         #region TotalCpu
+        [Browsable(false)]
         public string TotalCpu
         {
             get { return lblTotalCpu.Text; }
@@ -64,6 +64,7 @@ namespace BergUI
         #endregion TotalCpu
 
         #region TotalCpuUser
+        [Browsable(false)]
         public string TotalCpuUser
         {
             get { return lblTotalCpuUser.Text; }
@@ -72,6 +73,7 @@ namespace BergUI
         #endregion TotalCpuUser
 
         #region Threads
+        [Browsable(false)]
         public string Threads
         {
             get { return lblThreads.Text; }
@@ -80,15 +82,13 @@ namespace BergUI
         #endregion Threads
 
         #region UseLocalDataSource
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always), Bindable(true)]
+        [DefaultValue(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         [Description(@"""True"" uses the current system this control is running on as the datasource. ""False"" uses a remote application or executable running the BergDataServices dll as the datasource"), Category("DataSource")]
         public bool UseLocalDataSource { get; set; }
         #endregion UseLocalDataSource
 
         #region UpdateInterval
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always), Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         [DefaultValue(1000)]
         [Description(@"Frequency at which performance data is refreshed. Default - 1000ms"), Category("DataSource")]
         public int UpdateInterval { get; set; }
@@ -118,14 +118,11 @@ namespace BergUI
             // Prevent the control from running in VS Designer
             if (LicenseManager.UsageMode == LicenseUsageMode.Runtime)
             {
-                if (UseLocalDataSource)
-                {
-                    InitializeData();
-                }
-                else
-                {
-                    InitializeDataFromStream();
-                }
+                UpdateInterval = 1000;
+                UseLocalDataSource = false;
+
+                _BergCpuMonitor = new BergCpuMonitor(UpdateInterval, true, UseLocalDataSource);
+                _BergCpuMonitor.PerformanceData.DataUpdated += OnPerformanceDataUpdated;
             }
         }
         #endregion CpuPerformanceControl
@@ -202,33 +199,6 @@ namespace BergUI
         }
         #endregion InitializeControls
 
-        #region InitializeData
-        public void InitializeData()
-        {
-            PerformanceData = new CpuPerformanceData(UpdateInterval);
-            PerformanceData.DataUpdated += OnPerformanceDataUpdated;
-        }
-        #endregion InitializeData
-
-        #region InitializeDataFromStream
-        public void InitializeDataFromStream()
-        {
-            using (BergNamedPipeServer bergNamedPipeServer = new BergNamedPipeServer())
-            {
-                // Dedicates a new thread to listening explicitly for writes to the Berg named pipe
-                Task.Run(() =>
-                {
-                    while (true)
-                    {
-                        byte[] performanceDataByteArray = bergNamedPipeServer.Read();
-                        CpuPerformanceData CpuPerformanceData = (CpuPerformanceData)BergPerformanceData.Deserialize(performanceDataByteArray);
-                        OnPerformanceDataUpdated(CpuPerformanceData, null);
-                    }
-                });
-            }
-        }
-        #endregion InitializeDataFromStream
-
         #region InitializeGridLayout
         private void InitializeGridLayout()
         {
@@ -258,7 +228,6 @@ namespace BergUI
         #region OnPerformanceDataUpdated
         public void OnPerformanceDataUpdated(object sender, EventArgs e)
         {
-            //CpuPerformanceData CpuPerformanceData = PerformanceData as CpuPerformanceData;
             CpuPerformanceData CpuPerformanceData = sender as CpuPerformanceData;
             Invoke(new OnDataUpdated(() =>
             {

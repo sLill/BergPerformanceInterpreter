@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BergCpuMonitor.cs" />
+    <Compile Include="BergMonitor.cs" />
     <Compile Include="CpuPerformanceData.cs" />
     <Compile Include="DiskPerformanceData.cs" />
     <Compile Include="MemoryPerformanceData.cs" />
