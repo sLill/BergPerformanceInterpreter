@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 
 namespace BergPerformanceServices
 {
+    [Serializable]
     public class CpuPerformanceData : BergPerformanceData
     {
         #region Member Variables..
+        [NonSerialized]
         private static int _UpdateInterval = -1;
         //private long _RawCpuPrev = 0;
         //private long _RawUserCpuPrev = 0;
@@ -44,11 +46,12 @@ namespace BergPerformanceServices
 
         public string TotalUserCPU { get; private set; }
 
-        public Dictionary<string, PerformanceWatch> PerformanceWatchList = new Dictionary<string, PerformanceWatch>();
+        public Dictionary<string, PerformanceWatch> PerformanceWatchCollection { get; set; }
         #endregion Properties..
 
         #region Structs
         #region LogicalCore
+        [Serializable]
         public struct LogicalCore
         {
             public string CoreId;
@@ -56,6 +59,13 @@ namespace BergPerformanceServices
             public string PercentUserTime;
         }
         #endregion LogicalCore
+
+        #region PerformanceWatch
+        public struct PerformanceWatch
+        {
+            public string Name;
+        }
+        #endregion PerformanceWatch
         #endregion Structs
 
         #region Constructors..
@@ -63,13 +73,17 @@ namespace BergPerformanceServices
         public CpuPerformanceData(int updateInterval)
             : base(updateInterval)
         {
+            PerformanceWatchCollection = new Dictionary<string, PerformanceWatch>();
             _UpdateInterval = updateInterval;
         }
         #endregion CpuPerformanceData
 
         #region CpuPerformanceData
         public CpuPerformanceData()
-            : base() { }
+            : base()
+        {
+            PerformanceWatchCollection = new Dictionary<string, PerformanceWatch>();
+        }
         #endregion CpuPerformanceData
         #endregion Constructors..
 
@@ -77,51 +91,19 @@ namespace BergPerformanceServices
         #region BeginWatch
         public void BeginWatch(string name)
         {
-            PerformanceWatchList[name] = new PerformanceWatch(name);
+            PerformanceWatchCollection[name] = new PerformanceWatch()
+            {
+                Name = name
+            };
         }
         #endregion BeginWatch
 
         #region EndWatch
         public void EndWatch(string name)
         {
-            PerformanceWatchList.Remove(name);
+            PerformanceWatchCollection.Remove(name);
         }
         #endregion EndWatch
-
-        #region Deserialize
-        public static CpuPerformanceData Deserialize(byte[] data)
-        {
-            CpuPerformanceData Result = new CpuPerformanceData();
-
-            if (data.Length > 0)
-            {
-                using (MemoryStream memoryStream = new MemoryStream(data))
-                {
-                    using (BinaryReader reader = new BinaryReader(memoryStream))
-                    {
-                        Result.CoreCount = reader.ReadString();
-                        Result.CurrentClockSpeed = reader.ReadString();
-                        Result.L2CacheSize = reader.ReadString();
-                        Result.L3CacheSize = reader.ReadString();
-                        Result.LoadPercentage = reader.ReadString();
-                        Result.LogicalProcessorsCount = reader.ReadString();
-                        Result.MaxClockSpeed = reader.ReadString();
-                        Result.Name = reader.ReadString();
-                        Result.Status = reader.ReadString();
-                        Result.ThreadCount = reader.ReadString();
-                        Result.TotalCPU = reader.ReadString();
-                        Result.TotalUserCPU = reader.ReadString();
-
-                        // Performance Watches
-                        //var BinaryFormatter = new BinaryFormatter();
-                        //Result.PerformanceWatchList = (Dictionary<string, PerformanceWatch>)BinaryFormatter.Deserialize(memoryStream);
-                    }
-                }
-            }
-
-            return Result;
-        }
-        #endregion Deserialize
 
         #region Initialize
         protected override void Initialize()
@@ -154,7 +136,7 @@ namespace BergPerformanceServices
         {
             base.BroadcastPerformanceData();
 
-            byte[] performanceDataByteArray = Serialize();
+            byte[] performanceDataByteArray = this.Serialize();
             BergNamedPipeClient.Write(performanceDataByteArray);
         }
         #endregion BroadcastPerformanceData
@@ -230,39 +212,6 @@ namespace BergPerformanceServices
             }
         }
         #endregion GetPerformanceUpdate
-
-        #region Serialize
-        protected byte[] Serialize()
-        {
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                using (BinaryWriter writer = new BinaryWriter(memoryStream))
-                {
-                    writer.Write(CoreCount ?? string.Empty);
-                    writer.Write(CurrentClockSpeed ?? string.Empty);
-                    writer.Write(L2CacheSize ?? string.Empty);
-                    writer.Write(L3CacheSize ?? string.Empty);
-                    writer.Write(LoadPercentage ?? string.Empty);
-                    writer.Write(LogicalProcessorsCount ?? string.Empty);
-                    writer.Write(MaxClockSpeed ?? string.Empty);
-                    writer.Write(Name ?? string.Empty);
-                    writer.Write(Status ?? string.Empty);
-                    writer.Write(ThreadCount ?? string.Empty);
-                    writer.Write(TotalCPU ?? string.Empty);
-                    writer.Write(TotalUserCPU ?? string.Empty);
-                    //public List<LogicalCore> LogicalCores );
-
-                    // Performance Watches
-                    foreach (var watch in PerformanceWatchList)
-                    {
-                        writer.Write(watch.Value.Serialize());
-                    }
-                }
-
-                return memoryStream.ToArray();
-            }
-        }
-        #endregion Serialize
         #endregion Methods..
     }
 }

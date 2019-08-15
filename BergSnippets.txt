@@ -33,29 +33,73 @@
                 loadingControl.SendToBack();
                 loadingControl.Visible = false;		
 
-        //public static byte[] ObjectToByteArray(Object obj)
-        //{
-        //    BinaryFormatter bf = new BinaryFormatter();
-        //    using (var ms = new MemoryStream())
-        //    {
-        //        bf.Serialize(ms, obj);
-        //        return ms.ToArray();
-        //    }
-        //}
+		
+		// Explicit Serialization
+		        #region Serialize
+        protected byte[] Serialize()
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                using (BinaryWriter writer = new BinaryWriter(memoryStream))
+                {
+                    writer.Write(CoreCount ?? string.Empty);
+                    writer.Write(CurrentClockSpeed ?? string.Empty);
+                    writer.Write(L2CacheSize ?? string.Empty);
+                    writer.Write(L3CacheSize ?? string.Empty);
+                    writer.Write(LoadPercentage ?? string.Empty);
+                    writer.Write(LogicalProcessorsCount ?? string.Empty);
+                    writer.Write(MaxClockSpeed ?? string.Empty);
+                    writer.Write(Name ?? string.Empty);
+                    writer.Write(Status ?? string.Empty);
+                    writer.Write(ThreadCount ?? string.Empty);
+                    writer.Write(TotalCPU ?? string.Empty);
+                    writer.Write(TotalUserCPU ?? string.Empty);
+                    //public List<LogicalCore> LogicalCores );
 
+                    // Performance Watches
+                    foreach (var watch in PerformanceWatchCollection)
+                    {
+                        writer.Write(watch.Value.Serialize());
+                    }
+                }
 
+                return memoryStream.ToArray();
+            }
+        }
+        #endregion Serialize
+		
+		        #region Deserialize
+        public static CpuPerformanceData Deserialize(byte[] data)
+        {
+            CpuPerformanceData Result = new CpuPerformanceData();
 
-// Convert a byte array to an Object
-public static Object ByteArrayToObject(byte[] arrBytes)
-{
-    using (var memStream = new MemoryStream())
-    {
-        var binForm = new BinaryFormatter();
-        memStream.Write(arrBytes, 0, arrBytes.Length);
-        memStream.Seek(0, SeekOrigin.Begin);
-        var obj = binForm.Deserialize(memStream);
-        return obj;
-    }
-}				
-				
+            if (data.Length > 0)
+            {
+                using (MemoryStream memoryStream = new MemoryStream(data))
+                {
+                    using (BinaryReader reader = new BinaryReader(memoryStream))
+                    {
+                        Result.CoreCount = reader.ReadString();
+                        Result.CurrentClockSpeed = reader.ReadString();
+                        Result.L2CacheSize = reader.ReadString();
+                        Result.L3CacheSize = reader.ReadString();
+                        Result.LoadPercentage = reader.ReadString();
+                        Result.LogicalProcessorsCount = reader.ReadString();
+                        Result.MaxClockSpeed = reader.ReadString();
+                        Result.Name = reader.ReadString();
+                        Result.Status = reader.ReadString();
+                        Result.ThreadCount = reader.ReadString();
+                        Result.TotalCPU = reader.ReadString();
+                        Result.TotalUserCPU = reader.ReadString();
+
+                        // Performance Watches
+                        //var BinaryFormatter = new BinaryFormatter();
+                        //Result.PerformanceWatchList = (Dictionary<string, PerformanceWatch>)BinaryFormatter.Deserialize(memoryStream);
+                    }
+                }
+            }
+
+            return Result;
+        }
+        #endregion Deserialize
 

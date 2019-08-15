@@ -17,14 +17,6 @@ namespace BergUI
     public partial class CpuPerformanceControl : UserControl, IBergPerformanceControl
     {
         #region Member Variables..
-        #region Enums..
-        private enum CpuViewMode
-        {
-            OverallUtilization,
-            LogicalProcessors
-        }
-        #endregion Enums..
-
         private CpuViewMode _CpuViewMode = CpuViewMode.OverallUtilization;
         #endregion Member Variables..
 
@@ -106,6 +98,14 @@ namespace BergUI
         #region Delegates/Events
         public delegate void OnDataUpdated();
         #endregion Delegates/Events
+
+        #region Enums..
+        private enum CpuViewMode
+        {
+            OverallUtilization,
+            LogicalProcessors
+        }
+        #endregion Enums..
 
         #region Constructors..
         #region CpuPerformanceControl
@@ -221,7 +221,7 @@ namespace BergUI
                     while (true)
                     {
                         byte[] performanceDataByteArray = bergNamedPipeServer.Read();
-                        CpuPerformanceData CpuPerformanceData = CpuPerformanceData.Deserialize(performanceDataByteArray);
+                        CpuPerformanceData CpuPerformanceData = (CpuPerformanceData)BergPerformanceData.Deserialize(performanceDataByteArray);
                         OnPerformanceDataUpdated(CpuPerformanceData, null);
                     }
                 });
@@ -269,11 +269,11 @@ namespace BergUI
 
                 this.Series[0].Points.Add(Convert.ToDouble(CpuPerformanceData.TotalCPU));
 
-                //foreach (var logicalCore in CpuPerformanceData.LogicalCores)
-                //{
-                //    string SeriesName = $"LogicalProcessorSeries_{logicalCore.CoreId}";
-                //    this.Series[SeriesName].Points.Add(Convert.ToDouble(logicalCore.PercentProcessorTime));
-                //}
+                foreach (var logicalCore in CpuPerformanceData.LogicalCores)
+                {
+                    string SeriesName = $"LogicalProcessorSeries_{logicalCore.CoreId}";
+                    this.Series[SeriesName].Points.Add(Convert.ToDouble(logicalCore.PercentProcessorTime));
+                }
             }), null);
         }
         #endregion OnPerformanceDataUpdated

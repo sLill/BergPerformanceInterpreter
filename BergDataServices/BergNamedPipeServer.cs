@@ -33,17 +33,17 @@ namespace BergDataServices
         #region Read
         public byte[] Read()
         {
-            byte[] Result = null;
-
-            using (NamedPipeServerStream namedPipeServer = new NamedPipeServerStream(_PipeName, PipeDirection.InOut, 1))
+            List<byte> Result = new List<byte>();
+            using (NamedPipeServerStream namedPipeServerStream = new NamedPipeServerStream(_PipeName, PipeDirection.InOut, 1))
             {
                 try
                 {
-                    namedPipeServer.WaitForConnection();
+                    namedPipeServerStream.WaitForConnection();
 
-                    using (StreamReader reader = new StreamReader(namedPipeServer))
+                    byte[] byteBlock = new byte[4096];
+                    while (namedPipeServerStream.Read(byteBlock, 0, byteBlock.Length) > 0)
                     {
-                        Result = Encoding.ASCII.GetBytes(reader.ReadToEnd());
+                        Result.AddRange(byteBlock);
                     }
                 }
                 catch
@@ -52,7 +52,7 @@ namespace BergDataServices
                 }
             }
 
-            return Result;
+            return Result.ToArray();
         }
         #endregion Read
         #endregion Methods..

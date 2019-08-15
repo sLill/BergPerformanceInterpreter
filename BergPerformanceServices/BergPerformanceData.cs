@@ -2,25 +2,36 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Management;
 using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace BergPerformanceServices
 {
+    [Serializable]
     public class BergPerformanceData
     {
         #region Member Variables..
+        [NonSerialized]
         protected object _UpdateLock = new object();
+
+        [NonSerialized]
         private int _UpdateInterval = -1;
+
+        [NonSerialized]
         private Timer _UpdateTimer;
         #endregion Member Variables..
 
         #region Properties..
-        public BergNamedPipeClient BergNamedPipeClient { get; set; }
+        #region BergNamedPipeClient
+        [NonSerialized]
+        public BergNamedPipeClient BergNamedPipeClient;
+        #endregion BergNamedPipeClient
         #endregion Properties..
 
         #region Delegates/Events
@@ -53,6 +64,13 @@ namespace BergPerformanceServices
         #endregion Constructors..
 
         #region Methods..
+        #region BroadcastPerformanceData
+        protected virtual void BroadcastPerformanceData()
+        {
+
+        }
+        #endregion BroadcastPerformanceData
+
         #region Initialize
         protected virtual void Initialize()
         {
@@ -120,12 +138,32 @@ namespace BergPerformanceServices
         }
         #endregion GetPropertyValue
 
-        #region BroadcastPerformanceData
-        protected virtual void BroadcastPerformanceData()
+        #region Deserialize
+        public static object Deserialize(byte[] data)
         {
+            using (var memoryStream = new MemoryStream())
+            {
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
 
+                memoryStream.Write(data, 0, data.Length);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+
+                return binaryFormatter.Deserialize(memoryStream);
+            }
         }
-        #endregion BroadcastPerformanceData
+        #endregion Deserialize
+
+        #region Serialize
+        public byte[] Serialize()
+        {
+            BinaryFormatter binaryFormatter = new BinaryFormatter();
+            using (var memoryStream = new MemoryStream())
+            {
+                binaryFormatter.Serialize(memoryStream, this);
+                return memoryStream.ToArray();
+            }
+        }
+        #endregion Serialize
         #endregion Methods..
     }
 }
