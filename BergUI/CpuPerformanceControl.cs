@@ -1,9 +1,9 @@
-﻿using System;
+﻿using BergCommon;
+using BergPerformanceServices;
+using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using BergPerformanceServices;
-using BergCommon;
 
 namespace BergUI
 {

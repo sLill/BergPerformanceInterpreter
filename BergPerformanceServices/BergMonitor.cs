@@ -1,12 +1,8 @@
 ﻿using BergCommon;
 using BergDataServices;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 [assembly: InternalsVisibleTo("BergUI")]
 namespace BergPerformanceServices
@@ -22,9 +18,9 @@ namespace BergPerformanceServices
         #endregion Member Variables..
 
         #region Properties..
-        public BergNamedPipeClient BergNamedPipeClient;
+        protected BergNamedPipeClient BergNamedPipeClient;
 
-        public BergPerformanceData PerformanceData { get; protected set; }
+        protected BergPerformanceData PerformanceData { get; set; }
         #endregion Properties..
 
         #region Delegates/Events
@@ -33,7 +29,7 @@ namespace BergPerformanceServices
 
         #region Constructors..
         #region BergMonitor
-        public BergMonitor(int updateInterval)
+        protected BergMonitor(int updateInterval)
         {
             _UpdateInterval = updateInterval;
             BergNamedPipeClient = new BergNamedPipeClient();
@@ -44,7 +40,7 @@ namespace BergPerformanceServices
 
         #region Methods..
         #region PerformanceDataUpdated
-        public void PerformanceDataUpdated()
+        protected void PerformanceDataUpdated()
         {
             DataUpdated?.Invoke(PerformanceData, EventArgs.Empty);
         }
