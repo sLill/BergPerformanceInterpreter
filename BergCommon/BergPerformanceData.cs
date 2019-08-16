@@ -24,16 +24,6 @@ namespace BergCommon
         }
         #endregion Enums..
 
-        #region Structs..
-        #region PerformanceWatch
-        [Serializable]
-        public struct PerformanceWatch
-        {
-            public string Name;
-        }
-        #endregion PerformanceWatch 
-        #endregion Structs..
-
         #region Constructors..
         #region BergPerformanceData
         protected BergPerformanceData()

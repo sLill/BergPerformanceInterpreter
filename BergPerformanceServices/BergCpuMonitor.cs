@@ -40,6 +40,7 @@ namespace BergPerformanceServices
         {
             ((CpuPerformanceData)PerformanceData).PerformanceWatchCollection[name] = new PerformanceWatch()
             {
+                Active = true,
                 Name = name
             };
         }
@@ -48,7 +49,7 @@ namespace BergPerformanceServices
         #region EndWatch
         public void EndWatch(string name)
         {
-            ((CpuPerformanceData)PerformanceData).PerformanceWatchCollection.Remove(name);
+            ((CpuPerformanceData)PerformanceData).PerformanceWatchCollection[name].Active = false;
         }
         #endregion EndWatch
 

@@ -29,8 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.groupBoxCPU = new System.Windows.Forms.GroupBox();
             this.chartCpu = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.ctxChartCpu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -69,22 +67,6 @@
             // chartCpu
             // 
             this.chartCpu.BackColor = System.Drawing.Color.Transparent;
-            chartArea1.AlignmentOrientation = ((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations)((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Vertical | System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Horizontal)));
-            chartArea1.AxisX.LabelStyle.Enabled = false;
-            chartArea1.AxisX.MajorGrid.Enabled = false;
-            chartArea1.AxisX2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.True;
-            chartArea1.AxisX2.MajorGrid.Enabled = false;
-            chartArea1.AxisX2.MajorTickMark.Enabled = false;
-            chartArea1.AxisY.MajorGrid.Enabled = false;
-            chartArea1.AxisY.Maximum = 100D;
-            chartArea1.AxisY.Minimum = 0D;
-            chartArea1.AxisY.Title = "%";
-            chartArea1.AxisY2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.True;
-            chartArea1.AxisY2.LabelStyle.Enabled = false;
-            chartArea1.AxisY2.MajorGrid.Enabled = false;
-            chartArea1.AxisY2.MajorTickMark.Enabled = false;
-            chartArea1.Name = "OverallCpu";
-            this.chartCpu.ChartAreas.Add(chartArea1);
             this.chartCpu.ContextMenuStrip = this.ctxChartCpu;
             this.chartCpu.Location = new System.Drawing.Point(-14, 17);
             this.chartCpu.Margin = new System.Windows.Forms.Padding(0);
@@ -92,13 +74,6 @@
             this.chartCpu.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None;
             this.chartCpu.PaletteCustomColors = new System.Drawing.Color[] {
         System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))))};
-            series1.BorderWidth = 2;
-            series1.ChartArea = "OverallCpu";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            series1.IsVisibleInLegend = false;
-            series1.Name = "Series1";
-            this.chartCpu.Series.Add(series1);
             this.chartCpu.Size = new System.Drawing.Size(715, 276);
             this.chartCpu.TabIndex = 15;
             this.chartCpu.Text = "chart1";

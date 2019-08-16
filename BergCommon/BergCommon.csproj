@@ -46,6 +46,7 @@
     <Compile Include="CpuPerformanceData.cs" />
     <Compile Include="DiskPerformanceData.cs" />
     <Compile Include="MemoryPerformanceData.cs" />
+    <Compile Include="PerformanceWatch.cs" />
     <Compile Include="ProcessPerformanceData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SystemPerformanceData.cs" />

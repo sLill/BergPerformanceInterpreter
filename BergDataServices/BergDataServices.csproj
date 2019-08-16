@@ -43,7 +43,6 @@
   <ItemGroup>
     <Compile Include="BergNamedPipeClient.cs" />
     <Compile Include="BergNamedPipeServer.cs" />
-    <Compile Include="PerformanceDataStreamString.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

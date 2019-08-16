@@ -23,6 +23,7 @@ namespace BergDataServices
 
         }
         #endregion Dispose
+
         #region Read
         public byte[] Read()
         {
