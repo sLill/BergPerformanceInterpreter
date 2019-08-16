@@ -32,3 +32,5 @@ C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceIn
 C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\obj\Debug\BergPerformanceInterpreter.csproj.CopyComplete
 C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\obj\Debug\BergPerformanceInterpreter.exe
 C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\obj\Debug\BergPerformanceInterpreter.pdb
+C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\BergCommon.dll
+C:\Users\lills\Desktop\VS Solutions\BergPerformanceInterpreter\BergPerformanceInterpreter\bin\Debug\BergCommon.pdb

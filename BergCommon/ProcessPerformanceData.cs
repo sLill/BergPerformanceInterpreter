@@ -1,7 +1,6 @@
 ﻿using System.Management;
-using System.Threading.Tasks;
 
-namespace BergPerformanceServices
+namespace BergCommon
 {
     public class ProcessPerformanceData : BergPerformanceData
     {
@@ -33,7 +32,7 @@ namespace BergPerformanceServices
         #endregion Initialize
 
         #region GetPerformanceUpdate
-        internal override void RefreshPerformanceData(object state)
+        public override void RefreshPerformanceData(object state)
         {
             base.RefreshPerformanceData(state);
         }

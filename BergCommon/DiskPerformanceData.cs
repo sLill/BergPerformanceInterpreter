@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Management;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Management;
 
-namespace BergPerformanceServices
+namespace BergCommon
 {
     public class DiskPerformanceData : BergPerformanceData
     {
@@ -38,7 +33,7 @@ namespace BergPerformanceServices
         #endregion Initialize
 
         #region RefreshPerformanceData
-        internal override void RefreshPerformanceData(object state)
+        public override void RefreshPerformanceData(object state)
         {
             base.RefreshPerformanceData(state);
         }

@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Management;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace BergPerformanceServices
+namespace BergCommon
 {
     [Serializable]
     public class CpuPerformanceData : BergPerformanceData
@@ -93,7 +89,7 @@ namespace BergPerformanceServices
         #endregion Initialize
 
         #region RefreshPerformanceData
-        internal override void RefreshPerformanceData(object state)
+        public override void RefreshPerformanceData(object state)
         {
             LogicalCores = new List<LogicalCore>();
 
