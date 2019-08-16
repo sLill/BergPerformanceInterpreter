@@ -44,7 +44,9 @@
   <ItemGroup>
     <Compile Include="BergPerformanceData.cs" />
     <Compile Include="CpuPerformanceData.cs" />
+    <Compile Include="DataState.cs" />
     <Compile Include="DiskPerformanceData.cs" />
+    <Compile Include="GridState.cs" />
     <Compile Include="MemoryPerformanceData.cs" />
     <Compile Include="PerformanceWatch.cs" />
     <Compile Include="ProcessPerformanceData.cs" />

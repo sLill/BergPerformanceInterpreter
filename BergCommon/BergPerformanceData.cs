@@ -13,6 +13,8 @@ namespace BergCommon
         #endregion Member Variables..
 
         #region Properties..
+        public DataState DataState { get; set; }
+
         public Dictionary<string, PerformanceWatch> PerformanceWatchCollection { get; set; }
         #endregion Properties..
 
@@ -29,6 +31,7 @@ namespace BergCommon
         protected BergPerformanceData()
         {
             PerformanceWatchCollection = new Dictionary<string, PerformanceWatch>();
+            DataState = DataState.BEGIN;
         }
         #endregion BergPerformanceData
         #endregion Constructors..

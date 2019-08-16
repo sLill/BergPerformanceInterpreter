@@ -1,7 +1,6 @@
 ﻿using BergCommon;
 using BergDataServices;
 using System.Threading.Tasks;
-using static BergCommon.BergPerformanceData;
 
 namespace BergPerformanceServices
 {

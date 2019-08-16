@@ -32,6 +32,10 @@ namespace BergUI
         }
         #endregion Cores
 
+        #region GridState
+        public GridState GridState { get; private set; }
+        #endregion GridState
+
         #region LogicalProcessors
         [Browsable(false)]
         public string LogicalProcessors
@@ -40,6 +44,15 @@ namespace BergUI
             set { lblLogicalProcessors.Text = value; }
         }
         #endregion LogicalProcessors
+
+        #region ParentProcess
+        [Browsable(false)]
+        public string ParentProcess
+        {
+            get { return ttlParentProcessName.Text; }
+            set { ttlParentProcessName.Text = value; }
+        }
+        #endregion ParentProcess
 
         #region Series
         public SeriesCollection Series
@@ -113,7 +126,7 @@ namespace BergUI
             if (LicenseManager.UsageMode == LicenseUsageMode.Runtime)
             {
                 UpdateInterval = 1000;
-                UseLocalDataSource = false;
+                UseLocalDataSource = true;
 
                 _BergCpuMonitor = new BergCpuMonitor(UpdateInterval, true, UseLocalDataSource);
                 _BergCpuMonitor.DataUpdated += OnPerformanceDataUpdated;
@@ -132,10 +145,8 @@ namespace BergUI
                 item.Checked = item.Name == e.ClickedItem.Name;
             }
 
-            foreach (var chartArea in chartCpu.ChartAreas)
-            {
-                chartArea.Visible = (CpuViewMode)e.ClickedItem.Tag == (CpuViewMode)chartArea.Tag;
-            }
+            _CpuViewMode = (CpuViewMode)e.ClickedItem.Tag;
+            UpdateChartViewMode();
         }
         #endregion tsCpuViewMode_DropDownItemClicked
         #endregion Events..
@@ -147,7 +158,7 @@ namespace BergUI
             ChartArea.Tag = CpuViewMode.LogicalProcessors;
 
             bool ShowLogicalProcessors = _CpuViewMode == CpuViewMode.LogicalProcessors;
-            ChartArea.Visible = ShowLogicalProcessors;
+            ChartArea.Visible = ShowLogicalProcessors && _BergCpuMonitor?.PerformanceData != null;
 
             ChartArea.AxisX2.Enabled = AxisEnabled.True;
             ChartArea.AxisX2.MajorGrid.Enabled = false;
@@ -183,7 +194,7 @@ namespace BergUI
             ChartArea.Tag = CpuViewMode.OverallUtilization;
 
             bool ShowLogicalProcessors = _CpuViewMode == CpuViewMode.OverallUtilization;
-            ChartArea.Visible = ShowLogicalProcessors;
+            ChartArea.Visible = ShowLogicalProcessors && _BergCpuMonitor?.PerformanceData != null;
 
             ChartArea.AxisX2.Enabled = AxisEnabled.True;
             ChartArea.AxisX2.MajorGrid.Enabled = false;
@@ -212,7 +223,6 @@ namespace BergUI
         }
         #endregion AddChartArea_OverallCpu
 
-
         #region AddSeries_LogicalProcessor
         private Series AddSeries_LogicalProcessor(string name, Color color)
         {
@@ -236,6 +246,24 @@ namespace BergUI
         }
         #endregion AddSeries_OverallCpu
 
+        #region CheckState
+        private void CheckState(DataState dataState)
+        {
+            if (dataState == DataState.BEGIN)
+            {
+                UpdateChartViewMode();
+            }
+            else if (dataState == DataState.ALIVE)
+            {
+                if (GridState == GridState.WAITING)
+                {
+                    UpdateChartViewMode();
+                    GridState = GridState.ALIVE;
+                }
+            }
+        }
+        #endregion CheckState
+
         #region InitializeControls
         public void InitializeControls()
         {
@@ -246,6 +274,8 @@ namespace BergUI
         #region InitializeGridLayout
         private void InitializeGridLayout()
         {
+            GridState = GridState.WAITING;
+
             ToolStripMenuItem CpuViewModeMenuItem = chartCpu.ContextMenuStrip.Items["tsCpuViewMode"] as ToolStripMenuItem;
             CpuViewModeMenuItem.DropDownItems["tsOverallUtilization"].Tag = CpuViewMode.OverallUtilization;
             CpuViewModeMenuItem.DropDownItems["tsLogicalProcessors"].Tag = CpuViewMode.LogicalProcessors;
@@ -285,13 +315,16 @@ namespace BergUI
             {
                 Cores = CpuPerformanceData.CoreCount;
                 LogicalProcessors = CpuPerformanceData.LogicalProcessorsCount;
+                ParentProcess = CpuPerformanceData.ParentProcessName;
+
                 TotalCpu = CpuPerformanceData.TotalCPU;
                 TotalCpuUser = CpuPerformanceData.TotalUserCPU;
 
+                // Overall : Points
                 Series OverallCpuSeries = this.Series["OverallCpuSeries"];
                 OverallCpuSeries.Points.Add(new DataPoint(OverallCpuSeries.Points.Count, Convert.ToDouble(CpuPerformanceData.TotalCPU)));
 
-                // Logical Cores
+                // Logical Cores : Points
                 foreach (var logicalCore in CpuPerformanceData.LogicalCores)
                 {
                     string SeriesName = $"LogicalProcessorSeries_{logicalCore.CoreId}";
@@ -306,12 +339,12 @@ namespace BergUI
                     var Series = this.Series.FindByName(OverallWatchSeriesName);
                     if (Series == null)
                     {
-                        // Overall
+                        // Overall : UI
                         Series OverallWatchSeries = AddSeries_OverallCpu(OverallWatchSeriesName, Color.Red);
                         OverallWatchSeries.ChartArea = "OverallCpuChartArea";
                         chartCpu.Series.Add(OverallWatchSeries);
 
-                        // Logical Cores
+                        // Logical Cores : UI
                         foreach (var logicalCore in CpuPerformanceData.LogicalCores)
                         {
                             string LogicalProcessorWatchSeriesName = $"LogicalProcessorSeries_{PerformanceWatch.Value.UniqueId}_{logicalCore.CoreId}";
@@ -323,10 +356,10 @@ namespace BergUI
 
                     if (PerformanceWatch.Value.Active)
                     {
-                        // Overall
+                        // Overall : Points
                         this.Series[OverallWatchSeriesName].Points.Add(new DataPoint(OverallCpuSeries.Points[OverallCpuSeries.Points.Count - 1].XValue, new double[] { Convert.ToDouble(CpuPerformanceData.TotalCPU) }));
 
-                        // Logical Cores
+                        // Logical Cores : Points
                         foreach (var logicalCore in CpuPerformanceData.LogicalCores)
                         {
                             string LogicalProcessorSeriesName = $"LogicalProcessorSeries_{logicalCore.CoreId}";
@@ -337,9 +370,22 @@ namespace BergUI
                         }
                     }
                 }
+
+                // Handle state changes
+                CheckState(CpuPerformanceData.DataState);
             }), null);
         }
         #endregion OnPerformanceDataUpdated
+
+        #region UpdateChartViewMode
+        public void UpdateChartViewMode()
+        {
+            foreach (var chartArea in chartCpu.ChartAreas)
+            {
+                chartArea.Visible = _CpuViewMode == (CpuViewMode)chartArea.Tag;
+            }
+        }
+        #endregion UpdateChartViewMode
         #endregion Methods..
     }
 }

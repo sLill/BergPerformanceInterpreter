@@ -20,7 +20,7 @@ namespace BergPerformanceServices
         #region Properties..
         protected BergNamedPipeClient BergNamedPipeClient;
 
-        protected BergPerformanceData PerformanceData { get; set; }
+        internal BergPerformanceData PerformanceData { get; set; }
         #endregion Properties..
 
         #region Delegates/Events
@@ -75,6 +75,8 @@ namespace BergPerformanceServices
         {
             byte[] performanceDataByteArray = PerformanceData.Serialize();
             BergNamedPipeClient.Write(performanceDataByteArray);
+
+            PerformanceData.DataState = DataState.ALIVE;
         }
         #endregion WritePerformanceDataToStream
         #endregion Methods..

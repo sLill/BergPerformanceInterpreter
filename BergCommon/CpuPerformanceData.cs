@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Management;
 
 namespace BergCommon
@@ -31,6 +32,8 @@ namespace BergCommon
         public string MaxClockSpeed { get; private set; }
 
         public string Name { get; private set; }
+
+        public string ParentProcessName { get; private set; }
 
         public string Status { get; private set; }
 
@@ -85,6 +88,8 @@ namespace BergCommon
                 Name = systemItem["Name"].ToString();
                 Status = systemItem["Status"].ToString();
             }
+
+            ParentProcessName = AppDomain.CurrentDomain.FriendlyName;
         }
         #endregion Initialize
 
