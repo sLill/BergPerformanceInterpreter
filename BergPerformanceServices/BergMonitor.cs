@@ -26,6 +26,10 @@ namespace BergPerformanceServices
         public BergPerformanceData PerformanceData { get; protected set; }
         #endregion Properties..
 
+        #region Delegates/Events
+        public event EventHandler DataUpdated;
+        #endregion Delegates/Events
+
         #region Constructors..
         #region BergMonitor
         public BergMonitor(int updateInterval)
@@ -38,6 +42,13 @@ namespace BergPerformanceServices
         #endregion Constructors..
 
         #region Methods..
+        #region PerformanceDataUpdated
+        public void PerformanceDataUpdated()
+        {
+            DataUpdated?.Invoke(PerformanceData, EventArgs.Empty);
+        }
+        #endregion PerformanceDataUpdated
+
         #region RefreshPerformanceData
         protected virtual void RefreshPerformanceData(object state)
         {
@@ -48,6 +59,7 @@ namespace BergPerformanceServices
                     if (!_IsHost || _IsHost && _UseLocalDataSource)
                     {
                         PerformanceData.RefreshPerformanceData(state);
+                        PerformanceDataUpdated();
                     }
 
                     if (!_IsHost)

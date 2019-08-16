@@ -23,10 +23,6 @@ namespace BergPerformanceServices
         public Dictionary<string, PerformanceWatch> PerformanceWatchCollection { get; set; }
         #endregion Properties..
 
-        #region Delegates/Events
-        public event EventHandler DataUpdated;
-        #endregion Delegates/Events
-
         #region Enums..
         public enum CookingType
         {
@@ -58,13 +54,14 @@ namespace BergPerformanceServices
         #region Initialize
         public virtual void Initialize()
         {
+
         }
         #endregion Initialize
 
         #region RefreshPerformanceData
         internal virtual void RefreshPerformanceData(object state)
         {
-            DataUpdated?.Invoke(this, EventArgs.Empty);
+
         }
         #endregion RefreshPerformanceData
 

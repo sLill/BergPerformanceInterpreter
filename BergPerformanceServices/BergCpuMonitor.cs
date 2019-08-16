@@ -1,4 +1,5 @@
 ﻿using BergDataServices;
+using System;
 using System.Threading.Tasks;
 using static BergPerformanceServices.BergPerformanceData;
 
@@ -68,6 +69,7 @@ namespace BergPerformanceServices
                         {
                             byte[] performanceDataByteArray = bergNamedPipeServer.Read();
                             PerformanceData = (CpuPerformanceData)BergPerformanceData.Deserialize(performanceDataByteArray);
+                            PerformanceDataUpdated();
                         }
                     });
                 }

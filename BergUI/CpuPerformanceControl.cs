@@ -122,7 +122,7 @@ namespace BergUI
                 UseLocalDataSource = false;
 
                 _BergCpuMonitor = new BergCpuMonitor(UpdateInterval, true, UseLocalDataSource);
-                _BergCpuMonitor.PerformanceData.DataUpdated += OnPerformanceDataUpdated;
+                _BergCpuMonitor.DataUpdated += OnPerformanceDataUpdated;
             }
         }
         #endregion CpuPerformanceControl
