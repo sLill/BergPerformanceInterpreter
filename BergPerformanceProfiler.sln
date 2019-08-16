@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.705
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BergPerformanceProfiler", "BergPerformanceInterpreter\BergPerformanceProfiler.csproj", "{BCF901AA-1BF9-4C4B-8CBE-6C168A28987B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BergPerformanceProfiler", "BergPerformanceProfiler\BergPerformanceProfiler.csproj", "{BCF901AA-1BF9-4C4B-8CBE-6C168A28987B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{BD277512-2395-4955-9EAD-06DFE34A0E67} = {BD277512-2395-4955-9EAD-06DFE34A0E67}
 		{900DE9EC-80B7-4CB9-A62B-06DCA21169D5} = {900DE9EC-80B7-4CB9-A62B-06DCA21169D5}
