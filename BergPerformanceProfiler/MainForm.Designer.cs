@@ -30,23 +30,25 @@ namespace BergPerformanceProfiler
         /// </summary>
         private void InitializeComponent()
         {
-            this.cpuPerformanceControl1 = new BergUI.CpuPerformanceControl();
+            this.cpuPerformanceControl = new BergUI.CpuPerformanceControl();
             this.SuspendLayout();
             // 
-            // cpuPerformanceControl1
+            // cpuPerformanceControl
             // 
-            this.cpuPerformanceControl1.AutoSize = true;
-            this.cpuPerformanceControl1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.cpuPerformanceControl1.Cores = "-";
-            this.cpuPerformanceControl1.Location = new System.Drawing.Point(29, 12);
-            this.cpuPerformanceControl1.LogicalProcessors = "-";
-            this.cpuPerformanceControl1.Name = "cpuPerformanceControl1";
-            this.cpuPerformanceControl1.Size = new System.Drawing.Size(754, 369);
-            this.cpuPerformanceControl1.TabIndex = 0;
-            this.cpuPerformanceControl1.Threads = "-";
-            this.cpuPerformanceControl1.TotalCpu = "-";
-            this.cpuPerformanceControl1.TotalCpuUser = "-";
-            this.cpuPerformanceControl1.UpdateInterval = 0;
+            this.cpuPerformanceControl.AutoSize = true;
+            this.cpuPerformanceControl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.cpuPerformanceControl.Cores = "-";
+            this.cpuPerformanceControl.Location = new System.Drawing.Point(29, 12);
+            this.cpuPerformanceControl.LogicalProcessors = "-";
+            this.cpuPerformanceControl.Name = "cpuPerformanceControl";
+            this.cpuPerformanceControl.ParentProcess = "-";
+            this.cpuPerformanceControl.Size = new System.Drawing.Size(754, 391);
+            this.cpuPerformanceControl.TabIndex = 0;
+            this.cpuPerformanceControl.Threads = "-";
+            this.cpuPerformanceControl.TotalCpu = "-";
+            this.cpuPerformanceControl.TotalCpuUser = "-";
+            this.cpuPerformanceControl.UpdateInterval = 0;
+            this.cpuPerformanceControl.UseLocalDataSource = true;
             // 
             // MainForm
             // 
@@ -54,10 +56,10 @@ namespace BergPerformanceProfiler
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(820, 433);
-            this.Controls.Add(this.cpuPerformanceControl1);
+            this.Controls.Add(this.cpuPerformanceControl);
             this.DoubleBuffered = true;
             this.Name = "MainForm";
-            this.Text = "Berg Performance Interpreter";
+            this.Text = "Berg Performance Profiler";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -65,7 +67,7 @@ namespace BergPerformanceProfiler
 
         #endregion
 
-        private CpuPerformanceControl cpuPerformanceControl1;
+        private CpuPerformanceControl cpuPerformanceControl;
     }
 }
 

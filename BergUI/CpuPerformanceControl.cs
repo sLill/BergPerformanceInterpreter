@@ -33,6 +33,7 @@ namespace BergUI
         #endregion Cores
 
         #region GridState
+        [Browsable(false)]
         public GridState GridState { get; private set; }
         #endregion GridState
 
