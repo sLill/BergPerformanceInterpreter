@@ -127,7 +127,7 @@ namespace BergUI
             if (LicenseManager.UsageMode == LicenseUsageMode.Runtime)
             {
                 UpdateInterval = 1000;
-                UseLocalDataSource = true;
+                UseLocalDataSource = false;
 
                 _BergCpuMonitor = new BergCpuMonitor(UpdateInterval, true, UseLocalDataSource);
                 _BergCpuMonitor.DataUpdated += OnPerformanceDataUpdated;
@@ -275,6 +275,7 @@ namespace BergUI
         #region InitializeGridLayout
         private void InitializeGridLayout()
         {
+            Color GridColor = ColorLibrary.GetNextColor();
             GridState = GridState.WAITING;
 
             ToolStripMenuItem CpuViewModeMenuItem = chartCpu.ContextMenuStrip.Items["tsCpuViewMode"] as ToolStripMenuItem;
@@ -288,7 +289,7 @@ namespace BergUI
 
             // Overall Series
             string OverallCpuSeriesName = $"OverallCpuSeries";
-            Series OverallCpuSeries = AddSeries_OverallCpu(OverallCpuSeriesName, Color.FromArgb(128, 128, 255));
+            Series OverallCpuSeries = AddSeries_OverallCpu(OverallCpuSeriesName, GridColor);
             OverallCpuSeries.ChartArea = OverallCpuChartAreaName;
             chartCpu.Series.Add(OverallCpuSeries);
 
@@ -301,7 +302,7 @@ namespace BergUI
 
                 // LP Series
                 string SeriesName = $"LogicalProcessorSeries_{i}";
-                Series LogicalProcessorSeries = AddSeries_LogicalProcessor(SeriesName, Color.FromArgb(128, 128, 255));
+                Series LogicalProcessorSeries = AddSeries_LogicalProcessor(SeriesName, GridColor);
                 LogicalProcessorSeries.ChartArea = ChartAreaName;
                 chartCpu.Series.Add(LogicalProcessorSeries);
             }
@@ -340,8 +341,10 @@ namespace BergUI
                     var Series = this.Series.FindByName(OverallWatchSeriesName);
                     if (Series == null)
                     {
+                        Color GridColor = ColorLibrary.GetNextColor();
+
                         // Overall : UI
-                        Series OverallWatchSeries = AddSeries_OverallCpu(OverallWatchSeriesName, Color.Red);
+                        Series OverallWatchSeries = AddSeries_OverallCpu(OverallWatchSeriesName, GridColor);
                         OverallWatchSeries.ChartArea = "OverallCpuChartArea";
                         chartCpu.Series.Add(OverallWatchSeries);
 
@@ -349,7 +352,7 @@ namespace BergUI
                         foreach (var logicalCore in CpuPerformanceData.LogicalCores)
                         {
                             string LogicalProcessorWatchSeriesName = $"LogicalProcessorSeries_{PerformanceWatch.Value.UniqueId}_{logicalCore.CoreId}";
-                            Series LogicalProcessorWatchSeries = AddSeries_LogicalProcessor(LogicalProcessorWatchSeriesName, Color.Red);
+                            Series LogicalProcessorWatchSeries = AddSeries_LogicalProcessor(LogicalProcessorWatchSeriesName, GridColor);
                             LogicalProcessorWatchSeries.ChartArea = $"LogicalProcessorChartArea_{ logicalCore.CoreId}";
                             chartCpu.Series.Add(LogicalProcessorWatchSeries);
                         }
