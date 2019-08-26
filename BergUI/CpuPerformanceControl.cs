@@ -2,6 +2,7 @@
 using BergPerformanceServices;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -11,8 +12,10 @@ namespace BergUI
     public partial class CpuPerformanceControl : UserControl, IBergPerformanceControl
     {
         #region Member Variables..
-        BergCpuMonitor _BergCpuMonitor { get; set; }
+        private BergCpuMonitor _BergCpuMonitor { get; set; }
         private CpuViewMode _CpuViewMode = CpuViewMode.OverallUtilization;
+        private Point? _PrevMousePos = null;
+        private ToolTip _ToolTip = new ToolTip();
         #endregion Member Variables..
 
         #region Properties..
@@ -138,6 +141,38 @@ namespace BergUI
 
         #region Methods..
         #region Events..
+        #region ChartCpu_MouseMove
+        private void ChartCpu_MouseMove(object sender, MouseEventArgs e)
+        {
+            Point MousePos = e.Location;
+            if (_PrevMousePos != MousePos)
+            {
+                _ToolTip.RemoveAll();
+
+                var HoveredObjects = chartCpu.HitTest(MousePos.X, MousePos.Y, false, ChartElementType.DataPoint);
+                foreach (var hoveredObject in HoveredObjects)
+                { 
+                    if (hoveredObject.ChartElementType != ChartElementType.Nothing)
+                    {
+                        DataPoint ObjectDataPoint = hoveredObject.Object as DataPoint;
+                        var ObjectX = hoveredObject.ChartArea.AxisX.ValueToPixelPosition(ObjectDataPoint.XValue);
+                        var ObjectY = hoveredObject.ChartArea.AxisY.ValueToPixelPosition(ObjectDataPoint.YValues[0]);
+
+                        double DistanceToMouse = Math.Sqrt(Math.Pow(MousePos.X - ObjectX, 2) + Math.Pow(MousePos.Y - ObjectY, 2));
+
+                        if (DistanceToMouse < 3)
+                        {
+                            string ToolTipText = $"{ObjectDataPoint.YValues[0]}% - {ObjectDataPoint.XValue} seconds";
+                            _ToolTip.Show(ToolTipText, chartCpu, MousePos.X - 30, MousePos.Y - 30);
+                        }
+                    }
+                }
+
+                _PrevMousePos = MousePos;
+            }
+        }
+        #endregion ChartCpu_MouseMove
+
         #region tsCpuViewMode_DropDownItemClicked
         private void tsCpuViewMode_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
@@ -175,14 +210,18 @@ namespace BergUI
             ChartArea.AxisY2.MinorTickMark.Enabled = false;
             ChartArea.AxisY2.LabelStyle.Enabled = false;
 
-            ChartArea.AxisY.MajorGrid.Enabled = false;
             ChartArea.AxisY.MajorTickMark.Enabled = false;
+            ChartArea.AxisY.MajorGrid.LineColor = Color.FromArgb(50, 0, 0, 0);
+            ChartArea.AxisY.Maximum = 100;
             ChartArea.AxisY.LabelStyle.Enabled = false;
-            //ChartArea.AxisY.Title = "%";
+            ChartArea.AxisY.Title = "%";
 
+            ChartArea.AxisX.LabelStyle.Enabled = false;
             ChartArea.AxisX.MajorGrid.Enabled = false;
             ChartArea.AxisX.MajorTickMark.Enabled = false;
-            ChartArea.AxisX.LabelStyle.Enabled = false;
+            ChartArea.AxisX.Minimum = 0;
+            ChartArea.AxisX.Maximum = 30;
+            ChartArea.AxisX.Interval = 30;
 
             return ChartArea;
         }
@@ -211,14 +250,18 @@ namespace BergUI
             ChartArea.AxisY2.MinorTickMark.Enabled = false;
             ChartArea.AxisY2.LabelStyle.Enabled = false;
 
-            ChartArea.AxisY.MajorGrid.Enabled = false;
             ChartArea.AxisY.MajorTickMark.Enabled = false;
-            ChartArea.AxisY.LabelStyle.Enabled = false;
+            ChartArea.AxisY.MajorGrid.LineColor = Color.FromArgb(50, 0, 0, 0);
+            ChartArea.AxisY.Maximum = 100;
             ChartArea.AxisY.Title = "%";
 
             ChartArea.AxisX.MajorGrid.Enabled = false;
             ChartArea.AxisX.MajorTickMark.Enabled = false;
-            ChartArea.AxisX.LabelStyle.Enabled = false;
+            ChartArea.AxisX.Minimum = 0;
+            ChartArea.AxisX.Maximum = 30;
+            ChartArea.AxisX.Interval = 30;
+            ChartArea.AxisX.ScaleView.Zoomable = true;
+            ChartArea.AxisX.Title = "Seconds";
 
             return ChartArea;
         }
@@ -242,6 +285,7 @@ namespace BergUI
             Series.ChartType = SeriesChartType.Line;
             Series.Color = color;
             Series.BorderWidth = 2;
+            Series.MarkerStyle = MarkerStyle.Circle;
 
             return Series;
         }
@@ -324,13 +368,33 @@ namespace BergUI
 
                 // Overall : Points
                 Series OverallCpuSeries = this.Series["OverallCpuSeries"];
-                OverallCpuSeries.Points.Add(new DataPoint(OverallCpuSeries.Points.Count, Convert.ToDouble(CpuPerformanceData.TotalCPU)));
+                OverallCpuSeries.Points.AddXY(CpuPerformanceData.ElapsedTime / 1000, Convert.ToDouble(CpuPerformanceData.TotalCPU));
+
+                ChartArea OverallChartArea = this.ChartAreas["OverallCpuChartArea"];
+                double XValueMin = OverallCpuSeries.Points.FindMinByValue("X").XValue;
+                double XValueMax = OverallCpuSeries.Points.FindMaxByValue("X").XValue;
+
+                bool IncreaseXMaximum = XValueMax > OverallChartArea.AxisX.Maximum;
+                if (IncreaseXMaximum)
+                {
+                    OverallChartArea.AxisX.Minimum = Math.Floor(XValueMin / 30) * 30;
+                    OverallChartArea.AxisX.Maximum = Math.Ceiling(XValueMax / 30) * 30; 
+                }
 
                 // Logical Cores : Points
                 foreach (var logicalCore in CpuPerformanceData.LogicalCores)
                 {
                     string SeriesName = $"LogicalProcessorSeries_{logicalCore.CoreId}";
-                    this.Series[SeriesName].Points.Add(Convert.ToDouble(logicalCore.PercentProcessorTime));
+                    this.Series[SeriesName].Points.AddXY(CpuPerformanceData.ElapsedTime / 1000, Convert.ToDouble(logicalCore.PercentProcessorTime));
+
+                    if (IncreaseXMaximum)
+                    {
+                        string ChartAreaName = $"LogicalProcessorChartArea_{logicalCore.CoreId}";
+                        ChartArea LogicalProcessorChartArea = this.ChartAreas[ChartAreaName];
+
+                        LogicalProcessorChartArea.AxisX.Minimum = Math.Floor(XValueMin / 30) * 30;
+                        LogicalProcessorChartArea.AxisX.Maximum = Math.Ceiling(XValueMax / 30) * 30;
+                    }
                 }
 
                 // Performance Watches
@@ -361,7 +425,7 @@ namespace BergUI
                     if (PerformanceWatch.Value.Active)
                     {
                         // Overall : Points
-                        this.Series[OverallWatchSeriesName].Points.Add(new DataPoint(OverallCpuSeries.Points[OverallCpuSeries.Points.Count - 1].XValue, new double[] { Convert.ToDouble(CpuPerformanceData.TotalCPU) }));
+                        this.Series[OverallWatchSeriesName].Points.AddXY(CpuPerformanceData.ElapsedTime / 1000, Convert.ToDouble(CpuPerformanceData.TotalCPU));
 
                         // Logical Cores : Points
                         foreach (var logicalCore in CpuPerformanceData.LogicalCores)
@@ -370,7 +434,7 @@ namespace BergUI
                             Series LogicalProcessorSeries = this.Series[LogicalProcessorSeriesName];
 
                             string LogicalProcessorWatchSeriesName = $"LogicalProcessorSeries_{PerformanceWatch.Value.UniqueId}_{logicalCore.CoreId}";
-                            this.Series[LogicalProcessorWatchSeriesName].Points.Add(new DataPoint(LogicalProcessorSeries.Points[LogicalProcessorSeries.Points.Count - 1].XValue, new double[] { Convert.ToDouble(logicalCore.PercentProcessorTime) }));
+                            this.Series[LogicalProcessorWatchSeriesName].Points.AddXY(CpuPerformanceData.ElapsedTime / 1000, Convert.ToDouble(logicalCore.PercentProcessorTime));
                         }
                     }
                 }
@@ -390,6 +454,7 @@ namespace BergUI
             }
         }
         #endregion UpdateChartViewMode
+
         #endregion Methods..
     }
 }

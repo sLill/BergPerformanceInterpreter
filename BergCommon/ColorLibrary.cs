@@ -9,14 +9,17 @@ namespace BergCommon
         private static int _Index = 0;
         private static List<Color> Colors = new List<Color>
         {
-            // Blue
-            Color.FromArgb(128,128,255),
+            Color.FromArgb(128,128,255), // Blue
             Color.Red,
             Color.Orange,
             Color.Purple,
             Color.Green,
             Color.Pink,
-            Color.Yellow
+            Color.Yellow,
+            Color.Black,
+            Color.Brown,
+            Color.Magenta,
+            Color.Gold
         };
         #endregion Member Variables..
 
@@ -30,7 +33,7 @@ namespace BergCommon
         public static Color GetNextColor()
         {
             Color NextColor = Colors[_Index];
-            _Index = _Index == Colors.Count - 1 ? 0 : _Index + 1;
+            _Index = _Index == Colors.Count - 1 ? 1 : _Index + 1;
             return NextColor;
         }
         #endregion Methods..

@@ -30,23 +30,23 @@
         {
             this.components = new System.ComponentModel.Container();
             this.groupBoxCPU = new System.Windows.Forms.GroupBox();
+            this.ttlParentProcessName = new BergUI.ToolTipLabel();
             this.chartCpu = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.ctxChartCpu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsCpuViewMode = new System.Windows.Forms.ToolStripMenuItem();
             this.tsOverallUtilization = new System.Windows.Forms.ToolStripMenuItem();
             this.tsLogicalProcessors = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanelCpuDetails = new System.Windows.Forms.TableLayoutPanel();
+            this.toolTipLabel4 = new BergUI.ToolTipLabel();
             this.lblTotalCpu = new System.Windows.Forms.Label();
+            this.toolTipLabel5 = new BergUI.ToolTipLabel();
             this.lblLogicalProcessors = new System.Windows.Forms.Label();
             this.lblCores = new System.Windows.Forms.Label();
             this.lblThreads = new System.Windows.Forms.Label();
-            this.lblTotalCpuUser = new System.Windows.Forms.Label();
-            this.ttlParentProcessName = new BergUI.ToolTipLabel();
-            this.toolTipLabel4 = new BergUI.ToolTipLabel();
-            this.toolTipLabel5 = new BergUI.ToolTipLabel();
             this.toolTipLabel6 = new BergUI.ToolTipLabel();
             this.toolTipLabel7 = new BergUI.ToolTipLabel();
             this.toolTipLabel8 = new BergUI.ToolTipLabel();
+            this.lblTotalCpuUser = new System.Windows.Forms.Label();
             this.groupBoxCPU.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartCpu)).BeginInit();
             this.ctxChartCpu.SuspendLayout();
@@ -66,6 +66,18 @@
             this.groupBoxCPU.TabStop = false;
             this.groupBoxCPU.Text = "CPU";
             // 
+            // ttlParentProcessName
+            // 
+            this.ttlParentProcessName.AutoSize = true;
+            this.ttlParentProcessName.BackColor = System.Drawing.Color.Transparent;
+            this.ttlParentProcessName.Location = new System.Drawing.Point(24, 16);
+            this.ttlParentProcessName.Name = "ttlParentProcessName";
+            this.ttlParentProcessName.Size = new System.Drawing.Size(77, 13);
+            this.ttlParentProcessName.TabIndex = 19;
+            this.ttlParentProcessName.Text = "-";
+            this.ttlParentProcessName.ToolTipEnabled = false;
+            this.ttlParentProcessName.ToolTipText = "";
+            // 
             // chartCpu
             // 
             this.chartCpu.BackColor = System.Drawing.Color.Transparent;
@@ -79,6 +91,7 @@
             this.chartCpu.Size = new System.Drawing.Size(715, 276);
             this.chartCpu.TabIndex = 15;
             this.chartCpu.Text = "chart1";
+            this.chartCpu.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ChartCpu_MouseMove);
             // 
             // ctxChartCpu
             // 
@@ -140,6 +153,21 @@
             this.tableLayoutPanelCpuDetails.Size = new System.Drawing.Size(619, 47);
             this.tableLayoutPanelCpuDetails.TabIndex = 18;
             // 
+            // toolTipLabel4
+            // 
+            this.toolTipLabel4.AutoSize = true;
+            this.toolTipLabel4.BackColor = System.Drawing.Color.Transparent;
+            this.toolTipLabel4.Cursor = System.Windows.Forms.Cursors.Default;
+            this.toolTipLabel4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolTipLabel4.Location = new System.Drawing.Point(3, 23);
+            this.toolTipLabel4.Name = "toolTipLabel4";
+            this.toolTipLabel4.Size = new System.Drawing.Size(102, 13);
+            this.toolTipLabel4.TabIndex = 9;
+            this.toolTipLabel4.Text = "Logical Processors:";
+            this.toolTipLabel4.ToolTipEnabled = true;
+            this.toolTipLabel4.ToolTipText = "Typically equal to twice the number of physical cpu cores when hyperthreading is " +
+    "enabled";
+            // 
             // lblTotalCpu
             // 
             this.lblTotalCpu.AutoSize = true;
@@ -152,6 +180,19 @@
             this.lblTotalCpu.TabIndex = 7;
             this.lblTotalCpu.Text = "-";
             this.lblTotalCpu.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // toolTipLabel5
+            // 
+            this.toolTipLabel5.AutoSize = true;
+            this.toolTipLabel5.BackColor = System.Drawing.Color.Transparent;
+            this.toolTipLabel5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolTipLabel5.Location = new System.Drawing.Point(3, 3);
+            this.toolTipLabel5.Name = "toolTipLabel5";
+            this.toolTipLabel5.Size = new System.Drawing.Size(43, 13);
+            this.toolTipLabel5.TabIndex = 1;
+            this.toolTipLabel5.Text = "Cores:";
+            this.toolTipLabel5.ToolTipEnabled = false;
+            this.toolTipLabel5.ToolTipText = "things and stuff";
             // 
             // lblLogicalProcessors
             // 
@@ -188,59 +229,6 @@
             this.lblThreads.TabIndex = 8;
             this.lblThreads.Text = "-";
             this.lblThreads.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblTotalCpuUser
-            // 
-            this.lblTotalCpuUser.AutoSize = true;
-            this.lblTotalCpuUser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblTotalCpuUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotalCpuUser.Location = new System.Drawing.Point(292, 20);
-            this.lblTotalCpuUser.Margin = new System.Windows.Forms.Padding(0);
-            this.lblTotalCpuUser.Name = "lblTotalCpuUser";
-            this.lblTotalCpuUser.Size = new System.Drawing.Size(68, 20);
-            this.lblTotalCpuUser.TabIndex = 13;
-            this.lblTotalCpuUser.Text = "-";
-            this.lblTotalCpuUser.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // ttlParentProcessName
-            // 
-            this.ttlParentProcessName.AutoSize = true;
-            this.ttlParentProcessName.BackColor = System.Drawing.Color.Transparent;
-            this.ttlParentProcessName.Location = new System.Drawing.Point(24, 16);
-            this.ttlParentProcessName.Name = "ttlParentProcessName";
-            this.ttlParentProcessName.Size = new System.Drawing.Size(77, 13);
-            this.ttlParentProcessName.TabIndex = 19;
-            this.ttlParentProcessName.Text = "-";
-            this.ttlParentProcessName.ToolTipEnabled = false;
-            this.ttlParentProcessName.ToolTipText = "";
-            // 
-            // toolTipLabel4
-            // 
-            this.toolTipLabel4.AutoSize = true;
-            this.toolTipLabel4.BackColor = System.Drawing.Color.Transparent;
-            this.toolTipLabel4.Cursor = System.Windows.Forms.Cursors.Default;
-            this.toolTipLabel4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolTipLabel4.Location = new System.Drawing.Point(3, 23);
-            this.toolTipLabel4.Name = "toolTipLabel4";
-            this.toolTipLabel4.Size = new System.Drawing.Size(102, 13);
-            this.toolTipLabel4.TabIndex = 9;
-            this.toolTipLabel4.Text = "Logical Processors:";
-            this.toolTipLabel4.ToolTipEnabled = true;
-            this.toolTipLabel4.ToolTipText = "Typically equal to twice the number of physical cpu cores when hyperthreading is " +
-    "enabled";
-            // 
-            // toolTipLabel5
-            // 
-            this.toolTipLabel5.AutoSize = true;
-            this.toolTipLabel5.BackColor = System.Drawing.Color.Transparent;
-            this.toolTipLabel5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolTipLabel5.Location = new System.Drawing.Point(3, 3);
-            this.toolTipLabel5.Name = "toolTipLabel5";
-            this.toolTipLabel5.Size = new System.Drawing.Size(43, 13);
-            this.toolTipLabel5.TabIndex = 1;
-            this.toolTipLabel5.Text = "Cores:";
-            this.toolTipLabel5.ToolTipEnabled = false;
-            this.toolTipLabel5.ToolTipText = "things and stuff";
             // 
             // toolTipLabel6
             // 
@@ -286,6 +274,19 @@
             this.toolTipLabel8.Text = "Threads:";
             this.toolTipLabel8.ToolTipEnabled = false;
             this.toolTipLabel8.ToolTipText = "The number";
+            // 
+            // lblTotalCpuUser
+            // 
+            this.lblTotalCpuUser.AutoSize = true;
+            this.lblTotalCpuUser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblTotalCpuUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotalCpuUser.Location = new System.Drawing.Point(292, 20);
+            this.lblTotalCpuUser.Margin = new System.Windows.Forms.Padding(0);
+            this.lblTotalCpuUser.Name = "lblTotalCpuUser";
+            this.lblTotalCpuUser.Size = new System.Drawing.Size(68, 20);
+            this.lblTotalCpuUser.TabIndex = 13;
+            this.lblTotalCpuUser.Text = "-";
+            this.lblTotalCpuUser.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // CpuPerformanceControl
             // 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Management;
+using System.Diagnostics;
 
 namespace BergCommon
 {
@@ -10,10 +11,14 @@ namespace BergCommon
     public class BergPerformanceData
     {
         #region Member Variables..
+        [NonSerialized]
+        private Stopwatch _PerformanceTimer = new Stopwatch();
         #endregion Member Variables..
 
         #region Properties..
         public DataState DataState { get; set; }
+
+        public long ElapsedTime { get; private set; }
 
         public Dictionary<string, PerformanceWatch> PerformanceWatchCollection { get; set; }
         #endregion Properties..
@@ -30,6 +35,7 @@ namespace BergCommon
         #region BergPerformanceData
         protected BergPerformanceData()
         {
+            _PerformanceTimer = new Stopwatch();
             PerformanceWatchCollection = new Dictionary<string, PerformanceWatch>();
             DataState = DataState.BEGIN;
         }
@@ -40,7 +46,7 @@ namespace BergCommon
         #region Initialize
         public virtual void Initialize()
         {
-
+            _PerformanceTimer.Start();
         }
         #endregion Initialize
 
@@ -121,6 +127,8 @@ namespace BergCommon
         #region Serialize
         public byte[] Serialize()
         {
+            ElapsedTime = _PerformanceTimer.ElapsedMilliseconds;
+
             BinaryFormatter binaryFormatter = new BinaryFormatter();
             using (var memoryStream = new MemoryStream())
             {
