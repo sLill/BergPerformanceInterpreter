@@ -29,32 +29,34 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.pbTooltip = new System.Windows.Forms.PictureBox();
+            this.toolTipInfo = new System.Windows.Forms.ToolTip(this.components);
+            this.pbInfo = new System.Windows.Forms.PictureBox();
             this.lblTextValue = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.pbTooltip)).BeginInit();
+            this.toolTipKeyObject = new System.Windows.Forms.ToolTip(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.pbInfo)).BeginInit();
             this.SuspendLayout();
             // 
-            // toolTip
+            // toolTipInfo
             // 
-            this.toolTip.AutomaticDelay = 100;
-            this.toolTip.AutoPopDelay = 32767;
-            this.toolTip.InitialDelay = 100;
-            this.toolTip.IsBalloon = true;
-            this.toolTip.ReshowDelay = 20;
-            this.toolTip.UseAnimation = false;
-            this.toolTip.UseFading = false;
+            this.toolTipInfo.AutomaticDelay = 100;
+            this.toolTipInfo.AutoPopDelay = 32767;
+            this.toolTipInfo.InitialDelay = 100;
+            this.toolTipInfo.IsBalloon = true;
+            this.toolTipInfo.ReshowDelay = 20;
+            this.toolTipInfo.UseAnimation = false;
+            this.toolTipInfo.UseFading = false;
             // 
-            // pbTooltip
+            // pbInfo
             // 
-            this.pbTooltip.BackColor = System.Drawing.Color.Transparent;
-            this.pbTooltip.Image = global::BergUI.Properties.Resources.tooltip_info;
-            this.pbTooltip.Location = new System.Drawing.Point(0, 0);
-            this.pbTooltip.Name = "pbTooltip";
-            this.pbTooltip.Size = new System.Drawing.Size(8, 8);
-            this.pbTooltip.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbTooltip.TabIndex = 4;
-            this.pbTooltip.TabStop = false;
+            this.pbInfo.BackColor = System.Drawing.Color.Transparent;
+            this.pbInfo.Image = global::BergUI.Properties.Resources.tooltip_info;
+            this.pbInfo.Location = new System.Drawing.Point(0, 0);
+            this.pbInfo.Name = "pbInfo";
+            this.pbInfo.Size = new System.Drawing.Size(8, 8);
+            this.pbInfo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbInfo.TabIndex = 4;
+            this.pbInfo.TabStop = false;
+            this.pbInfo.MouseHover += new System.EventHandler(this.PbTooltip_MouseHover);
             // 
             // lblTextValue
             // 
@@ -67,6 +69,17 @@
             this.lblTextValue.TabIndex = 3;
             this.lblTextValue.Text = "TooltipLabel";
             this.lblTextValue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblTextValue.MouseHover += new System.EventHandler(this.LblTextValue_MouseHover);
+            // 
+            // toolTipKeyObject
+            // 
+            this.toolTipKeyObject.AutomaticDelay = 100;
+            this.toolTipKeyObject.AutoPopDelay = 32767;
+            this.toolTipKeyObject.InitialDelay = 100;
+            this.toolTipKeyObject.IsBalloon = true;
+            this.toolTipKeyObject.ReshowDelay = 20;
+            this.toolTipKeyObject.UseAnimation = false;
+            this.toolTipKeyObject.UseFading = false;
             // 
             // ToolTipLabel
             // 
@@ -74,19 +87,20 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.Transparent;
-            this.Controls.Add(this.pbTooltip);
+            this.Controls.Add(this.pbInfo);
             this.Controls.Add(this.lblTextValue);
             this.Name = "ToolTipLabel";
             this.Size = new System.Drawing.Size(87, 17);
-            ((System.ComponentModel.ISupportInitialize)(this.pbTooltip)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbInfo)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.ToolTip toolTip;
-        private System.Windows.Forms.PictureBox pbTooltip;
+        private System.Windows.Forms.ToolTip toolTipInfo;
+        private System.Windows.Forms.PictureBox pbInfo;
         private System.Windows.Forms.Label lblTextValue;
+        private System.Windows.Forms.ToolTip toolTipKeyObject;
     }
 }

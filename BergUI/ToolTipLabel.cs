@@ -17,43 +17,73 @@ namespace BergUI
         }
         #endregion Text
 
-        #region ToolTipText
+        #region KeyObjectToolTipEnabled
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always), Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
-        public string ToolTipText
+        public bool KeyObjectToolTipEnabled
         {
-            get { return toolTip.GetToolTip(pbTooltip); }
-            set { toolTip.SetToolTip(pbTooltip, value); }
+            get { return toolTipKeyObject.Active; }
+            set { toolTipKeyObject.Active = value; }
         }
-        #endregion ToolTipText
+        #endregion KeyObjectToolTipEnabled
 
-        #region ToolTipEnabled
+        #region KeyObjectToolTipText
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always), Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
-        public bool ToolTipEnabled
+        public string KeyObjectToolTipText
         {
-            get { return pbTooltip.Visible; }
-            set { pbTooltip.Visible = value; }
+            get { return toolTipKeyObject.GetToolTip(lblTextValue); }
+            set { toolTipKeyObject.SetToolTip(lblTextValue, value); }
         }
-        #endregion ToolTipEnabled
+        #endregion KeyObjectToolTipText
+
+        #region InfoToolTipEnabled
+        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always), Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        public bool InfoToolTipEnabled
+        {
+            get { return pbInfo.Visible; }
+            set { pbInfo.Visible = value; }
+        }
+        #endregion InfoToolTipEnabled
+
+        #region InfoToolTipText
+        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always), Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        public string InfoToolTipText
+        {
+            get { return toolTipInfo.GetToolTip(pbInfo); }
+            set { toolTipInfo.SetToolTip(pbInfo, value); }
+        }
+        #endregion InfoToolTipText
         #endregion Properties..
 
         #region Constructors..
+        #region ToolTipLabel
         public ToolTipLabel()
         {
             InitializeComponent();
         }
+        #endregion ToolTipLabel
         #endregion Constructors..
 
         #region Methods..
         #region Events..
-        #region pbTooltip_MouseHover
-        private void pbTooltip_MouseHover(object sender, EventArgs e)
+        #region LblTextValue_MouseHover
+        private void LblTextValue_MouseHover(object sender, EventArgs e)
         {
 
         }
-        #endregion pbTooltip_MouseHover
+        #endregion LblTextValue_MouseHover
+
+        #region PbTooltip_MouseHover
+        private void PbTooltip_MouseHover(object sender, EventArgs e)
+        {
+
+        }
+        #endregion PbTooltip_MouseHover
         #endregion Events..
+
         #endregion Methods..
     }
 }

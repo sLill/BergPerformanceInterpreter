@@ -53,7 +53,7 @@ namespace BergCommon
         #region RefreshPerformanceData
         public virtual void RefreshPerformanceData(object state)
         {
-
+            ElapsedTime = _PerformanceTimer.ElapsedMilliseconds;
         }
         #endregion RefreshPerformanceData
 
@@ -127,8 +127,6 @@ namespace BergCommon
         #region Serialize
         public byte[] Serialize()
         {
-            ElapsedTime = _PerformanceTimer.ElapsedMilliseconds;
-
             BinaryFormatter binaryFormatter = new BinaryFormatter();
             using (var memoryStream = new MemoryStream())
             {

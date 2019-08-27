@@ -87,6 +87,11 @@ namespace BergCommon
                 LogicalProcessorsCount = systemItem["NumberOfLogicalProcessors"].ToString();
                 Name = systemItem["Name"].ToString();
                 Status = systemItem["Status"].ToString();
+
+                foreach (var property in systemItem.Properties)
+                {
+                    Console.WriteLine($"{property.Name} - {property.Value}");
+                }
             }
 
             ParentProcessName = AppDomain.CurrentDomain.FriendlyName;

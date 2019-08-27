@@ -35,6 +35,11 @@ namespace BergUI
         }
         #endregion Cores
 
+        #region CurrentClockSpeed
+        [Browsable(false)]
+        public string CurrentClockSpeed { get; private set; }
+        #endregion CurrentClockSpeed
+
         #region GridState
         [Browsable(false)]
         public GridState GridState { get; private set; }
@@ -48,6 +53,20 @@ namespace BergUI
             set { lblLogicalProcessors.Text = value; }
         }
         #endregion LogicalProcessors
+
+        #region MaximumClockSpeed
+        [Browsable(false)]
+        public string MaximumClockSpeed { get; private set; }
+        #endregion MaximumClockSpeed
+
+        #region Name
+        [Browsable(false)]
+        public new string Name
+        {
+            get { return ttlProcessor.Text; }
+            set { ttlProcessor.Text = value; }
+        }
+        #endregion Name
 
         #region ParentProcess
         [Browsable(false)]
@@ -85,10 +104,10 @@ namespace BergUI
 
         #region Threads
         [Browsable(false)]
-        public string Threads
+        public string ThreadCount
         {
-            get { return lblThreads.Text; }
-            set { lblThreads.Text = value; }
+            get { return lblThreadCount.Text; }
+            set { lblThreadCount.Text = value; }
         }
         #endregion Threads
 
@@ -260,7 +279,7 @@ namespace BergUI
             ChartArea.AxisX.Maximum = 30;
             ChartArea.AxisX.Interval = 30;
             ChartArea.AxisX.ScaleView.Zoomable = true;
-            ChartArea.AxisX.Title = "Seconds";
+            //ChartArea.AxisX.Title = "Seconds";
 
             return ChartArea;
         }
@@ -359,11 +378,22 @@ namespace BergUI
             Invoke(new OnDataUpdated(() =>
             {
                 Cores = CpuPerformanceData.CoreCount;
+                CurrentClockSpeed = CpuPerformanceData.CurrentClockSpeed;
                 LogicalProcessors = CpuPerformanceData.LogicalProcessorsCount;
+                MaximumClockSpeed = CpuPerformanceData.MaxClockSpeed;
+                Name = CpuPerformanceData.Name;
                 ParentProcess = CpuPerformanceData.ParentProcessName;
 
                 TotalCpu = CpuPerformanceData.TotalCPU;
                 TotalCpuUser = CpuPerformanceData.TotalUserCPU;
+                ThreadCount = CpuPerformanceData.ThreadCount;
+
+                ttlProcessor.KeyObjectToolTipText = $"Cores:               {Cores}{Environment.NewLine}" +
+                                                    $"Logical Processors:  {LogicalProcessors}{Environment.NewLine}" +
+                                                    $"Logical Threads:     {ThreadCount}{Environment.NewLine}" +
+                                                    $"{Environment.NewLine}" +
+                                                    $"Maximum Clock Speed: {MaximumClockSpeed}{Environment.NewLine}" +
+                                                    $"Current Clock Speed: {CurrentClockSpeed}";
 
                 // Overall : Points
                 Series OverallCpuSeries = this.Series["OverallCpuSeries"];

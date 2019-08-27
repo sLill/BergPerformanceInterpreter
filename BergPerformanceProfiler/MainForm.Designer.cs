@@ -44,7 +44,7 @@ namespace BergPerformanceProfiler
             this.cpuPerformanceControl.ParentProcess = "-";
             this.cpuPerformanceControl.Size = new System.Drawing.Size(754, 391);
             this.cpuPerformanceControl.TabIndex = 0;
-            this.cpuPerformanceControl.Threads = "-";
+            this.cpuPerformanceControl.ThreadCount = "-";
             this.cpuPerformanceControl.TotalCpu = "-";
             this.cpuPerformanceControl.TotalCpuUser = "-";
             this.cpuPerformanceControl.UpdateInterval = 0;
