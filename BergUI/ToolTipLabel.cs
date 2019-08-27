@@ -18,7 +18,7 @@ namespace BergUI
         #endregion Text
 
         #region KeyObjectToolTipEnabled
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always), Bindable(true)]
+        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always), Bindable(true), DefaultValue(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public bool KeyObjectToolTipEnabled
         {

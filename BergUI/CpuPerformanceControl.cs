@@ -1,9 +1,11 @@
 ﻿using BergCommon;
 using BergPerformanceServices;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -178,6 +180,46 @@ namespace BergUI
             }
         }
         #endregion ChartCpu_MouseMove
+
+        #region ChartCpu_MouseWheel
+        private void ChartCpu_MouseWheel(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                Point MousePos = e.Location;
+
+                var HoveredControls = chartCpu.HitTest(MousePos.X, MousePos.Y, false, ChartElementType.PlottingArea);
+                ChartArea ChartArea = (from control in HoveredControls
+                                       where control.Object.GetType() == typeof(ChartArea)
+                                       select (ChartArea)control.Object).FirstOrDefault();
+
+                if (e.Delta < 0)
+                {
+                    // Up scroll
+                    Series ChartAreaSeries = Series.Where(x => x.ChartArea == ChartArea.Name).FirstOrDefault();
+                    double XValueMax = ChartAreaSeries.Points.FindMaxByValue("X").XValue;
+                    ChartArea.AxisX.Maximum = Math.Ceiling(XValueMax / 30) * 30;
+                    ChartArea.AxisX.Interval = 30;
+
+                    ChartArea.AxisX.ScaleView.ZoomReset();
+                }
+                else if (e.Delta > 0)
+                {
+                    // Down scroll
+                    var XMin = ChartArea.AxisX.ScaleView.ViewMinimum;
+                    var XMax = ChartArea.AxisX.ScaleView.ViewMaximum;
+
+                    var XPositionBegin = (int)(ChartArea.AxisX.PixelPositionToValue(e.Location.X) - (XMax - XMin) / 4);
+                    var XPositionEnd = (int)(ChartArea.AxisX.PixelPositionToValue(e.Location.X) + (XMax - XMin) / 4);
+
+                    ChartArea.AxisX.Maximum = XPositionEnd;
+                    ChartArea.AxisX.Interval = (XPositionEnd - XPositionBegin) / 4;
+                    ChartArea.AxisX.ScaleView.Zoom(XPositionBegin, XPositionEnd);
+                }
+            }
+            catch { }
+        }
+        #endregion ChartCpu_MouseWheel
 
         #region tsCpuViewMode_DropDownItemClicked
         private void tsCpuViewMode_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
