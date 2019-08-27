@@ -155,6 +155,28 @@ namespace BergCommon
             }
             #endregion Formatted Calculation
 
+            #region Formatted - ManagementClass
+            //ManagementClass ManagementClass = new ManagementClass("Win32_PerfFormattedData_PerfOS_Processor");
+            //foreach (ManagementObject managementObject in ManagementClass.GetInstances())
+            //{
+            //    string ItemName = managementObject["Name"].ToString();
+            //    if (ItemName == "_Total")
+            //    {
+            //        TotalCPU = managementObject["PercentProcessorTime"].ToString();
+            //        TotalUserCPU = managementObject["PercentUserTime"].ToString();
+            //    }
+            //    else
+            //    {
+            //        LogicalCores.Add(new LogicalCore()
+            //        {
+            //            CoreId = ItemName,
+            //            PercentProcessorTime = managementObject["PercentProcessorTime"].ToString(),
+            //            PercentUserTime = managementObject["PercentUserTime"].ToString()
+            //        });
+            //    }
+            //}
+            #endregion Formatted - ManagementClass
+
             base.RefreshPerformanceData(state);
         }
         #endregion RefreshPerformanceData

@@ -130,7 +130,7 @@ namespace BergUI
             if (LicenseManager.UsageMode == LicenseUsageMode.Runtime)
             {
                 UpdateInterval = 1000;
-                UseLocalDataSource = false;
+                UseLocalDataSource = true;
 
                 _BergCpuMonitor = new BergCpuMonitor(UpdateInterval, true, UseLocalDataSource);
                 _BergCpuMonitor.DataUpdated += OnPerformanceDataUpdated;
@@ -151,7 +151,7 @@ namespace BergUI
 
                 var HoveredObjects = chartCpu.HitTest(MousePos.X, MousePos.Y, false, ChartElementType.DataPoint);
                 foreach (var hoveredObject in HoveredObjects)
-                { 
+                {
                     if (hoveredObject.ChartElementType != ChartElementType.Nothing)
                     {
                         DataPoint ObjectDataPoint = hoveredObject.Object as DataPoint;
@@ -159,7 +159,6 @@ namespace BergUI
                         var ObjectY = hoveredObject.ChartArea.AxisY.ValueToPixelPosition(ObjectDataPoint.YValues[0]);
 
                         double DistanceToMouse = Math.Sqrt(Math.Pow(MousePos.X - ObjectX, 2) + Math.Pow(MousePos.Y - ObjectY, 2));
-
                         if (DistanceToMouse < 3)
                         {
                             string ToolTipText = $"{ObjectDataPoint.YValues[0]}% - {ObjectDataPoint.XValue} seconds";
@@ -283,9 +282,9 @@ namespace BergUI
         {
             Series Series = new Series(name);
             Series.ChartType = SeriesChartType.Line;
+            Series.MarkerStyle = MarkerStyle.Circle;
             Series.Color = color;
             Series.BorderWidth = 2;
-            Series.MarkerStyle = MarkerStyle.Circle;
 
             return Series;
         }
