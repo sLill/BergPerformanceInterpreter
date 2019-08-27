@@ -28,11 +28,7 @@ namespace BergUI
 
         #region Cores
         [Browsable(false)]
-        public string Cores
-        {
-            get { return lblCores.Text; }
-            set { lblCores.Text = value; }
-        }
+        public string Cores { get; private set; }
         #endregion Cores
 
         #region CurrentClockSpeed
@@ -47,11 +43,7 @@ namespace BergUI
 
         #region LogicalProcessors
         [Browsable(false)]
-        public string LogicalProcessors
-        {
-            get { return lblLogicalProcessors.Text; }
-            set { lblLogicalProcessors.Text = value; }
-        }
+        public string LogicalProcessors { get; private set; }
         #endregion LogicalProcessors
 
         #region MaximumClockSpeed
@@ -104,11 +96,7 @@ namespace BergUI
 
         #region Threads
         [Browsable(false)]
-        public string ThreadCount
-        {
-            get { return lblThreadCount.Text; }
-            set { lblThreadCount.Text = value; }
-        }
+        public string ThreadCount { get; private set; }
         #endregion Threads
 
         #region UseLocalDataSource
@@ -281,6 +269,9 @@ namespace BergUI
             ChartArea.AxisX.ScaleView.Zoomable = true;
             //ChartArea.AxisX.Title = "Seconds";
 
+            ChartArea.CursorX.AutoScroll = true;
+            ChartArea.CursorX.IsUserSelectionEnabled = true;
+
             return ChartArea;
         }
         #endregion AddChartArea_OverallCpu
@@ -309,14 +300,34 @@ namespace BergUI
         }
         #endregion AddSeries_OverallCpu
 
-        #region CheckState
-        private void CheckState(DataState dataState)
+        #region ReconcileStates
+        private void ReconcileStates(CpuPerformanceData cpuPerformanceData)
         {
-            if (dataState == DataState.BEGIN)
+            // Data state
+            if (cpuPerformanceData.DataState == DataState.BEGIN)
             {
+                // Static header data. Only set once
+                Cores = cpuPerformanceData.CoreCount;
+                CurrentClockSpeed = cpuPerformanceData.CurrentClockSpeed;
+                LogicalProcessors = cpuPerformanceData.LogicalProcessorsCount;
+                MaximumClockSpeed = cpuPerformanceData.MaxClockSpeed;
+                Name = cpuPerformanceData.Name;
+                ParentProcess = cpuPerformanceData.ParentProcessName;
+
+                TotalCpu = cpuPerformanceData.TotalCPU;
+                TotalCpuUser = cpuPerformanceData.TotalUserCPU;
+                ThreadCount = cpuPerformanceData.ThreadCount;
+
+                ttlProcessor.KeyObjectToolTipText = $"Cores:               {Cores}{Environment.NewLine}" +
+                                                    $"Logical Processors:  {LogicalProcessors}{Environment.NewLine}" +
+                                                    $"Logical Threads:     {ThreadCount}{Environment.NewLine}" +
+                                                    $"{Environment.NewLine}" +
+                                                    $"Maximum Clock Speed: {MaximumClockSpeed}{Environment.NewLine}" +
+                                                    $"Current Clock Speed: {CurrentClockSpeed}";
+
                 UpdateChartViewMode();
             }
-            else if (dataState == DataState.ALIVE)
+            else if (cpuPerformanceData.DataState == DataState.ALIVE)
             {
                 if (GridState == GridState.WAITING)
                 {
@@ -325,7 +336,7 @@ namespace BergUI
                 }
             }
         }
-        #endregion CheckState
+        #endregion ReconcileStates
 
         #region InitializeControls
         public void InitializeControls()
@@ -377,23 +388,8 @@ namespace BergUI
             CpuPerformanceData CpuPerformanceData = sender as CpuPerformanceData;
             Invoke(new OnDataUpdated(() =>
             {
-                Cores = CpuPerformanceData.CoreCount;
-                CurrentClockSpeed = CpuPerformanceData.CurrentClockSpeed;
-                LogicalProcessors = CpuPerformanceData.LogicalProcessorsCount;
-                MaximumClockSpeed = CpuPerformanceData.MaxClockSpeed;
-                Name = CpuPerformanceData.Name;
-                ParentProcess = CpuPerformanceData.ParentProcessName;
-
-                TotalCpu = CpuPerformanceData.TotalCPU;
-                TotalCpuUser = CpuPerformanceData.TotalUserCPU;
-                ThreadCount = CpuPerformanceData.ThreadCount;
-
-                ttlProcessor.KeyObjectToolTipText = $"Cores:               {Cores}{Environment.NewLine}" +
-                                                    $"Logical Processors:  {LogicalProcessors}{Environment.NewLine}" +
-                                                    $"Logical Threads:     {ThreadCount}{Environment.NewLine}" +
-                                                    $"{Environment.NewLine}" +
-                                                    $"Maximum Clock Speed: {MaximumClockSpeed}{Environment.NewLine}" +
-                                                    $"Current Clock Speed: {CurrentClockSpeed}";
+                // Handle state changes
+                ReconcileStates(CpuPerformanceData);
 
                 // Overall : Points
                 Series OverallCpuSeries = this.Series["OverallCpuSeries"];
@@ -467,9 +463,6 @@ namespace BergUI
                         }
                     }
                 }
-
-                // Handle state changes
-                CheckState(CpuPerformanceData.DataState);
             }), null);
         }
         #endregion OnPerformanceDataUpdated

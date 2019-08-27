@@ -37,14 +37,11 @@ namespace BergPerformanceProfiler
             // 
             this.cpuPerformanceControl.AutoSize = true;
             this.cpuPerformanceControl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.cpuPerformanceControl.Cores = "-";
             this.cpuPerformanceControl.Location = new System.Drawing.Point(29, 12);
-            this.cpuPerformanceControl.LogicalProcessors = "-";
             this.cpuPerformanceControl.Name = "cpuPerformanceControl";
             this.cpuPerformanceControl.ParentProcess = "-";
             this.cpuPerformanceControl.Size = new System.Drawing.Size(754, 391);
             this.cpuPerformanceControl.TabIndex = 0;
-            this.cpuPerformanceControl.ThreadCount = "-";
             this.cpuPerformanceControl.TotalCpu = "-";
             this.cpuPerformanceControl.TotalCpuUser = "-";
             this.cpuPerformanceControl.UpdateInterval = 0;
