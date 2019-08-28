@@ -39,11 +39,9 @@ namespace BergPerformanceProfiler
             this.cpuPerformanceControl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.cpuPerformanceControl.Location = new System.Drawing.Point(29, 12);
             this.cpuPerformanceControl.Name = "cpuPerformanceControl";
-            this.cpuPerformanceControl.ParentProcess = "-";
             this.cpuPerformanceControl.Size = new System.Drawing.Size(754, 391);
             this.cpuPerformanceControl.TabIndex = 0;
             this.cpuPerformanceControl.TotalCpu = "-";
-            this.cpuPerformanceControl.TotalCpuUser = "-";
             this.cpuPerformanceControl.UpdateInterval = 0;
             this.cpuPerformanceControl.UseLocalDataSource = true;
             // 

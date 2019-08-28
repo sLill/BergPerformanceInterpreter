@@ -46,13 +46,14 @@
     <Compile Include="BergPerformanceData.cs" />
     <Compile Include="ColorLibrary.cs" />
     <Compile Include="CpuPerformanceData.cs" />
-    <Compile Include="DataState.cs" />
     <Compile Include="DiskPerformanceData.cs" />
     <Compile Include="GridState.cs" />
     <Compile Include="MemoryPerformanceData.cs" />
     <Compile Include="PerformanceWatch.cs" />
     <Compile Include="ProcessPerformanceData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scope.cs" />
+    <Compile Include="ScopeType.cs" />
     <Compile Include="SystemPerformanceData.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

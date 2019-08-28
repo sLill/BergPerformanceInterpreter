@@ -19,6 +19,8 @@ namespace BergCommon
         
         public string CurrentClockSpeed { get; private set; }
 
+        public string CurrentThreads { get; private set; }
+
         public string L2CacheSize { get; private set; }
 
         public string L3CacheSize { get; private set; }
@@ -33,15 +35,11 @@ namespace BergCommon
 
         public string Name { get; private set; }
 
-        public string ParentProcessName { get; private set; }
-
         public string Status { get; private set; }
 
         public string ThreadCount { get; private set; }
 
         public string TotalCPU { get; private set; }
-
-        public string TotalUserCPU { get; private set; }
         #endregion Properties..
 
         #region Structs
@@ -87,13 +85,9 @@ namespace BergCommon
                 LogicalProcessorsCount = systemItem["NumberOfLogicalProcessors"].ToString();
                 Name = systemItem["Name"].ToString();
                 Status = systemItem["Status"].ToString();
-
-                foreach (var property in systemItem.Properties)
-                {
-                    Console.WriteLine($"{property.Name} - {property.Value}");
-                }
             }
 
+            SystemName = Environment.MachineName;
             ParentProcessName = AppDomain.CurrentDomain.FriendlyName;
         }
         #endregion Initialize
@@ -138,15 +132,14 @@ namespace BergCommon
             #endregion RawCalculation
 
             #region Formatted Calculation
-            string CpuPerformanceQuery = "SELECT * FROM Win32_PerfFormattedData_PerfOS_Processor";
-            ManagementObjectSearcher ManagementObjectSearcher = new ManagementObjectSearcher("root\\CIMV2", CpuPerformanceQuery);
+            string Query = "SELECT * FROM Win32_PerfFormattedData_PerfOS_Processor";
+            ManagementObjectSearcher ManagementObjectSearcher = new ManagementObjectSearcher("root\\CIMV2", Query);
             foreach (var systemItem in ManagementObjectSearcher.Get())
             {
                 string ItemName = systemItem["Name"].ToString();
                 if (ItemName == "_Total")
                 {
                     TotalCPU = systemItem["PercentProcessorTime"].ToString();
-                    TotalUserCPU = systemItem["PercentUserTime"].ToString();
                 }
                 else
                 {
@@ -158,6 +151,10 @@ namespace BergCommon
                     });
                 }
             }
+
+            Query = "SELECT * FROM Win32_Thread";
+            ManagementObjectSearcher.Query.QueryString = Query;
+            CurrentThreads = ManagementObjectSearcher.Get().Count.ToString();
             #endregion Formatted Calculation
 
             #region Formatted - ManagementClass

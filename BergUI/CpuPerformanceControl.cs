@@ -14,17 +14,16 @@ namespace BergUI
     public partial class CpuPerformanceControl : UserControl, IBergPerformanceControl
     {
         #region Member Variables..
+        private bool _RefreshStatics = true;
         private BergCpuMonitor _BergCpuMonitor { get; set; }
         private CpuViewMode _CpuViewMode = CpuViewMode.OverallUtilization;
-        private Point? _PrevMousePos = null;
-        private ToolTip _ToolTip = new ToolTip();
         #endregion Member Variables..
 
         #region Properties..
         #region ChartAreas
         public ChartAreaCollection ChartAreas
         {
-            get { return chartCpu.ChartAreas; }
+            get { return bergChart1.ChartBase.ChartAreas; }
         }
         #endregion ChartAreas
 
@@ -62,44 +61,31 @@ namespace BergUI
         }
         #endregion Name
 
-        #region ParentProcess
-        [Browsable(false)]
-        public string ParentProcess
-        {
-            get { return ttlParentProcessName.Text; }
-            set { ttlParentProcessName.Text = value; }
-        }
-        #endregion ParentProcess
-
         #region Series
         public SeriesCollection Series
         {
-            get { return chartCpu.Series; }
+            get { return bergChart1.ChartBase.Series; }
         }
         #endregion Series
+
+        #region ScopeItems
+        [Browsable(false)]
+        public BindingList<Scope> ScopeItems = new BindingList<Scope>();
+        #endregion ScopeItems
 
         #region TotalCpu
         [Browsable(false)]
         public string TotalCpu
         {
             get { return lblTotalCpu.Text; }
-            set { lblTotalCpu.Text = value; }
+            set { lblTotalCpu.Text = $"{value}%"; }
         }
         #endregion TotalCpu
 
-        #region TotalCpuUser
+        #region LogicalThreads
         [Browsable(false)]
-        public string TotalCpuUser
-        {
-            get { return lblTotalCpuUser.Text; }
-            set { lblTotalCpuUser.Text = value; }
-        }
-        #endregion TotalCpuUser
-
-        #region Threads
-        [Browsable(false)]
-        public string ThreadCount { get; private set; }
-        #endregion Threads
+        public string LogicalThreads { get; private set; }
+        #endregion LogicalThreads
 
         #region UseLocalDataSource
         [DefaultValue(false)]
@@ -107,6 +93,15 @@ namespace BergUI
         [Description(@"""True"" uses the current system this control is running on as the datasource. ""False"" uses a remote application or executable running the BergDataServices dll as the datasource"), Category("DataSource")]
         public bool UseLocalDataSource { get; set; }
         #endregion UseLocalDataSource
+
+        #region CurrentThreads
+        [Browsable(false)]
+        public string CurrentThreads
+        {
+            get { return lblThreads.Text; }
+            set { lblThreads.Text = value; }
+        }
+        #endregion CurrentThreads
 
         #region UpdateInterval
         [DefaultValue(1000)]
@@ -150,76 +145,12 @@ namespace BergUI
 
         #region Methods..
         #region Events..
-        #region ChartCpu_MouseMove
-        private void ChartCpu_MouseMove(object sender, MouseEventArgs e)
+        #region CmbScope_SelectedValueChanged
+        private void CmbScope_SelectedValueChanged(object sender, EventArgs e)
         {
-            Point MousePos = e.Location;
-            if (_PrevMousePos != MousePos)
-            {
-                _ToolTip.RemoveAll();
-
-                var HoveredObjects = chartCpu.HitTest(MousePos.X, MousePos.Y, false, ChartElementType.DataPoint);
-                foreach (var hoveredObject in HoveredObjects)
-                {
-                    if (hoveredObject.ChartElementType != ChartElementType.Nothing)
-                    {
-                        DataPoint ObjectDataPoint = hoveredObject.Object as DataPoint;
-                        var ObjectX = hoveredObject.ChartArea.AxisX.ValueToPixelPosition(ObjectDataPoint.XValue);
-                        var ObjectY = hoveredObject.ChartArea.AxisY.ValueToPixelPosition(ObjectDataPoint.YValues[0]);
-
-                        double DistanceToMouse = Math.Sqrt(Math.Pow(MousePos.X - ObjectX, 2) + Math.Pow(MousePos.Y - ObjectY, 2));
-                        if (DistanceToMouse < 3)
-                        {
-                            string ToolTipText = $"{ObjectDataPoint.YValues[0]}% - {ObjectDataPoint.XValue} seconds";
-                            _ToolTip.Show(ToolTipText, chartCpu, MousePos.X - 30, MousePos.Y - 30);
-                        }
-                    }
-                }
-
-                _PrevMousePos = MousePos;
-            }
+            _RefreshStatics = true;
         }
-        #endregion ChartCpu_MouseMove
-
-        #region ChartCpu_MouseWheel
-        private void ChartCpu_MouseWheel(object sender, MouseEventArgs e)
-        {
-            try
-            {
-                Point MousePos = e.Location;
-
-                var HoveredControls = chartCpu.HitTest(MousePos.X, MousePos.Y, false, ChartElementType.PlottingArea);
-                ChartArea ChartArea = (from control in HoveredControls
-                                       where control.Object.GetType() == typeof(ChartArea)
-                                       select (ChartArea)control.Object).FirstOrDefault();
-
-                if (e.Delta < 0)
-                {
-                    // Up scroll
-                    Series ChartAreaSeries = Series.Where(x => x.ChartArea == ChartArea.Name).FirstOrDefault();
-                    double XValueMax = ChartAreaSeries.Points.FindMaxByValue("X").XValue;
-                    ChartArea.AxisX.Maximum = Math.Ceiling(XValueMax / 30) * 30;
-                    ChartArea.AxisX.Interval = 30;
-
-                    ChartArea.AxisX.ScaleView.ZoomReset();
-                }
-                else if (e.Delta > 0)
-                {
-                    // Down scroll
-                    var XMin = ChartArea.AxisX.ScaleView.ViewMinimum;
-                    var XMax = ChartArea.AxisX.ScaleView.ViewMaximum;
-
-                    var XPositionBegin = (int)(ChartArea.AxisX.PixelPositionToValue(e.Location.X) - (XMax - XMin) / 4);
-                    var XPositionEnd = (int)(ChartArea.AxisX.PixelPositionToValue(e.Location.X) + (XMax - XMin) / 4);
-
-                    ChartArea.AxisX.Maximum = XPositionEnd;
-                    ChartArea.AxisX.Interval = (XPositionEnd - XPositionBegin) / 4;
-                    ChartArea.AxisX.ScaleView.Zoom(XPositionBegin, XPositionEnd);
-                }
-            }
-            catch { }
-        }
-        #endregion ChartCpu_MouseWheel
+        #endregion CmbScope_SelectedValueChanged
 
         #region tsCpuViewMode_DropDownItemClicked
         private void tsCpuViewMode_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -301,7 +232,8 @@ namespace BergUI
             ChartArea.AxisY.MajorTickMark.Enabled = false;
             ChartArea.AxisY.MajorGrid.LineColor = Color.FromArgb(50, 0, 0, 0);
             ChartArea.AxisY.Maximum = 100;
-            ChartArea.AxisY.Title = "%";
+            //ChartArea.AxisY.Title = "%";
+            //ChartArea.AxisY.TitleFont = new Font(FontFamily.GenericSansSerif, 6);
 
             ChartArea.AxisX.MajorGrid.Enabled = false;
             ChartArea.AxisX.MajorTickMark.Enabled = false;
@@ -342,100 +274,19 @@ namespace BergUI
         }
         #endregion AddSeries_OverallCpu
 
-        #region ReconcileStates
-        private void ReconcileStates(CpuPerformanceData cpuPerformanceData)
+        #region UpdateGrid
+        private void UpdateGrid(CpuPerformanceData cpuPerformanceData)
         {
-            // Data state
-            if (cpuPerformanceData.DataState == DataState.BEGIN)
+            if (GridState == GridState.WAITING)
             {
-                // Static header data. Only set once
-                Cores = cpuPerformanceData.CoreCount;
-                CurrentClockSpeed = cpuPerformanceData.CurrentClockSpeed;
-                LogicalProcessors = cpuPerformanceData.LogicalProcessorsCount;
-                MaximumClockSpeed = cpuPerformanceData.MaxClockSpeed;
-                Name = cpuPerformanceData.Name;
-                ParentProcess = cpuPerformanceData.ParentProcessName;
-
-                TotalCpu = cpuPerformanceData.TotalCPU;
-                TotalCpuUser = cpuPerformanceData.TotalUserCPU;
-                ThreadCount = cpuPerformanceData.ThreadCount;
-
-                ttlProcessor.KeyObjectToolTipText = $"Cores:               {Cores}{Environment.NewLine}" +
-                                                    $"Logical Processors:  {LogicalProcessors}{Environment.NewLine}" +
-                                                    $"Logical Threads:     {ThreadCount}{Environment.NewLine}" +
-                                                    $"{Environment.NewLine}" +
-                                                    $"Maximum Clock Speed: {MaximumClockSpeed}{Environment.NewLine}" +
-                                                    $"Current Clock Speed: {CurrentClockSpeed}";
-
                 UpdateChartViewMode();
+                GridState = GridState.ALIVE;
             }
-            else if (cpuPerformanceData.DataState == DataState.ALIVE)
+            else if (GridState == GridState.ALIVE)
             {
-                if (GridState == GridState.WAITING)
-                {
-                    UpdateChartViewMode();
-                    GridState = GridState.ALIVE;
-                }
-            }
-        }
-        #endregion ReconcileStates
-
-        #region InitializeControls
-        public void InitializeControls()
-        {
-            InitializeGridLayout();
-        }
-        #endregion InitializeControls
-
-        #region InitializeGridLayout
-        private void InitializeGridLayout()
-        {
-            Color GridColor = ColorLibrary.GetNextColor();
-            GridState = GridState.WAITING;
-
-            ToolStripMenuItem CpuViewModeMenuItem = chartCpu.ContextMenuStrip.Items["tsCpuViewMode"] as ToolStripMenuItem;
-            CpuViewModeMenuItem.DropDownItems["tsOverallUtilization"].Tag = CpuViewMode.OverallUtilization;
-            CpuViewModeMenuItem.DropDownItems["tsLogicalProcessors"].Tag = CpuViewMode.LogicalProcessors;
-
-            // Overall ChartArea
-            string OverallCpuChartAreaName = $"OverallCpuChartArea";
-            ChartArea OverallCpuChartArea = AddChartArea_OverallCpu(OverallCpuChartAreaName);
-            chartCpu.ChartAreas.Add(OverallCpuChartArea);
-
-            // Overall Series
-            string OverallCpuSeriesName = $"OverallCpuSeries";
-            Series OverallCpuSeries = AddSeries_OverallCpu(OverallCpuSeriesName, GridColor);
-            OverallCpuSeries.ChartArea = OverallCpuChartAreaName;
-            chartCpu.Series.Add(OverallCpuSeries);
-
-            for (int i = 0; i < Environment.ProcessorCount; i++)
-            {
-                // LP ChartArea
-                string ChartAreaName = $"LogicalProcessorChartArea_{i}";
-                ChartArea LogicalProcessorChartArea = AddChartArea_LogicalProcessor(ChartAreaName);
-                chartCpu.ChartAreas.Add(LogicalProcessorChartArea);
-
-                // LP Series
-                string SeriesName = $"LogicalProcessorSeries_{i}";
-                Series LogicalProcessorSeries = AddSeries_LogicalProcessor(SeriesName, GridColor);
-                LogicalProcessorSeries.ChartArea = ChartAreaName;
-                chartCpu.Series.Add(LogicalProcessorSeries);
-            }
-        }
-        #endregion InitializeGridLayout
-
-        #region OnPerformanceDataUpdated
-        public void OnPerformanceDataUpdated(object sender, EventArgs e)
-        {
-            CpuPerformanceData CpuPerformanceData = sender as CpuPerformanceData;
-            Invoke(new OnDataUpdated(() =>
-            {
-                // Handle state changes
-                ReconcileStates(CpuPerformanceData);
-
                 // Overall : Points
                 Series OverallCpuSeries = this.Series["OverallCpuSeries"];
-                OverallCpuSeries.Points.AddXY(CpuPerformanceData.ElapsedTime / 1000, Convert.ToDouble(CpuPerformanceData.TotalCPU));
+                OverallCpuSeries.Points.AddXY(cpuPerformanceData.ElapsedTime / 1000, Convert.ToDouble(cpuPerformanceData.TotalCPU));
 
                 ChartArea OverallChartArea = this.ChartAreas["OverallCpuChartArea"];
                 double XValueMin = OverallCpuSeries.Points.FindMinByValue("X").XValue;
@@ -445,14 +296,14 @@ namespace BergUI
                 if (IncreaseXMaximum)
                 {
                     OverallChartArea.AxisX.Minimum = Math.Floor(XValueMin / 30) * 30;
-                    OverallChartArea.AxisX.Maximum = Math.Ceiling(XValueMax / 30) * 30; 
+                    OverallChartArea.AxisX.Maximum = Math.Ceiling(XValueMax / 30) * 30;
                 }
 
                 // Logical Cores : Points
-                foreach (var logicalCore in CpuPerformanceData.LogicalCores)
+                foreach (var logicalCore in cpuPerformanceData.LogicalCores)
                 {
                     string SeriesName = $"LogicalProcessorSeries_{logicalCore.CoreId}";
-                    this.Series[SeriesName].Points.AddXY(CpuPerformanceData.ElapsedTime / 1000, Convert.ToDouble(logicalCore.PercentProcessorTime));
+                    this.Series[SeriesName].Points.AddXY(cpuPerformanceData.ElapsedTime / 1000, Convert.ToDouble(logicalCore.PercentProcessorTime));
 
                     if (IncreaseXMaximum)
                     {
@@ -465,7 +316,7 @@ namespace BergUI
                 }
 
                 // Performance Watches
-                foreach (var PerformanceWatch in CpuPerformanceData.PerformanceWatchCollection)
+                foreach (var PerformanceWatch in cpuPerformanceData.PerformanceWatchCollection)
                 {
                     string OverallWatchSeriesName = $"OverallCpuSeries_{PerformanceWatch.Value.UniqueId}";
 
@@ -477,34 +328,136 @@ namespace BergUI
                         // Overall : UI
                         Series OverallWatchSeries = AddSeries_OverallCpu(OverallWatchSeriesName, GridColor);
                         OverallWatchSeries.ChartArea = "OverallCpuChartArea";
-                        chartCpu.Series.Add(OverallWatchSeries);
+                        bergChart1.ChartBase.Series.Add(OverallWatchSeries);
 
                         // Logical Cores : UI
-                        foreach (var logicalCore in CpuPerformanceData.LogicalCores)
+                        foreach (var logicalCore in cpuPerformanceData.LogicalCores)
                         {
                             string LogicalProcessorWatchSeriesName = $"LogicalProcessorSeries_{PerformanceWatch.Value.UniqueId}_{logicalCore.CoreId}";
                             Series LogicalProcessorWatchSeries = AddSeries_LogicalProcessor(LogicalProcessorWatchSeriesName, GridColor);
                             LogicalProcessorWatchSeries.ChartArea = $"LogicalProcessorChartArea_{ logicalCore.CoreId}";
-                            chartCpu.Series.Add(LogicalProcessorWatchSeries);
+                            bergChart1.ChartBase.Series.Add(LogicalProcessorWatchSeries);
                         }
                     }
 
                     if (PerformanceWatch.Value.Active)
                     {
                         // Overall : Points
-                        this.Series[OverallWatchSeriesName].Points.AddXY(CpuPerformanceData.ElapsedTime / 1000, Convert.ToDouble(CpuPerformanceData.TotalCPU));
+                        this.Series[OverallWatchSeriesName].Points.AddXY(cpuPerformanceData.ElapsedTime / 1000, Convert.ToDouble(cpuPerformanceData.TotalCPU));
 
                         // Logical Cores : Points
-                        foreach (var logicalCore in CpuPerformanceData.LogicalCores)
+                        foreach (var logicalCore in cpuPerformanceData.LogicalCores)
                         {
                             string LogicalProcessorSeriesName = $"LogicalProcessorSeries_{logicalCore.CoreId}";
                             Series LogicalProcessorSeries = this.Series[LogicalProcessorSeriesName];
 
                             string LogicalProcessorWatchSeriesName = $"LogicalProcessorSeries_{PerformanceWatch.Value.UniqueId}_{logicalCore.CoreId}";
-                            this.Series[LogicalProcessorWatchSeriesName].Points.AddXY(CpuPerformanceData.ElapsedTime / 1000, Convert.ToDouble(logicalCore.PercentProcessorTime));
+                            this.Series[LogicalProcessorWatchSeriesName].Points.AddXY(cpuPerformanceData.ElapsedTime / 1000, Convert.ToDouble(logicalCore.PercentProcessorTime));
                         }
                     }
                 }
+            }
+        }
+        #endregion UpdateGrid
+
+        #region InitializeControls
+        public void InitializeControls()
+        {
+            BindingSource BindingSource = new BindingSource() { DataSource = ScopeItems };
+            cmbScope.DataSource = BindingSource;
+            cmbScope.DisplayMember = "Name";
+            cmbScope.ValueMember = "ScopeType";
+
+            bergChart1.ContextMenuStrip = ctxChartCpu;
+
+            InitializeGridLayout();
+        }
+        #endregion InitializeControls
+
+        #region InitializeGridLayout
+        private void InitializeGridLayout()
+        {
+            Color GridColor = ColorLibrary.GetNextColor();
+            GridState = GridState.WAITING;
+
+            ToolStripMenuItem CpuViewModeMenuItem = bergChart1.ContextMenuStrip.Items["tsCpuViewMode"] as ToolStripMenuItem;
+            CpuViewModeMenuItem.DropDownItems["tsOverallUtilization"].Tag = CpuViewMode.OverallUtilization;
+            CpuViewModeMenuItem.DropDownItems["tsLogicalProcessors"].Tag = CpuViewMode.LogicalProcessors;
+
+            // Overall ChartArea
+            string OverallCpuChartAreaName = $"OverallCpuChartArea";
+            ChartArea OverallCpuChartArea = AddChartArea_OverallCpu(OverallCpuChartAreaName);
+            bergChart1.ChartBase.ChartAreas.Add(OverallCpuChartArea);
+
+            // Overall Series
+            string OverallCpuSeriesName = $"OverallCpuSeries";
+            Series OverallCpuSeries = AddSeries_OverallCpu(OverallCpuSeriesName, GridColor);
+            OverallCpuSeries.ChartArea = OverallCpuChartAreaName;
+            bergChart1.ChartBase.Series.Add(OverallCpuSeries);
+
+            for (int i = 0; i < Environment.ProcessorCount; i++)
+            {
+                // LP ChartArea
+                string ChartAreaName = $"LogicalProcessorChartArea_{i}";
+                ChartArea LogicalProcessorChartArea = AddChartArea_LogicalProcessor(ChartAreaName);
+                bergChart1.ChartBase.ChartAreas.Add(LogicalProcessorChartArea);
+
+                // LP Series
+                string SeriesName = $"LogicalProcessorSeries_{i}";
+                Series LogicalProcessorSeries = AddSeries_LogicalProcessor(SeriesName, GridColor);
+                LogicalProcessorSeries.ChartArea = ChartAreaName;
+                bergChart1.ChartBase.Series.Add(LogicalProcessorSeries);
+            }
+        }
+        #endregion InitializeGridLayout
+
+        #region OnPerformanceDataUpdated
+        public void OnPerformanceDataUpdated(object sender, EventArgs e)
+        {
+            CpuPerformanceData CpuPerformanceData = sender as CpuPerformanceData;
+            Invoke(new OnDataUpdated(() =>
+            {
+                if (!ScopeItems.Any(x => x.Name == CpuPerformanceData.SystemName))
+                {
+                    ScopeItems.Add(new Scope()
+                    {
+                        Name = CpuPerformanceData.SystemName,
+                        ScopeType = ScopeType.System
+                    });
+                }
+
+                if (!ScopeItems.Any(x => x.Name == CpuPerformanceData.ParentProcessName))
+                {
+                    ScopeItems.Add(new Scope()
+                    {
+                        Name = CpuPerformanceData.ParentProcessName,
+                        ScopeType = ScopeType.Process
+                    });
+                }
+                cmbScope.Refresh();
+                if (_RefreshStatics)
+                {
+                    Cores = CpuPerformanceData.CoreCount;
+                    CurrentClockSpeed = CpuPerformanceData.CurrentClockSpeed;
+                    LogicalProcessors = CpuPerformanceData.LogicalProcessorsCount;
+                    MaximumClockSpeed = CpuPerformanceData.MaxClockSpeed;
+                    Name = CpuPerformanceData.Name;
+                    LogicalThreads = CpuPerformanceData.ThreadCount;
+
+                    ttlProcessor.KeyObjectToolTipText = $"Cores:               {Cores}{Environment.NewLine}" +
+                                                        $"Logical Processors:  {LogicalProcessors}{Environment.NewLine}" +
+                                                        $"Logical Threads:     {LogicalThreads}{Environment.NewLine}" +
+                                                        $"{Environment.NewLine}" +
+                                                        $"Maximum Clock Speed: {MaximumClockSpeed}{Environment.NewLine}" +
+                                                        $"Current Clock Speed: {CurrentClockSpeed}";
+
+                    _RefreshStatics = false;
+                }
+
+                TotalCpu = CpuPerformanceData.TotalCPU;
+                CurrentThreads = CpuPerformanceData.CurrentThreads;
+
+                UpdateGrid(CpuPerformanceData);                
             }), null);
         }
         #endregion OnPerformanceDataUpdated
@@ -512,13 +465,12 @@ namespace BergUI
         #region UpdateChartViewMode
         public void UpdateChartViewMode()
         {
-            foreach (var chartArea in chartCpu.ChartAreas)
+            foreach (var chartArea in bergChart1.ChartBase.ChartAreas)
             {
                 chartArea.Visible = _CpuViewMode == (CpuViewMode)chartArea.Tag;
             }
         }
         #endregion UpdateChartViewMode
-
         #endregion Methods..
     }
 }

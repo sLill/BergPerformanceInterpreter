@@ -48,6 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BergChart.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BergChart.Designer.cs">
+      <DependentUpon>BergChart.cs</DependentUpon>
+    </Compile>
     <Compile Include="CpuPerformanceControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -69,6 +75,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="BergChart.resx">
+      <DependentUpon>BergChart.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CpuPerformanceControl.resx">
       <DependentUpon>CpuPerformanceControl.cs</DependentUpon>
     </EmbeddedResource>

@@ -75,8 +75,6 @@ namespace BergPerformanceServices
         {
             byte[] performanceDataByteArray = PerformanceData.Serialize();
             BergNamedPipeClient.Write(performanceDataByteArray);
-
-            PerformanceData.DataState = DataState.ALIVE;
         }
         #endregion WritePerformanceDataToStream
         #endregion Methods..

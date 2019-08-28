@@ -16,9 +16,11 @@ namespace BergCommon
         #endregion Member Variables..
 
         #region Properties..
-        public DataState DataState { get; set; }
-
         public long ElapsedTime { get; private set; }
+
+        public string ParentProcessName { get; protected set; }
+
+        public string SystemName { get; protected set; }
 
         public Dictionary<string, PerformanceWatch> PerformanceWatchCollection { get; set; }
         #endregion Properties..
@@ -37,7 +39,6 @@ namespace BergCommon
         {
             _PerformanceTimer = new Stopwatch();
             PerformanceWatchCollection = new Dictionary<string, PerformanceWatch>();
-            DataState = DataState.BEGIN;
         }
         #endregion BergPerformanceData
         #endregion Constructors..
