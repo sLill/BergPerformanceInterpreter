@@ -15,31 +15,31 @@ namespace BergCommon
         #endregion Member Variables..
 
         #region Properties..
-        public string CoreCount { get; private set; }
+        public byte CoreCount { get; private set; }
         
-        public string CurrentClockSpeed { get; private set; }
+        public int CurrentClockSpeed { get; private set; }
 
-        public string CurrentThreads { get; private set; }
+        public int CurrentThreads { get; private set; }
 
-        public string L2CacheSize { get; private set; }
+        public int L2CacheSize { get; private set; }
 
-        public string L3CacheSize { get; private set; }
+        public int L3CacheSize { get; private set; }
 
         public List<LogicalCore> LogicalCores { get; private set; }
 
-        public string LoadPercentage { get; private set; }
+        public byte LoadPercentage { get; private set; }
 
-        public string LogicalProcessorsCount { get; private set; }
+        public byte LogicalProcessorsCount { get; private set; }
 
-        public string MaxClockSpeed { get; private set; }
+        public int MaxClockSpeed { get; private set; }
 
         public string Name { get; private set; }
 
+        public Dictionary<ScopeType, byte> ScopeCpuUtilization = new Dictionary<ScopeType, byte>();
+
         public string Status { get; private set; }
 
-        public string ThreadCount { get; private set; }
-
-        public string TotalCPU { get; private set; }
+        public int ThreadCount { get; private set; }
         #endregion Properties..
 
         #region Structs
@@ -48,8 +48,8 @@ namespace BergCommon
         public struct LogicalCore
         {
             public string CoreId;
-            public string PercentProcessorTime;
-            public string PercentUserTime;
+            public int PercentCpuTotal;
+            public int PercentCpuProcess;
         }
         #endregion LogicalCore
         #endregion Structs
@@ -67,28 +67,29 @@ namespace BergCommon
         {
             base.Initialize();
 
-            ManagementObjectSearcher ManagementObjectSearcher = new ManagementObjectSearcher();
-
-            // CPU Information
-            string CpuInformationQuery = "SELECT * FROM Win32_Processor";
-            ManagementObjectSearcher.Query = new ObjectQuery(CpuInformationQuery);
-
-            foreach (var systemItem in ManagementObjectSearcher.Get())
+            using (ManagementObjectSearcher ManagementObjectSearcher = new ManagementObjectSearcher())
             {
-                L2CacheSize = systemItem["L2CacheSize"].ToString();
-                L3CacheSize = systemItem["L3CacheSize"].ToString();
-                CurrentClockSpeed = systemItem["CurrentClockSpeed"].ToString();
-                MaxClockSpeed = systemItem["MaxClockSpeed"].ToString();
-                ThreadCount = GetPropertyValue(systemItem, "ThreadCount");
-                CoreCount = systemItem["NumberOfCores"].ToString();
-                LoadPercentage = systemItem["LoadPercentage"].ToString();
-                LogicalProcessorsCount = systemItem["NumberOfLogicalProcessors"].ToString();
-                Name = systemItem["Name"].ToString();
-                Status = systemItem["Status"].ToString();
-            }
+                // CPU Information
+                string CpuInformationQuery = "SELECT * FROM Win32_Processor";
+                ManagementObjectSearcher.Query = new ObjectQuery(CpuInformationQuery);
 
-            SystemName = Environment.MachineName;
-            ParentProcessName = AppDomain.CurrentDomain.FriendlyName;
+                foreach (var systemItem in ManagementObjectSearcher.Get())
+                {
+                    L2CacheSize = Convert.ToInt32(systemItem["L2CacheSize"]);
+                    L3CacheSize = Convert.ToInt32(systemItem["L3CacheSize"]);
+                    CurrentClockSpeed = Convert.ToInt32(systemItem["CurrentClockSpeed"]);
+                    MaxClockSpeed = Convert.ToInt32(systemItem["MaxClockSpeed"]);
+                    ThreadCount = Convert.ToInt32(systemItem["ThreadCount"]);
+                    CoreCount = Convert.ToByte(systemItem["NumberOfCores"]);
+                    LoadPercentage = Convert.ToByte(systemItem["LoadPercentage"]);
+                    LogicalProcessorsCount = Convert.ToByte(systemItem["NumberOfLogicalProcessors"]);
+                    Name = systemItem["Name"].ToString();
+                    Status = systemItem["Status"].ToString();
+                }
+
+                SystemName = Environment.MachineName;
+                ParentProcessName = AppDomain.CurrentDomain.FriendlyName;
+            }
         }
         #endregion Initialize
 
@@ -132,29 +133,39 @@ namespace BergCommon
             #endregion RawCalculation
 
             #region Formatted Calculation
-            string Query = "SELECT * FROM Win32_PerfFormattedData_PerfOS_Processor";
-            ManagementObjectSearcher ManagementObjectSearcher = new ManagementObjectSearcher("root\\CIMV2", Query);
-            foreach (var systemItem in ManagementObjectSearcher.Get())
+            using (ManagementObjectSearcher ManagementObjectSearcher = new ManagementObjectSearcher())
             {
-                string ItemName = systemItem["Name"].ToString();
-                if (ItemName == "_Total")
-                {
-                    TotalCPU = systemItem["PercentProcessorTime"].ToString();
-                }
-                else
-                {
-                    LogicalCores.Add(new LogicalCore()
-                    {
-                        CoreId = ItemName,
-                        PercentProcessorTime = systemItem["PercentProcessorTime"].ToString(),
-                        PercentUserTime = systemItem["PercentUserTime"].ToString()
-                    });
-                }
-            }
+                ManagementObjectSearcher.Scope.Path.Path = "root\\CIMV2";
 
-            Query = "SELECT * FROM Win32_Thread";
-            ManagementObjectSearcher.Query.QueryString = Query;
-            CurrentThreads = ManagementObjectSearcher.Get().Count.ToString();
+                string Query = "SELECT * FROM Win32_PerfFormattedData_PerfOS_Processor";
+                ManagementObjectSearcher.Query.QueryString = Query;
+
+                foreach (var systemItem in ManagementObjectSearcher.Get())
+                {
+                    string ItemName = systemItem["Name"].ToString();
+                    if (ItemName == "_Total")
+                    {
+                        ScopeCpuUtilization[ScopeType.System] = Convert.ToByte(systemItem["PercentProcessorTime"]);
+                    }
+                    else
+                    {
+                        LogicalCores.Add(new LogicalCore()
+                        {
+                            CoreId = ItemName,
+                            PercentCpuTotal = Convert.ToInt32(systemItem["PercentProcessorTime"])
+                            //PercentCpuProcess = 
+                        });
+                    }
+                }
+
+                // Current Process
+                ScopeCpuUtilization[ScopeType.Process] = 0;
+
+                // Thread
+                Query = "SELECT * FROM Win32_Thread";
+                ManagementObjectSearcher.Query.QueryString = Query;
+                CurrentThreads = ManagementObjectSearcher.Get().Count;
+            }
             #endregion Formatted Calculation
 
             #region Formatted - ManagementClass

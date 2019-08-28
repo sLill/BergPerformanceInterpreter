@@ -30,15 +30,15 @@
         {
             this.components = new System.ComponentModel.Container();
             this.groupBoxCPU = new System.Windows.Forms.GroupBox();
-            this.cmbScope = new System.Windows.Forms.ComboBox();
-            this.lblThreads = new System.Windows.Forms.Label();
-            this.lblTotalCpu = new System.Windows.Forms.Label();
             this.ctxChartCpu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsCpuViewMode = new System.Windows.Forms.ToolStripMenuItem();
             this.tsOverallUtilization = new System.Windows.Forms.ToolStripMenuItem();
             this.tsLogicalProcessors = new System.Windows.Forms.ToolStripMenuItem();
-            this.bergChart1 = new BergUI.BergChart();
-            this.toolTipLabel1 = new BergUI.ToolTipLabel();
+            this.lblTotalCpu = new System.Windows.Forms.Label();
+            this.lblThreads = new System.Windows.Forms.Label();
+            this.cmbScope = new System.Windows.Forms.ComboBox();
+            this.chartCpu = new BergUI.BergChart();
+            this.ttlThreads = new BergUI.ToolTipLabel();
             this.toolTipLabel6 = new BergUI.ToolTipLabel();
             this.ttlProcessor = new BergUI.ToolTipLabel();
             this.groupBoxCPU.SuspendLayout();
@@ -48,10 +48,10 @@
             // groupBoxCPU
             // 
             this.groupBoxCPU.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.groupBoxCPU.Controls.Add(this.bergChart1);
+            this.groupBoxCPU.Controls.Add(this.chartCpu);
             this.groupBoxCPU.Controls.Add(this.cmbScope);
             this.groupBoxCPU.Controls.Add(this.lblThreads);
-            this.groupBoxCPU.Controls.Add(this.toolTipLabel1);
+            this.groupBoxCPU.Controls.Add(this.ttlThreads);
             this.groupBoxCPU.Controls.Add(this.lblTotalCpu);
             this.groupBoxCPU.Controls.Add(this.toolTipLabel6);
             this.groupBoxCPU.Controls.Add(this.ttlProcessor);
@@ -61,40 +61,6 @@
             this.groupBoxCPU.TabIndex = 9;
             this.groupBoxCPU.TabStop = false;
             this.groupBoxCPU.Text = "CPU";
-            // 
-            // cmbScope
-            // 
-            this.cmbScope.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbScope.FormattingEnabled = true;
-            this.cmbScope.Location = new System.Drawing.Point(57, 39);
-            this.cmbScope.Name = "cmbScope";
-            this.cmbScope.Size = new System.Drawing.Size(227, 21);
-            this.cmbScope.TabIndex = 29;
-            this.cmbScope.SelectionChangeCommitted += new System.EventHandler(this.CmbScope_SelectedValueChanged);
-            // 
-            // lblThreads
-            // 
-            this.lblThreads.AutoSize = true;
-            this.lblThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblThreads.Location = new System.Drawing.Point(139, 345);
-            this.lblThreads.Margin = new System.Windows.Forms.Padding(0);
-            this.lblThreads.Name = "lblThreads";
-            this.lblThreads.Size = new System.Drawing.Size(52, 13);
-            this.lblThreads.TabIndex = 28;
-            this.lblThreads.Text = "[Threads]";
-            this.lblThreads.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblTotalCpu
-            // 
-            this.lblTotalCpu.AutoSize = true;
-            this.lblTotalCpu.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotalCpu.Location = new System.Drawing.Point(139, 326);
-            this.lblTotalCpu.Margin = new System.Windows.Forms.Padding(0);
-            this.lblTotalCpu.Name = "lblTotalCpu";
-            this.lblTotalCpu.Size = new System.Drawing.Size(56, 13);
-            this.lblTotalCpu.TabIndex = 21;
-            this.lblTotalCpu.Text = "[TotalCpu]";
-            this.lblTotalCpu.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // ctxChartCpu
             // 
@@ -127,28 +93,62 @@
             this.tsLogicalProcessors.Size = new System.Drawing.Size(171, 22);
             this.tsLogicalProcessors.Text = "Logical Processors";
             // 
-            // bergChart1
+            // lblTotalCpu
             // 
-            this.bergChart1.Location = new System.Drawing.Point(6, 66);
-            this.bergChart1.Name = "bergChart1";
-            this.bergChart1.Size = new System.Drawing.Size(717, 250);
-            this.bergChart1.TabIndex = 30;
+            this.lblTotalCpu.AutoSize = true;
+            this.lblTotalCpu.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotalCpu.Location = new System.Drawing.Point(139, 326);
+            this.lblTotalCpu.Margin = new System.Windows.Forms.Padding(0);
+            this.lblTotalCpu.Name = "lblTotalCpu";
+            this.lblTotalCpu.Size = new System.Drawing.Size(56, 13);
+            this.lblTotalCpu.TabIndex = 21;
+            this.lblTotalCpu.Text = "[TotalCpu]";
+            this.lblTotalCpu.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // toolTipLabel1
+            // lblThreads
             // 
-            this.toolTipLabel1.AutoSize = true;
-            this.toolTipLabel1.BackColor = System.Drawing.Color.Transparent;
-            this.toolTipLabel1.Cursor = System.Windows.Forms.Cursors.Default;
-            this.toolTipLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolTipLabel1.InfoToolTipEnabled = false;
-            this.toolTipLabel1.InfoToolTipText = "";
-            this.toolTipLabel1.KeyObjectToolTipEnabled = true;
-            this.toolTipLabel1.KeyObjectToolTipText = "";
-            this.toolTipLabel1.Location = new System.Drawing.Point(61, 345);
-            this.toolTipLabel1.Name = "toolTipLabel1";
-            this.toolTipLabel1.Size = new System.Drawing.Size(58, 13);
-            this.toolTipLabel1.TabIndex = 27;
-            this.toolTipLabel1.Text = "Threads:";
+            this.lblThreads.AutoSize = true;
+            this.lblThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblThreads.Location = new System.Drawing.Point(139, 345);
+            this.lblThreads.Margin = new System.Windows.Forms.Padding(0);
+            this.lblThreads.Name = "lblThreads";
+            this.lblThreads.Size = new System.Drawing.Size(52, 13);
+            this.lblThreads.TabIndex = 28;
+            this.lblThreads.Text = "[Threads]";
+            this.lblThreads.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // cmbScope
+            // 
+            this.cmbScope.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbScope.FormattingEnabled = true;
+            this.cmbScope.Location = new System.Drawing.Point(57, 39);
+            this.cmbScope.Name = "cmbScope";
+            this.cmbScope.Size = new System.Drawing.Size(227, 21);
+            this.cmbScope.TabIndex = 29;
+            this.cmbScope.SelectionChangeCommitted += new System.EventHandler(this.CmbScope_SelectedValueChanged);
+            // 
+            // chartCpu
+            // 
+            this.chartCpu.Location = new System.Drawing.Point(6, 66);
+            this.chartCpu.Name = "chartCpu";
+            this.chartCpu.Size = new System.Drawing.Size(717, 250);
+            this.chartCpu.TabIndex = 30;
+            // 
+            // ttlThreads
+            // 
+            this.ttlThreads.AutoSize = true;
+            this.ttlThreads.BackColor = System.Drawing.Color.Transparent;
+            this.ttlThreads.Cursor = System.Windows.Forms.Cursors.Default;
+            this.ttlThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ttlThreads.InfoToolTipEnabled = false;
+            this.ttlThreads.InfoToolTipText = "";
+            this.ttlThreads.KeyObjectToolTipEnabled = true;
+            this.ttlThreads.KeyObjectToolTipText = "";
+            this.ttlThreads.Location = new System.Drawing.Point(61, 345);
+            this.ttlThreads.Name = "ttlThreads";
+            this.ttlThreads.Size = new System.Drawing.Size(58, 13);
+            this.ttlThreads.TabIndex = 27;
+            this.ttlThreads.Text = "Threads:";
             // 
             // toolTipLabel6
             // 
@@ -203,12 +203,12 @@
         private System.Windows.Forms.ToolStripMenuItem tsCpuViewMode;
         private System.Windows.Forms.ToolStripMenuItem tsOverallUtilization;
         private System.Windows.Forms.ToolStripMenuItem tsLogicalProcessors;
-        private ToolTipLabel ttlProcessor;
+        private BergChart chartCpu;
+        private System.Windows.Forms.ComboBox cmbScope;
+        private System.Windows.Forms.Label lblThreads;
+        private ToolTipLabel ttlThreads;
         private System.Windows.Forms.Label lblTotalCpu;
         private ToolTipLabel toolTipLabel6;
-        private System.Windows.Forms.Label lblThreads;
-        private ToolTipLabel toolTipLabel1;
-        private System.Windows.Forms.ComboBox cmbScope;
-        private BergChart bergChart1;
+        private ToolTipLabel ttlProcessor;
     }
 }

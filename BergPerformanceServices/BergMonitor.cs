@@ -7,7 +7,7 @@ using System.Threading;
 [assembly: InternalsVisibleTo("BergUI")]
 namespace BergPerformanceServices
 {
-    public class BergMonitor
+    public abstract class BergMonitor : IDisposable
     {
         #region Member Variables..
         protected object _UpdateLock = new object();
@@ -39,6 +39,11 @@ namespace BergPerformanceServices
         #endregion Constructors..
 
         #region Methods..
+        public void Dispose()
+        {
+            _UpdateTimer.Dispose();
+        }
+
         #region PerformanceDataUpdated
         protected void PerformanceDataUpdated()
         {

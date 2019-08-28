@@ -8,7 +8,7 @@ using System.Diagnostics;
 namespace BergCommon
 {
     [Serializable]
-    public class BergPerformanceData
+    public abstract class BergPerformanceData
     {
         #region Member Variables..
         [NonSerialized]
