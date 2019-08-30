@@ -57,7 +57,7 @@
             this.groupBoxCPU.Controls.Add(this.ttlProcessor);
             this.groupBoxCPU.Location = new System.Drawing.Point(2, 3);
             this.groupBoxCPU.Name = "groupBoxCPU";
-            this.groupBoxCPU.Size = new System.Drawing.Size(749, 464);
+            this.groupBoxCPU.Size = new System.Drawing.Size(749, 371);
             this.groupBoxCPU.TabIndex = 9;
             this.groupBoxCPU.TabStop = false;
             this.groupBoxCPU.Text = "CPU";
@@ -97,7 +97,7 @@
             // 
             this.lblTotalCpu.AutoSize = true;
             this.lblTotalCpu.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotalCpu.Location = new System.Drawing.Point(139, 326);
+            this.lblTotalCpu.Location = new System.Drawing.Point(139, 311);
             this.lblTotalCpu.Margin = new System.Windows.Forms.Padding(0);
             this.lblTotalCpu.Name = "lblTotalCpu";
             this.lblTotalCpu.Size = new System.Drawing.Size(56, 13);
@@ -109,7 +109,7 @@
             // 
             this.lblThreads.AutoSize = true;
             this.lblThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblThreads.Location = new System.Drawing.Point(139, 345);
+            this.lblThreads.Location = new System.Drawing.Point(139, 330);
             this.lblThreads.Margin = new System.Windows.Forms.Padding(0);
             this.lblThreads.Name = "lblThreads";
             this.lblThreads.Size = new System.Drawing.Size(52, 13);
@@ -121,7 +121,7 @@
             // 
             this.cmbScope.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbScope.FormattingEnabled = true;
-            this.cmbScope.Location = new System.Drawing.Point(57, 39);
+            this.cmbScope.Location = new System.Drawing.Point(57, 24);
             this.cmbScope.Name = "cmbScope";
             this.cmbScope.Size = new System.Drawing.Size(227, 21);
             this.cmbScope.TabIndex = 29;
@@ -129,7 +129,7 @@
             // 
             // chartCpu
             // 
-            this.chartCpu.Location = new System.Drawing.Point(6, 66);
+            this.chartCpu.Location = new System.Drawing.Point(6, 51);
             this.chartCpu.Name = "chartCpu";
             this.chartCpu.Size = new System.Drawing.Size(717, 250);
             this.chartCpu.TabIndex = 30;
@@ -144,7 +144,7 @@
             this.ttlThreads.InfoToolTipText = "";
             this.ttlThreads.KeyObjectToolTipEnabled = true;
             this.ttlThreads.KeyObjectToolTipText = "";
-            this.ttlThreads.Location = new System.Drawing.Point(61, 345);
+            this.ttlThreads.Location = new System.Drawing.Point(61, 330);
             this.ttlThreads.Name = "ttlThreads";
             this.ttlThreads.Size = new System.Drawing.Size(58, 13);
             this.ttlThreads.TabIndex = 27;
@@ -160,7 +160,7 @@
             this.toolTipLabel6.InfoToolTipText = "";
             this.toolTipLabel6.KeyObjectToolTipEnabled = true;
             this.toolTipLabel6.KeyObjectToolTipText = "";
-            this.toolTipLabel6.Location = new System.Drawing.Point(61, 326);
+            this.toolTipLabel6.Location = new System.Drawing.Point(61, 311);
             this.toolTipLabel6.Name = "toolTipLabel6";
             this.toolTipLabel6.Size = new System.Drawing.Size(83, 13);
             this.toolTipLabel6.TabIndex = 22;
@@ -175,7 +175,7 @@
             this.ttlProcessor.InfoToolTipText = "";
             this.ttlProcessor.KeyObjectToolTipEnabled = true;
             this.ttlProcessor.KeyObjectToolTipText = "";
-            this.ttlProcessor.Location = new System.Drawing.Point(449, 42);
+            this.ttlProcessor.Location = new System.Drawing.Point(449, 27);
             this.ttlProcessor.Name = "ttlProcessor";
             this.ttlProcessor.Size = new System.Drawing.Size(77, 13);
             this.ttlProcessor.TabIndex = 20;
@@ -189,7 +189,7 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Controls.Add(this.groupBoxCPU);
             this.Name = "CpuPerformanceControl";
-            this.Size = new System.Drawing.Size(754, 470);
+            this.Size = new System.Drawing.Size(754, 377);
             this.groupBoxCPU.ResumeLayout(false);
             this.groupBoxCPU.PerformLayout();
             this.ctxChartCpu.ResumeLayout(false);

@@ -297,7 +297,7 @@ namespace BergUI
                 {
                     // Overall : Points
                     Series OverallCpuSeries = this.Series[$"OverallCpuSeries_{scopeType}"];
-                    OverallCpuSeries.Points.AddXY(cpuPerformanceData.ElapsedTime / 1000, cpuPerformanceData.ScopeCpuUtilization[scopeType]);
+                    OverallCpuSeries.Points.AddXY(cpuPerformanceData.ElapsedTime / 1000, cpuPerformanceData.CpuUtilization[scopeType]);
 
                     ChartArea OverallChartArea = this.ChartAreas[$"OverallCpuChartArea_{scopeType}"];
                     double XValueMin = OverallCpuSeries.Points.FindMinByValue("X").XValue;
@@ -354,7 +354,7 @@ namespace BergUI
                         if (PerformanceWatch.Value.Active)
                         {
                             // Overall : Points
-                            this.Series[OverallWatchSeriesName].Points.AddXY(cpuPerformanceData.ElapsedTime / 1000, cpuPerformanceData.ScopeCpuUtilization[scopeType]);
+                            this.Series[OverallWatchSeriesName].Points.AddXY(cpuPerformanceData.ElapsedTime / 1000, cpuPerformanceData.CpuUtilization[scopeType]);
 
                             // Logical Cores : Points
                             foreach (var logicalCore in cpuPerformanceData.LogicalCores)
@@ -432,20 +432,22 @@ namespace BergUI
             CpuPerformanceData CpuPerformanceData = sender as CpuPerformanceData;
             Invoke(new OnDataUpdated(() =>
             {
-                if (!ScopeItems.Any(x => x.Name == CpuPerformanceData.SystemName))
+                string SystemName = $"System - {CpuPerformanceData.SystemName}";
+                if (!ScopeItems.Any(x => x.Name == SystemName))
                 {
                     ScopeItems.Add(new Scope()
                     {
-                        Name = CpuPerformanceData.SystemName,
+                        Name = SystemName,
                         ScopeType = ScopeType.System
                     });
                 }
 
-                if (!ScopeItems.Any(x => x.Name == CpuPerformanceData.ParentProcessName))
+                string ProcessName = $"Process - {CpuPerformanceData.ParentProcessName}";
+                if (!ScopeItems.Any(x => x.Name == ProcessName))
                 {
                     ScopeItems.Add(new Scope()
                     {
-                        Name = CpuPerformanceData.ParentProcessName,
+                        Name = ProcessName,
                         ScopeType = ScopeType.Process
                     });
                 }
@@ -470,8 +472,8 @@ namespace BergUI
                 }
 
                 ScopeType SelectedScope = (ScopeType)cmbScope.SelectedValue;
-                TotalCpu = CpuPerformanceData.ScopeCpuUtilization[SelectedScope].ToString();
-                CurrentThreads = CpuPerformanceData.CurrentThreads.ToString();
+                TotalCpu = CpuPerformanceData.CpuUtilization[SelectedScope].ToString();
+                CurrentThreads = CpuPerformanceData.Threads[SelectedScope].ToString();
 
                 UpdateGrid(CpuPerformanceData);                
             }), null);

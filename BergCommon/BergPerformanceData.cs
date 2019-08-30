@@ -20,6 +20,8 @@ namespace BergCommon
 
         public string ParentProcessName { get; protected set; }
 
+        public Guid PerformanceDataId { get; protected set; }
+
         public string SystemName { get; protected set; }
 
         public Dictionary<string, PerformanceWatch> PerformanceWatchCollection { get; set; }
@@ -37,6 +39,7 @@ namespace BergCommon
         #region BergPerformanceData
         protected BergPerformanceData()
         {
+            PerformanceDataId = Guid.NewGuid();
             _PerformanceTimer = new Stopwatch();
             PerformanceWatchCollection = new Dictionary<string, PerformanceWatch>();
         }

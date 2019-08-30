@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Management;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace BergCommon
 {
@@ -16,10 +18,10 @@ namespace BergCommon
 
         #region Properties..
         public byte CoreCount { get; private set; }
-        
-        public int CurrentClockSpeed { get; private set; }
 
-        public int CurrentThreads { get; private set; }
+        public Dictionary<ScopeType, byte> CpuUtilization = new Dictionary<ScopeType, byte>();
+
+        public int CurrentClockSpeed { get; private set; }
 
         public int L2CacheSize { get; private set; }
 
@@ -35,9 +37,9 @@ namespace BergCommon
 
         public string Name { get; private set; }
 
-        public Dictionary<ScopeType, byte> ScopeCpuUtilization = new Dictionary<ScopeType, byte>();
-
         public string Status { get; private set; }
+
+        public Dictionary<ScopeType, int> Threads = new Dictionary<ScopeType, int>();
 
         public int ThreadCount { get; private set; }
         #endregion Properties..
@@ -137,15 +139,24 @@ namespace BergCommon
             {
                 ManagementObjectSearcher.Scope.Path.Path = "root\\CIMV2";
 
-                string Query = "SELECT * FROM Win32_PerfFormattedData_PerfOS_Processor";
+                // Process
+                Process CurrentProcess = Process.GetCurrentProcess();
+                Threads[ScopeType.Process] = CurrentProcess.Threads.Count;
+                CpuUtilization[ScopeType.Process] = Convert.ToByte(100 - (CurrentProcess.TotalProcessorTime.Milliseconds / 100));
+                    
+                string Query = "SELECT * FROM Win32_PerfFormattedData_PerfProc_Process";
                 ManagementObjectSearcher.Query.QueryString = Query;
+                var CurrentProcessWMI = ManagementObjectSearcher.Get().Cast<ManagementObject>().Where(item => item["Name"].ToString() == CurrentProcess.ProcessName);
 
+                // System
+                Query = "SELECT * FROM Win32_PerfFormattedData_PerfOS_Processor";
+                ManagementObjectSearcher.Query.QueryString = Query;
                 foreach (var systemItem in ManagementObjectSearcher.Get())
                 {
                     string ItemName = systemItem["Name"].ToString();
                     if (ItemName == "_Total")
                     {
-                        ScopeCpuUtilization[ScopeType.System] = Convert.ToByte(systemItem["PercentProcessorTime"]);
+                        CpuUtilization[ScopeType.System] = Convert.ToByte(systemItem["PercentProcessorTime"]);
                     }
                     else
                     {
@@ -158,13 +169,9 @@ namespace BergCommon
                     }
                 }
 
-                // Current Process
-                ScopeCpuUtilization[ScopeType.Process] = 0;
-
-                // Thread
                 Query = "SELECT * FROM Win32_Thread";
                 ManagementObjectSearcher.Query.QueryString = Query;
-                CurrentThreads = ManagementObjectSearcher.Get().Count;
+                Threads[ScopeType.System] = ManagementObjectSearcher.Get().Count;
             }
             #endregion Formatted Calculation
 
