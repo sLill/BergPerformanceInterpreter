@@ -11,6 +11,7 @@ namespace BergCommon
     public class CpuPerformanceData : BergPerformanceData
     {
         #region Member Variables..
+        private (DateTime, double) _PreviousProcessCheck = (DateTime.Now, 0);
         //private long _RawCpuPrev = 0;
         //private long _RawUserCpuPrev = 0;
         //private UInt64 _RawTimeStampPrev = 0;
@@ -142,8 +143,11 @@ namespace BergCommon
                 // Process
                 Process CurrentProcess = Process.GetCurrentProcess();
                 Threads[ScopeType.Process] = CurrentProcess.Threads.Count;
-                CpuUtilization[ScopeType.Process] = Convert.ToByte(100 - (CurrentProcess.TotalProcessorTime.Milliseconds / 100));
-                    
+
+                var CurrentProcessCheck = (DateTime.Now, CurrentProcess.TotalProcessorTime.TotalMilliseconds);
+                CpuUtilization[ScopeType.Process] = Convert.ToByte(((CurrentProcessCheck.TotalMilliseconds - _PreviousProcessCheck.Item2) / (CurrentProcessCheck.Now - _PreviousProcessCheck.Item1).TotalMilliseconds) * 100);
+                _PreviousProcessCheck = CurrentProcessCheck;
+
                 string Query = "SELECT * FROM Win32_PerfFormattedData_PerfProc_Process";
                 ManagementObjectSearcher.Query.QueryString = Query;
                 var CurrentProcessWMI = ManagementObjectSearcher.Get().Cast<ManagementObject>().Where(item => item["Name"].ToString() == CurrentProcess.ProcessName);
@@ -171,7 +175,7 @@ namespace BergCommon
 
                 Query = "SELECT * FROM Win32_Thread";
                 ManagementObjectSearcher.Query.QueryString = Query;
-                Threads[ScopeType.System] = ManagementObjectSearcher.Get().Count;
+                Threads[ScopeType.System] = Process.GetProcesses().Sum(x => x.Threads.Count);
             }
             #endregion Formatted Calculation
 

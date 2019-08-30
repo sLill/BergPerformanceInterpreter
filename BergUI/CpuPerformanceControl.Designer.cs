@@ -139,7 +139,7 @@
             this.ttlThreads.AutoSize = true;
             this.ttlThreads.BackColor = System.Drawing.Color.Transparent;
             this.ttlThreads.Cursor = System.Windows.Forms.Cursors.Default;
-            this.ttlThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ttlThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ttlThreads.InfoToolTipEnabled = false;
             this.ttlThreads.InfoToolTipText = "";
             this.ttlThreads.KeyObjectToolTipEnabled = true;
@@ -160,7 +160,7 @@
             this.toolTipLabel6.InfoToolTipText = "";
             this.toolTipLabel6.KeyObjectToolTipEnabled = true;
             this.toolTipLabel6.KeyObjectToolTipText = "";
-            this.toolTipLabel6.Location = new System.Drawing.Point(61, 311);
+            this.toolTipLabel6.Location = new System.Drawing.Point(45, 311);
             this.toolTipLabel6.Name = "toolTipLabel6";
             this.toolTipLabel6.Size = new System.Drawing.Size(83, 13);
             this.toolTipLabel6.TabIndex = 22;
