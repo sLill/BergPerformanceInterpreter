@@ -133,7 +133,7 @@ namespace BergUI
             if (LicenseManager.UsageMode == LicenseUsageMode.Runtime)
             {
                 UpdateInterval = 1000;
-                UseLocalDataSource = false;
+                UseLocalDataSource = true;
 
                 ShowLoadingSplash(this.groupBoxCPU, true);
 
@@ -245,6 +245,7 @@ namespace BergUI
             //ChartArea.AxisY.Title = "%";
             //ChartArea.AxisY.TitleFont = new Font(FontFamily.GenericSansSerif, 6);
 
+            ChartArea.AxisY.IsMarginVisible = false;
             ChartArea.AxisX.MajorGrid.Enabled = false;
             ChartArea.AxisX.MajorTickMark.Enabled = false;
             ChartArea.AxisX.Minimum = 0;
@@ -289,6 +290,7 @@ namespace BergUI
         {
             if (GridState == GridState.WAITING)
             {
+                ShowLoadingSplash(this.groupBoxCPU, false);
                 UpdateChartViewMode();
                 GridState = GridState.ALIVE;
             }
@@ -433,8 +435,6 @@ namespace BergUI
             CpuPerformanceData CpuPerformanceData = sender as CpuPerformanceData;
             Invoke(new OnDataUpdated(() =>
             {
-                ShowLoadingSplash(this.groupBoxCPU, false);
-
                 string SystemName = $"System - {CpuPerformanceData.SystemName}";
                 if (!string.IsNullOrEmpty(SystemName) && !ScopeItems.Any(x => x.Name == SystemName))
                 {
