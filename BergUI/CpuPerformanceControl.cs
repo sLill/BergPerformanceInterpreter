@@ -242,8 +242,6 @@ namespace BergUI
             ChartArea.AxisY.MajorTickMark.Enabled = false;
             ChartArea.AxisY.MajorGrid.LineColor = Color.FromArgb(50, 0, 0, 0);
             ChartArea.AxisY.Maximum = 100;
-            //ChartArea.AxisY.Title = "%";
-            //ChartArea.AxisY.TitleFont = new Font(FontFamily.GenericSansSerif, 6);
 
             ChartArea.AxisY.IsMarginVisible = false;
             ChartArea.AxisX.MajorGrid.Enabled = false;
