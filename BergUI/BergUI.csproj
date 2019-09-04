@@ -50,6 +50,12 @@
     <Compile Include="BergChart.Designer.cs">
       <DependentUpon>BergChart.cs</DependentUpon>
     </Compile>
+    <Compile Include="BergPerformanceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BergPerformanceControl.Designer.cs">
+      <DependentUpon>BergPerformanceControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="CpuPerformanceControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -57,6 +63,18 @@
       <DependentUpon>CpuPerformanceControl.cs</DependentUpon>
     </Compile>
     <Compile Include="IBergPerformanceControl.cs" />
+    <Compile Include="LoadingSplash.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LoadingSplash.Designer.cs">
+      <DependentUpon>LoadingSplash.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProgressIndicator.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ProgressIndicator.Designer.cs">
+      <DependentUpon>ProgressIndicator.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -76,6 +94,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CpuPerformanceControl.resx">
       <DependentUpon>CpuPerformanceControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LoadingSplash.resx">
+      <DependentUpon>LoadingSplash.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProgressIndicator.resx">
+      <DependentUpon>ProgressIndicator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

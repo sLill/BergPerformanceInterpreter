@@ -145,7 +145,7 @@ namespace BergCommon
                 Threads[ScopeType.Process] = CurrentProcess.Threads.Count;
 
                 var CurrentProcessCheck = (DateTime.Now, CurrentProcess.TotalProcessorTime.TotalMilliseconds);
-                CpuUtilization[ScopeType.Process] = Convert.ToByte(((CurrentProcessCheck.TotalMilliseconds - _PreviousProcessCheck.Item2) / (CurrentProcessCheck.Now - _PreviousProcessCheck.Item1).TotalMilliseconds) * 100);
+                CpuUtilization[ScopeType.Process] = Convert.ToByte(((CurrentProcessCheck.TotalMilliseconds - _PreviousProcessCheck.Item2) / (CurrentProcessCheck.Now - _PreviousProcessCheck.Item1).TotalMilliseconds) * 100 / Environment.ProcessorCount);
                 _PreviousProcessCheck = CurrentProcessCheck;
 
                 string Query = "SELECT * FROM Win32_PerfFormattedData_PerfProc_Process";

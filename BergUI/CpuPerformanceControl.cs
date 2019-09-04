@@ -3,7 +3,6 @@ using BergPerformanceServices;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -11,7 +10,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 
 namespace BergUI
 {
-    public partial class CpuPerformanceControl : UserControl, IBergPerformanceControl
+    public partial class CpuPerformanceControl : BergPerformanceControl
     {
         #region Member Variables..
         private bool _RefreshStatics = true;
@@ -135,6 +134,8 @@ namespace BergUI
             {
                 UpdateInterval = 1000;
                 UseLocalDataSource = false;
+
+                ShowLoadingSplash(this.groupBoxCPU, true);
 
                 _BergCpuMonitor = new BergCpuMonitor(UpdateInterval, true, UseLocalDataSource);
                 _BergCpuMonitor.DataUpdated += OnPerformanceDataUpdated;
@@ -432,8 +433,10 @@ namespace BergUI
             CpuPerformanceData CpuPerformanceData = sender as CpuPerformanceData;
             Invoke(new OnDataUpdated(() =>
             {
+                ShowLoadingSplash(this.groupBoxCPU, false);
+
                 string SystemName = $"System - {CpuPerformanceData.SystemName}";
-                if (!ScopeItems.Any(x => x.Name == SystemName))
+                if (!string.IsNullOrEmpty(SystemName) && !ScopeItems.Any(x => x.Name == SystemName))
                 {
                     ScopeItems.Add(new Scope()
                     {
@@ -443,7 +446,7 @@ namespace BergUI
                 }
 
                 string ProcessName = $"Process - {CpuPerformanceData.ParentProcessName}";
-                if (!ScopeItems.Any(x => x.Name == ProcessName))
+                if (!string.IsNullOrEmpty(ProcessName) && !ScopeItems.Any(x => x.Name == ProcessName))
                 {
                     ScopeItems.Add(new Scope()
                     {
