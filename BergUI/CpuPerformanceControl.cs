@@ -133,7 +133,7 @@ namespace BergUI
             if (LicenseManager.UsageMode == LicenseUsageMode.Runtime)
             {
                 UpdateInterval = 1000;
-                UseLocalDataSource = true;
+                UseLocalDataSource = false;
 
                 ShowLoadingSplash(this.groupBoxCPU, true);
 
@@ -328,43 +328,30 @@ namespace BergUI
                     }
 
                     // Performance Watches
-                    foreach (var PerformanceWatch in cpuPerformanceData.PerformanceWatchCollection)
+                    if (scopeType == ScopeType.System)
                     {
-                        string OverallWatchSeriesName = $"OverallCpuWatchSeries_{scopeType}_{PerformanceWatch.Value.UniqueId}";
-
-                        var Series = this.Series.FindByName(OverallWatchSeriesName);
-                        if (Series == null)
+                        foreach (var PerformanceWatch in cpuPerformanceData.PerformanceWatchCollection)
                         {
-                            Color GridColor = ColorLibrary.GetNextColor();
+                            string OverallWatchSeriesName = $"OverallCpuWatchSeries_{PerformanceWatch.Value.UniqueId}";
 
-                            // Overall : UI
-                            Series OverallWatchSeries = AddSeries_OverallCpu(OverallWatchSeriesName, GridColor);
-                            OverallWatchSeries.ChartArea = $"OverallCpuChartArea_{scopeType}";
-                            chartCpu.ChartBase.Series.Add(OverallWatchSeries);
-
-                            // Logical Cores : UI
-                            foreach (var logicalCore in cpuPerformanceData.LogicalCores)
+                            var Series = this.Series.FindByName(OverallWatchSeriesName);
+                            if (Series == null)
                             {
-                                string LogicalProcessorWatchSeriesName = $"LogicalProcessorSeries_{scopeType}_{PerformanceWatch.Value.UniqueId}_{logicalCore.CoreId}";
-                                Series LogicalProcessorWatchSeries = AddSeries_LogicalProcessor(LogicalProcessorWatchSeriesName, GridColor);
-                                LogicalProcessorWatchSeries.ChartArea = $"LogicalProcessorChartArea_{scopeType}_{logicalCore.CoreId}";
-                                chartCpu.ChartBase.Series.Add(LogicalProcessorWatchSeries);
+                                var GridColor = ColorLibrary.GetNextColor();
+
+                                // Overall : UI
+                                Series OverallWatchSeries = AddSeries_OverallCpu(OverallWatchSeriesName, GridColor.Value);
+                                OverallWatchSeries.ChartArea = $"OverallCpuChartArea_{ScopeType.System}";
+                                chartCpu.ChartBase.Series.Add(OverallWatchSeries);
+
+                                lvPerformanceWatches.AddObject(PerformanceWatch.Value);
+                                lvPerformanceWatches.Items[lvPerformanceWatches.Items.Count - 1].ImageKey = GridColor.Key;
                             }
-                        }
 
-                        if (PerformanceWatch.Value.Active)
-                        {
-                            // Overall : Points
-                            this.Series[OverallWatchSeriesName].Points.AddXY(cpuPerformanceData.ElapsedTime / 1000, cpuPerformanceData.CpuUtilization[scopeType]);
-
-                            // Logical Cores : Points
-                            foreach (var logicalCore in cpuPerformanceData.LogicalCores)
+                            if (PerformanceWatch.Value.Active)
                             {
-                                string LogicalProcessorSeriesName = $"LogicalProcessorSeries_{scopeType}_{logicalCore.CoreId}";
-                                Series LogicalProcessorSeries = this.Series[LogicalProcessorSeriesName];
-
-                                string LogicalProcessorWatchSeriesName = $"LogicalProcessorSeries_{scopeType}_{PerformanceWatch.Value.UniqueId}_{logicalCore.CoreId}";
-                                this.Series[LogicalProcessorWatchSeriesName].Points.AddXY(cpuPerformanceData.ElapsedTime / 1000, logicalCore.PercentCpuTotal);
+                                // Overall : Points
+                                this.Series[OverallWatchSeriesName].Points.AddXY(cpuPerformanceData.ElapsedTime / 1000, cpuPerformanceData.CpuUtilization[ScopeType.System]);
                             }
                         }
                     }
@@ -383,6 +370,26 @@ namespace BergUI
 
             chartCpu.ContextMenuStrip = ctxChartCpu;
 
+            // lvPerformanceWatches
+            ImageList ImageList = new ImageList();
+            foreach (var color in ColorLibrary.Colors)
+            {
+                Bitmap ItemBitMap = new Bitmap(32, 32);
+                using (Graphics ItemImage = Graphics.FromImage(ItemBitMap))
+                {
+                    using (SolidBrush solidBrush = new SolidBrush(color.Value))
+                    {
+                        ItemImage.FillEllipse(solidBrush, 0, 0, 19, 19);
+                    }
+                }
+
+                ImageList.Images.Add(color.Key, ItemBitMap);
+            }
+
+            lvPerformanceWatches.SmallImageList = ImageList;
+            lvPerformanceWatches.StateImageList = ImageList;
+            lvPerformanceWatches.LargeImageList = ImageList;
+
             InitializeGridLayout();
         }
         #endregion InitializeControls
@@ -390,7 +397,7 @@ namespace BergUI
         #region InitializeGridLayout
         private void InitializeGridLayout()
         {
-            Color GridColor = ColorLibrary.GetNextColor();
+            var GridColor = ColorLibrary.GetNextColor();
             GridState = GridState.WAITING;
 
             foreach (ScopeType scopeType in Enum.GetValues(typeof(ScopeType)))
@@ -406,7 +413,7 @@ namespace BergUI
 
                 // Overall Series
                 string OverallCpuSeriesName = $"OverallCpuSeries_{scopeType}";
-                Series OverallCpuSeries = AddSeries_OverallCpu(OverallCpuSeriesName, GridColor);
+                Series OverallCpuSeries = AddSeries_OverallCpu(OverallCpuSeriesName, GridColor.Value);
                 OverallCpuSeries.ChartArea = OverallCpuChartAreaName;
                 chartCpu.ChartBase.Series.Add(OverallCpuSeries);
 
@@ -419,7 +426,7 @@ namespace BergUI
 
                     // LP Series
                     string SeriesName = $"LogicalProcessorSeries_{scopeType}_{i}";
-                    Series LogicalProcessorSeries = AddSeries_LogicalProcessor(SeriesName, GridColor);
+                    Series LogicalProcessorSeries = AddSeries_LogicalProcessor(SeriesName, GridColor.Value);
                     LogicalProcessorSeries.ChartArea = ChartAreaName;
                     chartCpu.ChartBase.Series.Add(LogicalProcessorSeries);
                 }

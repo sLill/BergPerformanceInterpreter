@@ -7,6 +7,7 @@ namespace BergCommon
     {
         #region Member Variables..
         #endregion Member Variables..
+
         #region Properties..
         public bool Active { get; set; }
 

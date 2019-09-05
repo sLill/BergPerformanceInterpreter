@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace BergCommon
 {
@@ -7,34 +9,37 @@ namespace BergCommon
     {
         #region Member Variables..
         private static int _Index = 0;
-        private static List<Color> Colors = new List<Color>
-        {
-            Color.FromArgb(128,128,255), // Blue
-            Color.Red,
-            Color.Orange,
-            Color.Purple,
-            Color.Green,
-            Color.Pink,
-            Color.Yellow,
-            Color.Black,
-            Color.Brown,
-            Color.Magenta,
-            Color.Gold
-        };
         #endregion Member Variables..
 
         #region Properties..
+        public static Dictionary<string, Color> Colors = new Dictionary<string, Color>
+        {
+            { "Blue", Color.FromArgb(128,128,255) },
+            { "Red", Color.Red },
+            { "Orange", Color.Orange },
+            { "Purple", Color.Purple },
+            { "Green", Color.Green },
+            { "Pink", Color.Pink },
+            { "Yellow", Color.Yellow },
+            { "Black", Color.Black },
+            { "Brown", Color.Brown },
+            { "Magenta", Color.Magenta },
+            { "Gold", Color.Gold }
+        };
         #endregion Properties..
 
         #region Constructors..
         #endregion Constructors..
 
         #region Methods..
-        public static Color GetNextColor()
+        public static (string Key, Color Value) GetNextColor()
         {
-            Color NextColor = Colors[_Index];
+            string Key = Colors.Keys.ToList()[_Index];
+            Color Value = Colors[Key];
+
             _Index = _Index == Colors.Count - 1 ? 1 : _Index + 1;
-            return NextColor;
+
+            return (Key, Value);
         }
         #endregion Methods..
     }

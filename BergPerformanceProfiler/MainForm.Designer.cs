@@ -44,9 +44,9 @@ namespace BergPerformanceProfiler
             this.cpuPerformanceControl.CurrentThreads = "[Threads]";
             this.cpuPerformanceControl.Location = new System.Drawing.Point(12, 38);
             this.cpuPerformanceControl.Name = "cpuPerformanceControl";
-            this.cpuPerformanceControl.Size = new System.Drawing.Size(754, 377);
+            this.cpuPerformanceControl.Size = new System.Drawing.Size(754, 442);
             this.cpuPerformanceControl.TabIndex = 0;
-            this.cpuPerformanceControl.TotalCpu = "-%";
+            this.cpuPerformanceControl.TotalCpu = "-%%";
             this.cpuPerformanceControl.UpdateInterval = 0;
             this.cpuPerformanceControl.UseLocalDataSource = true;
             // 
@@ -72,7 +72,7 @@ namespace BergPerformanceProfiler
             // bergCpuMonitorDllToolStripMenuItem
             // 
             this.bergCpuMonitorDllToolStripMenuItem.Name = "bergCpuMonitorDllToolStripMenuItem";
-            this.bergCpuMonitorDllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bergCpuMonitorDllToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.bergCpuMonitorDllToolStripMenuItem.Text = "BergCpuMonitor dll";
             this.bergCpuMonitorDllToolStripMenuItem.Click += new System.EventHandler(this.BergCpuMonitorDllToolStripMenuItem_Click);
             // 
@@ -81,7 +81,7 @@ namespace BergPerformanceProfiler
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(793, 441);
+            this.ClientSize = new System.Drawing.Size(793, 498);
             this.Controls.Add(this.cpuPerformanceControl);
             this.Controls.Add(this.menuStripMain);
             this.DoubleBuffered = true;
