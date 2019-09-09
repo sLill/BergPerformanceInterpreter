@@ -133,7 +133,7 @@ namespace BergUI
             if (LicenseManager.UsageMode == LicenseUsageMode.Runtime)
             {
                 UpdateInterval = 1000;
-                UseLocalDataSource = false;
+                UseLocalDataSource = true;
 
                 ShowLoadingSplash(this.groupBoxCPU, true);
 
@@ -150,6 +150,13 @@ namespace BergUI
         private void CmbScope_SelectedValueChanged(object sender, EventArgs e)
         {
             _RefreshStatics = true;
+
+            ScopeType SelectedScope = (ScopeType)cmbScope.SelectedValue;
+            TotalCpu = "0";
+            CurrentThreads = "0";
+            ttlTotalCpu.Text = $"% Cpu Utilization ({SelectedScope.ToString()}):";
+            ttlThreads.Text = $"Threads ({SelectedScope.ToString()}):";
+
             UpdateChartViewMode();
         }
         #endregion CmbScope_SelectedValueChanged
