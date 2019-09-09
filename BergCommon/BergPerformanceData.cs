@@ -97,22 +97,6 @@ namespace BergCommon
         }
         #endregion GetPerfValueFromRaw
 
-        #region GetPropertyValue
-        protected string GetPropertyValue(ManagementBaseObject systemItem, string fieldName)
-        {
-            string Result = string.Empty;
-
-            try
-            {
-                Result = systemItem.GetPropertyValue(fieldName).ToString();
-                //Result = systemItem[fieldName].ToString();
-            }
-            catch { }
-
-            return Result;
-        }
-        #endregion GetPropertyValue
-
         #region Deserialize
         public static object Deserialize(byte[] data)
         {

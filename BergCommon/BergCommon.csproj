@@ -55,6 +55,7 @@
     <Compile Include="Scope.cs" />
     <Compile Include="ScopeType.cs" />
     <Compile Include="SystemPerformanceData.cs" />
+    <Compile Include="TypeExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

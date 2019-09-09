@@ -78,16 +78,16 @@ namespace BergCommon
 
                 foreach (var systemItem in ManagementObjectSearcher.Get())
                 {
-                    L2CacheSize = Convert.ToInt32(systemItem["L2CacheSize"]);
-                    L3CacheSize = Convert.ToInt32(systemItem["L3CacheSize"]);
-                    CurrentClockSpeed = Convert.ToInt32(systemItem["CurrentClockSpeed"]);
-                    MaxClockSpeed = Convert.ToInt32(systemItem["MaxClockSpeed"]);
-                    ThreadCount = Convert.ToInt32(systemItem["ThreadCount"]);
-                    CoreCount = Convert.ToByte(systemItem["NumberOfCores"]);
-                    LoadPercentage = Convert.ToByte(systemItem["LoadPercentage"]);
-                    LogicalProcessorsCount = Convert.ToByte(systemItem["NumberOfLogicalProcessors"]);
-                    Name = systemItem["Name"].ToString();
-                    Status = systemItem["Status"].ToString();
+                    L2CacheSize = Convert.ToInt32(systemItem.GetFieldValue("L2CacheSize"));
+                    L3CacheSize = Convert.ToInt32(systemItem.GetFieldValue("L3CacheSize"));
+                    CurrentClockSpeed = Convert.ToInt32(systemItem.GetFieldValue("CurrentClockSpeed"));
+                    MaxClockSpeed = Convert.ToInt32(systemItem.GetFieldValue("MaxClockSpeed"));
+                    ThreadCount = Convert.ToInt32(systemItem.GetFieldValue("ThreadCount"));
+                    CoreCount = Convert.ToByte(systemItem.GetFieldValue("NumberOfCores"));
+                    LoadPercentage = Convert.ToByte(systemItem.GetFieldValue("LoadPercentage"));
+                    LogicalProcessorsCount = Convert.ToByte(systemItem.GetFieldValue("NumberOfLogicalProcessors"));
+                    Name = systemItem.GetFieldValue("Name");
+                    Status = systemItem.GetFieldValue("Status");
                 }
 
                 SystemName = Environment.MachineName;
@@ -157,17 +157,17 @@ namespace BergCommon
                 ManagementObjectSearcher.Query.QueryString = Query;
                 foreach (var systemItem in ManagementObjectSearcher.Get())
                 {
-                    string ItemName = systemItem["Name"].ToString();
+                    string ItemName = systemItem.GetFieldValue("Name");
                     if (ItemName == "_Total")
                     {
-                        CpuUtilization[ScopeType.System] = Convert.ToByte(systemItem["PercentProcessorTime"]);
+                        CpuUtilization[ScopeType.System] = Convert.ToByte(systemItem.GetFieldValue("PercentProcessorTime"));
                     }
                     else
                     {
                         LogicalCores.Add(new LogicalCore()
                         {
                             CoreId = ItemName,
-                            PercentCpuTotal = Convert.ToInt32(systemItem["PercentProcessorTime"])
+                            PercentCpuTotal = Convert.ToInt32(systemItem.GetFieldValue("PercentProcessorTime"))
                             //PercentCpuProcess = 
                         });
                     }
