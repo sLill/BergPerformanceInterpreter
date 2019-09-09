@@ -30,57 +30,115 @@
         {
             this.components = new System.ComponentModel.Container();
             this.groupBoxCPU = new System.Windows.Forms.GroupBox();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanelCpu = new System.Windows.Forms.TableLayoutPanel();
+            this.cmbScope = new System.Windows.Forms.ComboBox();
+            this.lvPerformanceWatches = new BrightIdeasSoftware.ObjectListView();
+            this.watchName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.tableLayoutPanelInfo = new System.Windows.Forms.TableLayoutPanel();
             this.ttlTotalCpu = new BergUI.ToolTipLabel();
             this.ttlThreads = new BergUI.ToolTipLabel();
             this.lblThreads = new System.Windows.Forms.Label();
             this.lblTotalCpu = new System.Windows.Forms.Label();
-            this.lvPerformanceWatches = new BrightIdeasSoftware.ObjectListView();
-            this.watchName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.chartCpu = new BergUI.BergChart();
-            this.cmbScope = new System.Windows.Forms.ComboBox();
             this.ttlProcessor = new BergUI.ToolTipLabel();
+            this.chartCpu = new BergUI.BergChart();
             this.ctxChartCpu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsCpuViewMode = new System.Windows.Forms.ToolStripMenuItem();
             this.tsOverallUtilization = new System.Windows.Forms.ToolStripMenuItem();
             this.tsLogicalProcessors = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBoxCPU.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanelCpu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lvPerformanceWatches)).BeginInit();
+            this.tableLayoutPanelInfo.SuspendLayout();
             this.ctxChartCpu.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxCPU
             // 
             this.groupBoxCPU.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.groupBoxCPU.Controls.Add(this.tableLayoutPanel1);
-            this.groupBoxCPU.Controls.Add(this.lvPerformanceWatches);
-            this.groupBoxCPU.Controls.Add(this.chartCpu);
-            this.groupBoxCPU.Controls.Add(this.cmbScope);
-            this.groupBoxCPU.Controls.Add(this.ttlProcessor);
+            this.groupBoxCPU.Controls.Add(this.tableLayoutPanelCpu);
             this.groupBoxCPU.Location = new System.Drawing.Point(2, 3);
             this.groupBoxCPU.Name = "groupBoxCPU";
-            this.groupBoxCPU.Size = new System.Drawing.Size(749, 436);
+            this.groupBoxCPU.Size = new System.Drawing.Size(742, 391);
             this.groupBoxCPU.TabIndex = 9;
             this.groupBoxCPU.TabStop = false;
             this.groupBoxCPU.Text = "CPU";
             // 
-            // tableLayoutPanel1
+            // tableLayoutPanelCpu
             // 
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.Controls.Add(this.ttlTotalCpu, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.ttlThreads, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.lblThreads, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.lblTotalCpu, 1, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(34, 310);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(353, 42);
-            this.tableLayoutPanel1.TabIndex = 32;
+            this.tableLayoutPanelCpu.ColumnCount = 2;
+            this.tableLayoutPanelCpu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelCpu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanelCpu.Controls.Add(this.cmbScope, 0, 0);
+            this.tableLayoutPanelCpu.Controls.Add(this.lvPerformanceWatches, 1, 2);
+            this.tableLayoutPanelCpu.Controls.Add(this.tableLayoutPanelInfo, 0, 2);
+            this.tableLayoutPanelCpu.Controls.Add(this.ttlProcessor, 1, 0);
+            this.tableLayoutPanelCpu.Controls.Add(this.chartCpu, 0, 1);
+            this.tableLayoutPanelCpu.Location = new System.Drawing.Point(11, 28);
+            this.tableLayoutPanelCpu.Name = "tableLayoutPanelCpu";
+            this.tableLayoutPanelCpu.RowCount = 3;
+            this.tableLayoutPanelCpu.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelCpu.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelCpu.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelCpu.Size = new System.Drawing.Size(712, 345);
+            this.tableLayoutPanelCpu.TabIndex = 33;
+            // 
+            // cmbScope
+            // 
+            this.cmbScope.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.cmbScope.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbScope.FormattingEnabled = true;
+            this.cmbScope.Location = new System.Drawing.Point(33, 3);
+            this.cmbScope.Margin = new System.Windows.Forms.Padding(33, 3, 3, 3);
+            this.cmbScope.Name = "cmbScope";
+            this.cmbScope.Size = new System.Drawing.Size(227, 21);
+            this.cmbScope.TabIndex = 29;
+            this.cmbScope.SelectionChangeCommitted += new System.EventHandler(this.CmbScope_SelectedValueChanged);
+            // 
+            // lvPerformanceWatches
+            // 
+            this.lvPerformanceWatches.AllColumns.Add(this.watchName);
+            this.lvPerformanceWatches.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.lvPerformanceWatches.CellEditUseWholeCell = false;
+            this.lvPerformanceWatches.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.watchName});
+            this.lvPerformanceWatches.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lvPerformanceWatches.HasCollapsibleGroups = false;
+            this.lvPerformanceWatches.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.lvPerformanceWatches.Location = new System.Drawing.Point(402, 245);
+            this.lvPerformanceWatches.Name = "lvPerformanceWatches";
+            this.lvPerformanceWatches.ShowGroups = false;
+            this.lvPerformanceWatches.ShowHeaderInAllViews = false;
+            this.lvPerformanceWatches.Size = new System.Drawing.Size(307, 97);
+            this.lvPerformanceWatches.TabIndex = 31;
+            this.lvPerformanceWatches.UseCompatibleStateImageBehavior = false;
+            this.lvPerformanceWatches.UseHyperlinks = true;
+            this.lvPerformanceWatches.View = System.Windows.Forms.View.List;
+            // 
+            // watchName
+            // 
+            this.watchName.AspectName = "Name";
+            this.watchName.Groupable = false;
+            this.watchName.Hyperlink = true;
+            this.watchName.Text = "";
+            this.watchName.Width = 1000;
+            // 
+            // tableLayoutPanelInfo
+            // 
+            this.tableLayoutPanelInfo.ColumnCount = 2;
+            this.tableLayoutPanelInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanelInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanelInfo.Controls.Add(this.ttlTotalCpu, 0, 0);
+            this.tableLayoutPanelInfo.Controls.Add(this.ttlThreads, 0, 1);
+            this.tableLayoutPanelInfo.Controls.Add(this.lblThreads, 1, 1);
+            this.tableLayoutPanelInfo.Controls.Add(this.lblTotalCpu, 1, 0);
+            this.tableLayoutPanelInfo.Location = new System.Drawing.Point(33, 245);
+            this.tableLayoutPanelInfo.Margin = new System.Windows.Forms.Padding(33, 3, 3, 3);
+            this.tableLayoutPanelInfo.Name = "tableLayoutPanelInfo";
+            this.tableLayoutPanelInfo.RowCount = 2;
+            this.tableLayoutPanelInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelInfo.Size = new System.Drawing.Size(350, 42);
+            this.tableLayoutPanelInfo.TabIndex = 32;
             // 
             // ttlTotalCpu
             // 
@@ -142,53 +200,9 @@
             this.lblTotalCpu.Text = "[TotalCpu]";
             this.lblTotalCpu.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // lvPerformanceWatches
-            // 
-            this.lvPerformanceWatches.AllColumns.Add(this.watchName);
-            this.lvPerformanceWatches.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.lvPerformanceWatches.CellEditUseWholeCell = false;
-            this.lvPerformanceWatches.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.watchName});
-            this.lvPerformanceWatches.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lvPerformanceWatches.HasCollapsibleGroups = false;
-            this.lvPerformanceWatches.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-            this.lvPerformanceWatches.Location = new System.Drawing.Point(343, 312);
-            this.lvPerformanceWatches.Name = "lvPerformanceWatches";
-            this.lvPerformanceWatches.ShowGroups = false;
-            this.lvPerformanceWatches.ShowHeaderInAllViews = false;
-            this.lvPerformanceWatches.Size = new System.Drawing.Size(307, 97);
-            this.lvPerformanceWatches.TabIndex = 31;
-            this.lvPerformanceWatches.UseCompatibleStateImageBehavior = false;
-            this.lvPerformanceWatches.UseHyperlinks = true;
-            this.lvPerformanceWatches.View = System.Windows.Forms.View.List;
-            // 
-            // watchName
-            // 
-            this.watchName.AspectName = "Name";
-            this.watchName.Groupable = false;
-            this.watchName.Hyperlink = true;
-            this.watchName.Text = "";
-            this.watchName.Width = 1000;
-            // 
-            // chartCpu
-            // 
-            this.chartCpu.Location = new System.Drawing.Point(6, 51);
-            this.chartCpu.Name = "chartCpu";
-            this.chartCpu.Size = new System.Drawing.Size(717, 250);
-            this.chartCpu.TabIndex = 30;
-            // 
-            // cmbScope
-            // 
-            this.cmbScope.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbScope.FormattingEnabled = true;
-            this.cmbScope.Location = new System.Drawing.Point(57, 24);
-            this.cmbScope.Name = "cmbScope";
-            this.cmbScope.Size = new System.Drawing.Size(227, 21);
-            this.cmbScope.TabIndex = 29;
-            this.cmbScope.SelectionChangeCommitted += new System.EventHandler(this.CmbScope_SelectedValueChanged);
-            // 
             // ttlProcessor
             // 
+            this.ttlProcessor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ttlProcessor.AutoSize = true;
             this.ttlProcessor.BackColor = System.Drawing.Color.Transparent;
             this.ttlProcessor.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -196,11 +210,20 @@
             this.ttlProcessor.InfoToolTipText = "";
             this.ttlProcessor.KeyObjectToolTipEnabled = true;
             this.ttlProcessor.KeyObjectToolTipText = "";
-            this.ttlProcessor.Location = new System.Drawing.Point(449, 27);
+            this.ttlProcessor.Location = new System.Drawing.Point(616, 11);
+            this.ttlProcessor.Margin = new System.Windows.Forms.Padding(3, 3, 30, 3);
             this.ttlProcessor.Name = "ttlProcessor";
-            this.ttlProcessor.Size = new System.Drawing.Size(77, 13);
+            this.ttlProcessor.Size = new System.Drawing.Size(66, 13);
             this.ttlProcessor.TabIndex = 20;
             this.ttlProcessor.Text = "[Processor]";
+            // 
+            // chartCpu
+            // 
+            this.tableLayoutPanelCpu.SetColumnSpan(this.chartCpu, 2);
+            this.chartCpu.Location = new System.Drawing.Point(3, 30);
+            this.chartCpu.Name = "chartCpu";
+            this.chartCpu.Size = new System.Drawing.Size(706, 209);
+            this.chartCpu.TabIndex = 30;
             // 
             // ctxChartCpu
             // 
@@ -241,12 +264,13 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Controls.Add(this.groupBoxCPU);
             this.Name = "CpuPerformanceControl";
-            this.Size = new System.Drawing.Size(754, 442);
+            this.Size = new System.Drawing.Size(747, 397);
             this.groupBoxCPU.ResumeLayout(false);
-            this.groupBoxCPU.PerformLayout();
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
+            this.tableLayoutPanelCpu.ResumeLayout(false);
+            this.tableLayoutPanelCpu.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lvPerformanceWatches)).EndInit();
+            this.tableLayoutPanelInfo.ResumeLayout(false);
+            this.tableLayoutPanelInfo.PerformLayout();
             this.ctxChartCpu.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -267,6 +291,7 @@
         private ToolTipLabel ttlProcessor;
         private BrightIdeasSoftware.ObjectListView lvPerformanceWatches;
         private BrightIdeasSoftware.OLVColumn watchName;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelInfo;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelCpu;
     }
 }

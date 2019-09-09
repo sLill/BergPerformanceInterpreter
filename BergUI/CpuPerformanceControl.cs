@@ -149,9 +149,12 @@ namespace BergUI
         #region CmbScope_SelectedValueChanged
         private void CmbScope_SelectedValueChanged(object sender, EventArgs e)
         {
-            _RefreshStatics = true;
+            ScopeType SelectedScope = (ScopeType)((ComboBox)sender).SelectedValue;
 
-            ScopeType SelectedScope = (ScopeType)cmbScope.SelectedValue;
+            tsCpuViewMode_DropDownItemClicked(null, new ToolStripItemClickedEventArgs(tsOverallUtilization));
+            tsCpuViewMode.DropDownItems["tsLogicalProcessors"].Enabled = SelectedScope == ScopeType.System;
+
+            _RefreshStatics = true;
             TotalCpu = "0";
             CurrentThreads = "0";
             ttlTotalCpu.Text = $"% Cpu Utilization ({SelectedScope.ToString()}):";
@@ -164,12 +167,13 @@ namespace BergUI
         #region tsCpuViewMode_DropDownItemClicked
         private void tsCpuViewMode_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
+            _CpuViewMode = (CpuViewMode)e.ClickedItem.Tag;
+
             foreach (ToolStripMenuItem item in tsCpuViewMode.DropDownItems)
             {
                 item.Checked = item.Name == e.ClickedItem.Name;
             }
 
-            _CpuViewMode = (CpuViewMode)e.ClickedItem.Tag;
             UpdateChartViewMode();
         }
         #endregion tsCpuViewMode_DropDownItemClicked

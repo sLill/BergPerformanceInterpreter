@@ -37,7 +37,7 @@
             // 
             this.lblAxisYTitle.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblAxisYTitle.AutoSize = true;
-            this.lblAxisYTitle.Location = new System.Drawing.Point(1, 109);
+            this.lblAxisYTitle.Location = new System.Drawing.Point(1, 116);
             this.lblAxisYTitle.Name = "lblAxisYTitle";
             this.lblAxisYTitle.Size = new System.Drawing.Size(15, 13);
             this.lblAxisYTitle.TabIndex = 34;
@@ -50,7 +50,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chartBase.BackColor = System.Drawing.Color.Transparent;
-            this.chartBase.Location = new System.Drawing.Point(-11, -12);
+            this.chartBase.Location = new System.Drawing.Point(-11, -6);
             this.chartBase.Margin = new System.Windows.Forms.Padding(0);
             this.chartBase.Name = "chartBase";
             this.chartBase.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None;
@@ -69,7 +69,7 @@
             this.Controls.Add(this.lblAxisYTitle);
             this.Controls.Add(this.chartBase);
             this.Name = "BergChart";
-            this.Size = new System.Drawing.Size(659, 250);
+            this.Size = new System.Drawing.Size(659, 265);
             ((System.ComponentModel.ISupportInitialize)(this.chartBase)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
